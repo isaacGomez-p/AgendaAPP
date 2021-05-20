@@ -7,6 +7,8 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
+  listaFincas = [ "Finca1", "Finca2", "Finca3" ];
+
   constructor() {}
 
 }

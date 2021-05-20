@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 2
+      Planilla de aplicación
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,68 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 2</ion-title>
+      <ion-title size="large">Planilla de aplicación</ion-title>
     </ion-toolbar>
   </ion-header>
+
+  <form #form="ngForm" (ngSubmit)="login(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12" >
+
+
+          <div padding>
+            
+              <ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote">
+                <ion-select-option *ngFor="let lote of listaLotes"  value="{{lote}}">{{ lote }}</ion-select-option>                  
+              </ion-select>
+            
+              <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad">
+                <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}</ion-select-option>                  
+              </ion-select>
+            <ion-item>
+              <ion-input [(ngModel)]="control" name="control" type="text" placeholder="Control" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="prevencion" name="prevencion" type="text" placeholder="Prevencion" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="fertilizacion" name="fertilizacion" type="text" placeholder="Fertilización" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="producto" name="producto" type="text" placeholder="Producto" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="dosis" name="dosis" type="number" placeholder="Dosis (L)" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="mezcla_total" name="mezcla_total" type="number" placeholder="Mezcla Total" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="total_dosis" name="total_dosis" type="number" placeholder="Total Dosis" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" type="number" placeholder="Fecha Aplicación" ngModel required></ion-input>
+            </ion-item>
+            <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione una ejecución">
+              <ion-select-option *ngFor="let ejec of listaEjecucion"  value="{{ejec}}">{{ ejec }}</ion-select-option>                  
+            </ion-select>
+            <ion-item>
+              <ion-input [(ngModel)]="calidad_ejecucion" name="calidad_ejecucion" type="number" placeholder="Calidad Ejecución" ngModel required></ion-input>
+            </ion-item>
+          </div>
+
+          <div padding>
+            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
+          </div>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
 
   <app-explore-container name="Tab 2 page"></app-explore-container>
 </ion-content>

@@ -1,7 +1,7 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 1
+      Plano de Siembra
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -9,9 +9,55 @@
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
+      <ion-title size="medium">Plano de Siembra</ion-title>
     </ion-toolbar>
   </ion-header>
+  <form #form="ngForm" (ngSubmit)="login(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12" >
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+
+          <div padding>
+            
+              <ion-select [(ngModel)]="finca" name="finca" placeholder="Seleccione una finca">
+                <ion-select-option *ngFor="let finca of listaFincas"  value="{{finca}}">{{ finca }}</ion-select-option>                  
+              </ion-select>
+            
+            <ion-item>
+              <ion-input [(ngModel)]="lote" name="lote" type="text" placeholder="Lote" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="surco" name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="producto" name="producto" type="text" placeholder="Producto" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="variedad" name="variedad" type="text" placeholder="Variedad" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="cant_plantas" name="cant_plantas" type="number" placeholder="# Plantas" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="anio" name="anio" type="number" placeholder="Año" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="semana" name="semana" type="number" placeholder="Semana" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input [(ngModel)]="dia" name="dia" type="number" placeholder="Día" ngModel required></ion-input>
+            </ion-item>
+          </div>
+
+          <div padding>
+            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
+          </div>
+
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+
+  
 </ion-content>
