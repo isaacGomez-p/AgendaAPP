@@ -1,7 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Planilla de aplicación
+    <ion-button color="light" size="small" routerLink="/home">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Planilla de aplicación</H6>
+        </i></div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -13,58 +19,64 @@
     </ion-toolbar>
   </ion-header>
 
-  <form #form="ngForm" (ngSubmit)="login(form)">
+  <form #form="ngForm" (ngSubmit)="registrar(form)">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12" >
-
-
-          <div padding>
-            
+          <div padding>            
               <ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote">
                 <ion-select-option *ngFor="let lote of listaLotes"  value="{{lote}}">{{ lote }}</ion-select-option>                  
-              </ion-select>
-            
+              </ion-select>            
               <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad">
                 <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}</ion-select-option>                  
               </ion-select>
             <ion-item>
+              <ion-label position="floating">Control</ion-label>
               <ion-input [(ngModel)]="control" name="control" type="text" placeholder="Control" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Prevencion</ion-label>
               <ion-input [(ngModel)]="prevencion" name="prevencion" type="text" placeholder="Prevencion" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Fertilizacion</ion-label>
               <ion-input [(ngModel)]="fertilizacion" name="fertilizacion" type="text" placeholder="Fertilización" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Producto</ion-label>
               <ion-input [(ngModel)]="producto" name="producto" type="text" placeholder="Producto" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Dosis</ion-label>
               <ion-input [(ngModel)]="dosis" name="dosis" type="number" placeholder="Dosis (L)" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Mezcla total</ion-label>
               <ion-input [(ngModel)]="mezcla_total" name="mezcla_total" type="number" placeholder="Mezcla Total" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Total dosis</ion-label>
               <ion-input [(ngModel)]="total_dosis" name="total_dosis" type="number" placeholder="Total Dosis" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Elaborado</ion-label>
               <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-input [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" type="number" placeholder="Fecha Aplicación" ngModel required></ion-input>
-            </ion-item>
+            <ion-item>              
+              <ion-label position="floating">Fecha aplicacion</ion-label>
+              <ion-datetime [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" value="2021-05-20" placeholder="Seleccionar fecha" ngModel required></ion-datetime>
+            </ion-item>            
             <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione una ejecución">
               <ion-select-option *ngFor="let ejec of listaEjecucion"  value="{{ejec}}">{{ ejec }}</ion-select-option>                  
             </ion-select>
             <ion-item>
+              <ion-label position="floating">Calidad ejecucion</ion-label>
               <ion-input [(ngModel)]="calidad_ejecucion" name="calidad_ejecucion" type="number" placeholder="Calidad Ejecución" ngModel required></ion-input>
             </ion-item>
           </div>
 
           <div padding>
-            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
+            <ion-button expand="full" color="secondary" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
           </div>
 
         </ion-col>

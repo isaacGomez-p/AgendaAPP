@@ -1,0 +1,23 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="light">
+    <ion-button color="light" size="small" routerLink="/home">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Fincas registradas</H6>
+        </i></div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">  
+  <ion-list *ngFor="let finca of fincas">
+    <ion-item>
+      <ion-label>
+        <h2>{{finca.nombre}}</h2>        
+      </ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>

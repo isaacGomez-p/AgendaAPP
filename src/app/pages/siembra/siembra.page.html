@@ -1,8 +1,14 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>
-      Plano de Siembra
-    </ion-title>
+  <ion-toolbar>    
+    <ion-button color="light" size="small" routerLink="/home">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Plano de Siembra</H6>
+        </i></div>
+    </ion-title>    
   </ion-toolbar>
 </ion-header>
 
@@ -12,31 +18,32 @@
       <ion-title size="medium">Plano de Siembra</ion-title>
     </ion-toolbar>
   </ion-header>
-  <form #form="ngForm" (ngSubmit)="login(form)">
+  <form #form="ngForm" (ngSubmit)="registrar(form)">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12" >
-
-
-          <div padding>
-            
-              <ion-select [(ngModel)]="finca" name="finca" placeholder="Seleccione una finca">
-                <ion-select-option *ngFor="let finca of listaFincas"  value="{{finca}}">{{ finca }}</ion-select-option>                  
-              </ion-select>
-            
+          <div padding>            
+            <ion-select [(ngModel)]="finca" name="finca" placeholder="Seleccione una finca" ngModel required>
+              <ion-select-option *ngFor="let finca of listaFincas"  value="{{finca.finca_id}}">{{ finca.nombre }}</ion-select-option>                  
+            </ion-select>            
             <ion-item>
+              <ion-label position="floating">Lote</ion-label>
               <ion-input [(ngModel)]="lote" name="lote" type="text" placeholder="Lote" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Surco</ion-label>
               <ion-input [(ngModel)]="surco" name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Producto</ion-label>
               <ion-input [(ngModel)]="producto" name="producto" type="text" placeholder="Producto" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Variedad</ion-label>
               <ion-input [(ngModel)]="variedad" name="variedad" type="text" placeholder="Variedad" ngModel required></ion-input>
             </ion-item>
             <ion-item>
+              <ion-label position="floating">Cantidad de plantas</ion-label>
               <ion-input [(ngModel)]="cant_plantas" name="cant_plantas" type="number" placeholder="# Plantas" ngModel required></ion-input>
             </ion-item>
             <ion-item>
@@ -51,7 +58,7 @@
           </div>
 
           <div padding>
-            <ion-button size="large" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
+            <ion-button expand="full" color="secondary" type="submit" [disabled]="form.invalid" expand="block">Registrar </ion-button>
           </div>
 
         </ion-col>
