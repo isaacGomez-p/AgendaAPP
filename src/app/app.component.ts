@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   constructor(private alertCtrl: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent) {}
 
   ngOnInit() {  
-
+    
   }
 
   async menuFinca() {
@@ -63,9 +63,10 @@ export class AppComponent implements OnInit {
           role: 'selected',
           icon: 'add-outline',
           handler: () => {
+            window.localStorage.removeItem("buscarSiembraFinca")
             this.router.navigateByUrl('/siembra');
           }
-        },
+        },        
         {
           text: 'Cancel',
           icon: 'close',

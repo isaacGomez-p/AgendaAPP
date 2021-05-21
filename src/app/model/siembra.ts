@@ -1,5 +1,6 @@
 export class Siembra{
-    siembra_id: number;
+    plano_id: number;
+    finca_id: number;
     lote: String;
     surco: number;
     producto: String;

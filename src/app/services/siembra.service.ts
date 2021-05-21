@@ -20,11 +20,11 @@ export class SiembraService {
     longitud: number = 0;
 
     postSiembra(datos: Siembra) {
-        return this.http.post(`${this.urlService}/AGD_Finca`, datos);
+        return this.http.post(`${this.urlService}/AGD_Plano_de_siembra`, datos);
     }
 
-    /*getAllUser(idUsuario: number): Observable<Siembra[]> {
-        return this.http.get<Finca[]>(`${this.urlService}/AGD_Finca/` + idUsuario);
-    }*/
+    getSiembrasFinca(idFinca: number): Observable<Siembra[]> {
+        return this.http.get<Siembra[]>(`${this.urlService}/AGD_Plano_de_siembra/` + idFinca);
+    }
 
 }

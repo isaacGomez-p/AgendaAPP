@@ -21,15 +21,14 @@ export class FincaComponent implements OnInit {
 
   ngOnInit() {}
   
-  agregarFinca(form){
-    //console.log("nombre " + form.value.nombreFinca);    
-    //this.toastConfirmacion('Finca agregada correctamente.', 'success')
+  agregarFinca(form){    
     let datos = new Finca();
     datos.nombre = form.value.nombreFinca;
     datos.estado = 1; //Estado 1 indica que esta activo
     datos.id_agricultor = 1; 
     this.fincaService.postFinca(datos).subscribe((data) => {
-      this.toastConfirmacion('Finca agregada correctamente.', 'success')      
+      this.toastConfirmacion('Finca agregada correctamente.', 'success')
+      this.nombreFinca = null;
     });
   }
 

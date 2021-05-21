@@ -3,28 +3,34 @@
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
       <div font size=1 align="center"><i>
-          <H6>Fincas registradas</H6>
+          <H6>Siembras registradas</H6>
         </i></div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">  
+<ion-content [fullscreen]="true">      
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingIcon="chevron-down-circle-outline"
       pullingText="Pull to refresh"
       refreshingSpinner="circles"
-      refreshingText="Refreshing...">      
+      refreshingText="Refreshing...">
     </ion-refresher-content>
-    
   </ion-refresher>
-  <ion-list *ngFor="let finca of fincas">
-    <ion-item button (click)="verSiembras(finca.finca_id)">      
+  <ion-list *ngFor="let siembra of siembras">
+    <ion-item button (click)="masInfo(siembra)">
+      <ion-icon slot="start" name="leaf-outline" ></ion-icon>      
       <ion-label>
-        <h2>{{finca.nombre}}</h2>        
+        <h2>Lote: {{siembra.lote}}</h2>     
+        <h3>Surco: {{siembra.surco}}</h3>
+        <p>Producto: {{siembra.producto}}</p>   
       </ion-label>
-      <ion-icon slot="end" name="leaf-outline" ></ion-icon>
     </ion-item>
   </ion-list>
+  <ion-fab horizontal="start" vertical="bottom" slot="fixed">
+    <ion-fab-button (click)="agregarSiembra()">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
 </ion-content>

@@ -23,6 +23,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/siembra/siembra.module').then( m => m.SiembraPageModule)
   },  
   {
+    path: 'verSiembra',
+    loadChildren: () => import('./pages/siembra/ver-siembra/ver-siembra.module').then( m => m.VerSiembraPageModule)
+  },  
+  {
     path: 'aplicacion',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
   }
