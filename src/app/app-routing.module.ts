@@ -29,7 +29,15 @@ const routes: Routes = [
   {
     path: 'aplicacion',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
+  },  {
+    path: 'planilla',
+    loadChildren: () => import('./planilla/planilla.module').then( m => m.PlanillaPageModule)
+  },
+  {
+    path: 'planilla',
+    loadChildren: () => import('./pages/planilla/planilla.module').then( m => m.PlanillaPageModule)
   }
+
 ];
 @NgModule({
   imports: [
