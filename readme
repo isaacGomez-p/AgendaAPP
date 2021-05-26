@@ -1,0 +1,16 @@
+*********************************************************
+
+Para generar apk con Capacitor
+
+1. ionic build
+2. npx cap init
+3. npx cap add android
+4. npx cap sync 
+5. npx cap open android
+
+//En el AndroidManifest.xml añadir 
+<application
+    ...
+    android:usesCleartextTraffic="true"
+    ...
+</application>
