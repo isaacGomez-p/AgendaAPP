@@ -1,6 +1,6 @@
 import { NumeroPlanilla } from './../../../model/numeroPlanilla';
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import { AlertController, ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PlanillaService } from 'src/app/services/planilla.service';
@@ -17,7 +17,7 @@ export class VerPlanillaComponent implements OnInit {
 
   duracionRefresh: number = 2000;
 
-  constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService) { }
+  constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private alertController: AlertController) { }
 
   ngOnInit() {        
     this.cargarPlanillasLS();
@@ -74,29 +74,39 @@ export class VerPlanillaComponent implements OnInit {
     })
   }  
 
-  /*async nuevaPlanilla() {
+  async nuevaPlanilla() {
     const alert = await this.alertController.create({
-      cssClass: 'my-custom-class',
-      header: 'Confirm!',
-      message: 'Message <strong>text</strong>!!!',
+      cssClass: 'my-custom-class',      
+      message: '<strong>Desea crear una nueva planilla</strong>?',
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           role: 'cancel',
           cssClass: 'secondary',
           handler: (blah) => {
             console.log('Confirm Cancel: blah');
           }
         }, {
-          text: 'Okay',
+          text: 'Confirmar',
           handler: () => {
-            console.log('Confirm Okay');
+            this.registrar();
           }
         }
       ]
     });
-
     await alert.present();
-  }*/
+  }
+
+  registrar(){
+    let datos = new NumeroPlanilla();
+    datos = {
+      agricultor_id: 1,
+      fecha_creacion: new Date(),
+      n_planilla_id: 0
+    }
+    this.servicePlanilla.postNumeroPlanilla(datos).subscribe(() =>{
+      this.toastConfirmacion("Se registro correctamente", "success");
+    })
+  }
 
 }

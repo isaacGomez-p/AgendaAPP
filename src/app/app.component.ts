@@ -80,8 +80,10 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  async menuPlanilla() {
-    const alert = await this.actionSheetCtrl.create({
+  //async menuPlanilla() {
+  menuPlanilla() {
+    this.router.navigateByUrl('/verPlanilla');
+    /*const alert = await this.actionSheetCtrl.create({
       header: 'Aplicación',
       buttons: [
         {
@@ -102,7 +104,7 @@ export class AppComponent implements OnInit {
         }
       ]
     });
-    await alert.present();
+    await alert.present();*/
   }
 
   menuProductos(){
