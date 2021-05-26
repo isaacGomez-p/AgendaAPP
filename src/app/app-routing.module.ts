@@ -29,13 +29,39 @@ const routes: Routes = [
   {
     path: 'aplicacion',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
-  },  {
+  },
+  {
     path: 'planilla',
     loadChildren: () => import('./planilla/planilla.module').then( m => m.PlanillaPageModule)
   },
   {
-    path: 'planilla',
-    loadChildren: () => import('./pages/planilla/planilla.module').then( m => m.PlanillaPageModule)
+    path: 'verFinca',
+    loadChildren: () => import('./pages/finca/ver-finca/ver-finca.module').then( m => m.VerFincaPageModule)
+  },
+  {
+    path: 'siembra',
+    loadChildren: () => import('./pages/siembra/siembra.module').then( m => m.SiembraPageModule)
+  },  
+  {
+    path: 'verSiembra',
+    loadChildren: () => import('./pages/siembra/ver-siembra/ver-siembra.module').then( m => m.VerSiembraPageModule)
+  },  
+  {
+    path: 'aplicacion',
+    loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
+  },
+  {
+    path: 'verPlanilla',
+    loadChildren: () => import('./pages/aplicacion/ver-planilla/ver-planilla.module').then( m => m.VerAplicacionPageModule)
+  },
+  {
+    path: 'planillas',
+    loadChildren: () => import('./pages/aplicacion/ver-planilla/planillas/planillas.module').then( m => m.PlanillasPageModule)
+  },
+  {
+    path: 'producto',
+    loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)
+>>>>>>> d3719038839d2bf574a3a86909dd096aaa637893
   }
 
 ];

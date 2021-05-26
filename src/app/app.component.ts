@@ -80,16 +80,16 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  async menuAplicacion() {
+  async menuPlanilla() {
     const alert = await this.actionSheetCtrl.create({
       header: 'Aplicación',
       buttons: [
         {
-          text: 'Agregar aplicación',
+          text: 'Ver planilla',
           role: 'selected',
-          icon: 'add-outline',
+          icon: 'layers-outline',
           handler: () => {
-            this.router.navigateByUrl('/aplicacion');
+            this.router.navigateByUrl('/verPlanilla');
           }
         },
         {
@@ -104,6 +104,8 @@ export class AppComponent implements OnInit {
     });
     await alert.present();
   }
-  
-  
+
+  menuProductos(){
+    this.router.navigateByUrl('/producto');
+  }
 }
