@@ -6,6 +6,7 @@ import { Finca } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { FincaService } from 'src/app/services/finca.service';
 import { Router } from '@angular/router';
+import { Producto } from 'src/app/model/producto';
 
 @Component({
   selector: 'app-siembra',
@@ -29,6 +30,7 @@ export class SiembraPage implements OnInit{
   dia: number;
 
   listaFincas: Finca[];
+  productos: Producto[];
 
   //Control para los formularios
   estadoFormulario2: boolean = false;
@@ -75,16 +77,26 @@ export class SiembraPage implements OnInit{
   }
 
   registrar(form){  
-    let siembra = new Siembra();
-    siembra.producto = form.value.producto;
-    siembra.plantas = form.value.cant_plantas;
-    siembra.surco = form.value.surco;
-    siembra.variedad = form.value.variedad;
-    siembra.anio = form.value.anio;
-    siembra.dia = form.value.dia;
-    siembra.semana = form.value.semana;    
-    siembra.finca_id = JSON.parse(window.localStorage.getItem("buscarSiembraFinca"));
-    siembra.lote = this.lote;
+    let siembra = new Siembra();    
+    for(let p of this.productos){
+      console.log(' ' + JSON.stringify(p));
+      if(p.producto_id === Number.parseInt(form.value.producto)){        
+        this.variedad = p.variedad;
+        this.producto = p.nombre;
+      }
+    }        
+    siembra = {
+      plano_id: 0,
+      plantas: form.value.cant_plantas,
+      surco: form.value.surco,
+      variedad: this.variedad,
+      producto: this.producto,
+      anio: form.value.anio,
+      dia: form.value.dia,
+      semana: form.value.semana,
+      finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+      lote: this.lote
+    }       
     try{
       this.siembraService.postSiembra(siembra).subscribe((data) =>{
         this.toastConfirmacion("Siembra registrada correctamente", "success");
@@ -112,6 +124,11 @@ export class SiembraPage implements OnInit{
     }else{
       this.listaFincas =  JSON.parse(window.localStorage.getItem("fincas"));      
       this.cargarDatos();
+    }      
+    if(JSON.parse(window.localStorage.getItem("productos")) === null || JSON.parse(window.localStorage.getItem("productos")).length === 0){
+      this.toastConfirmacion('No tiene productos registrados.', 'warning');
+    }else{
+      this.productos =  JSON.parse(window.localStorage.getItem("productos"));            
     }      
   }
 

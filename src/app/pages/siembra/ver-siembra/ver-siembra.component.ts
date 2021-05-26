@@ -21,7 +21,7 @@ export class VerSiembraComponent implements OnInit {
   showBackdrop = true;
   shouldPropagate = false;
 
-  constructor(private serviceSiembra: SiembraService,private loadingController: LoadingController, public alertController: AlertController, private router: Router, private toastController: ToastController) { }  
+  constructor(private serviceSiembra: SiembraService, private loadingController: LoadingController, public alertController: AlertController, private router: Router, private toastController: ToastController) { }  
 
   ngOnInit() {
     this.cargarSiembras();

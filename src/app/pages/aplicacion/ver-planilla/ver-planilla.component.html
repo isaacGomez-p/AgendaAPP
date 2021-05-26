@@ -1,0 +1,34 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="light">    
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Planillas registradas</H6>
+        </i></div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">  
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">      
+    </ion-refresher-content>
+    
+  </ion-refresher>
+  <ion-list *ngFor="let planilla of planillas">
+    <ion-item button (click)="verPlanillas(planilla.n_planilla_id)">      
+      <ion-label>
+        <h2>{{planilla.n_planilla_id}}</h2>        
+      </ion-label>
+      <ion-icon slot="end" name="reader-outline" ></ion-icon>
+    </ion-item>
+  </ion-list>
+  <!--<ion-button expand="full" color="secondary" expand="block" (click)="nuevaPlanilla()">
+    <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
+      Registrar 
+  </ion-button>-->
+</ion-content>

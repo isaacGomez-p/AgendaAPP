@@ -14,4 +14,9 @@ export class Planilla{
     fecha_aplicacion: Date;
     estado: String;
     calidad_ejecucion: String;
+    n_planilla: number;
+    finca_id: number;
+
+    //No mapeadas
+    fincaNombre: String;
 }

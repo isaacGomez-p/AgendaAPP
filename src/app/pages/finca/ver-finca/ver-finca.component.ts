@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Finca } from 'src/app/model/finca';
 import { ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
-import { Router } from '@angular/router';
+import { Router, PreloadAllModules } from '@angular/router';
 
 @Component({
   selector: 'app-ver-finca',
@@ -22,7 +22,7 @@ export class VerFincaComponent implements OnInit {
     this.cargarFincasLS();
     window.localStorage.removeItem("buscarSiembraFinca")
   }
-
+  
   cargarFincasLS(){
     if(JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0){
       this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
@@ -51,8 +51,6 @@ export class VerFincaComponent implements OnInit {
     });
     toast.present();
   }
-
-  
 
   doRefresh(event) {    
     window.localStorage.removeItem("buscarSiembraFinca")

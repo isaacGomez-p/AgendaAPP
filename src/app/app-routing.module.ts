@@ -29,6 +29,18 @@ const routes: Routes = [
   {
     path: 'aplicacion',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
+  },
+  {
+    path: 'verPlanilla',
+    loadChildren: () => import('./pages/aplicacion/ver-planilla/ver-planilla.module').then( m => m.VerAplicacionPageModule)
+  },
+  {
+    path: 'planillas',
+    loadChildren: () => import('./pages/aplicacion/ver-planilla/planillas/planillas.module').then( m => m.PlanillasPageModule)
+  },
+  {
+    path: 'producto',
+    loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)
   }
 ];
 @NgModule({

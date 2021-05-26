@@ -1,0 +1,47 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="light">    
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Planillas</H6>
+        </i></div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">  
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content
+      pullingIcon="chevron-down-circle-outline"
+      pullingText="Pull to refresh"
+      refreshingSpinner="circles"
+      refreshingText="Refreshing...">      
+    </ion-refresher-content>
+    
+  </ion-refresher>
+  <ion-list *ngFor="let planilla of planillas">
+    <ion-item>
+      <ion-icon slot="start" name="reader-outline" ></ion-icon>
+      <ion-label>
+        <h3>Formulación: </h3>
+        <h3>      {{planilla.fecha_formulacion}}</h3>
+        <p>Finca: {{planilla.fincaNombre}}</p>
+        <p>Lote: {{planilla.lote}}</p>
+        <p>Actividad: {{planilla.actividad}}</p>
+        <p>Control: {{planilla.control}}</p>
+        <p>Fertilización: {{planilla.fertilizacion}}</p>
+        <p>Producto: {{planilla.producto}}</p>
+        <p>Dosis: {{planilla.dosis}}</p>        
+        <p>Mezcla total: {{planilla.mezcla_total}}</p>
+        <p>Total dosis: {{planilla.total_dosis}}</p>
+        <p>Elaborado: {{planilla.elaborado}}</p>
+        <p>Aplicación: {{planilla.fecha_aplicacion}}</p>
+        <p>Estado: {{planilla.estado}}</p>
+        <p>Calidad ejecución: {{planilla.calidad_ejecucion}}</p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  <section class="full-width">    
+    <ion-button expand="full" color="secondary" (click)="registrar()">Ingresar nueva planilla</ion-button>
+  </section>
+</ion-content>

@@ -43,44 +43,43 @@
       </ion-row>
     </ion-grid>
   </form>
-  <form #form2="ngForm" (ngSubmit)="registrar(form2)">
+  <form #form2="ngForm" (ngSubmit)="registrar(form2)" *ngIf="estadoFormulario2 !== false">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col>
           <div padding>  
 
-            <ion-item *ngIf="estadoFormulario2 !== false">
+            <ion-item>
               <ion-label position="floating">Surco</ion-label>
               <ion-input [(ngModel)]="surco"  name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
             </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
-              <ion-label position="floating">Producto</ion-label>
-              <ion-input [(ngModel)]="producto" name="producto" type="text" placeholder="Producto" ngModel required></ion-input>
-            </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
-              <ion-label position="floating">Variedad</ion-label>
-              <ion-input [(ngModel)]="variedad" name="variedad" type="text" placeholder="Variedad" ngModel required></ion-input>
-            </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
+                        
+            <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required>
+              <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
+                {{producto.nombre}} - {{producto.variedad}}
+              </ion-select-option>
+            </ion-select>
+                        
+            <ion-item>
               <ion-label position="floating">Cantidad de plantas</ion-label>
               <ion-input [(ngModel)]="cant_plantas" name="cant_plantas" type="number" placeholder="# Plantas" ngModel required></ion-input>
             </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
+            <ion-item>
               <ion-input [(ngModel)]="anio" name="anio" type="number" placeholder="Año" ngModel required></ion-input>
             </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
+            <ion-item>
               <ion-input [(ngModel)]="semana" name="semana" type="number" placeholder="Semana" ngModel required></ion-input>
             </ion-item>
-            <ion-item *ngIf="estadoFormulario2 !== false">
+            <ion-item>
               <ion-input [(ngModel)]="dia" name="dia" type="number" placeholder="Día" ngModel required></ion-input>
             </ion-item>
           </div>
 
           <div padding>
-            <ion-button *ngIf="estadoFormulario2 !== false" expand="full" color="success" type="submit" [disabled]="form2.invalid" expand="block">
+            <ion-button expand="full" color="success" type="submit" [disabled]="form2.invalid" expand="block">
               <ion-icon slot="start" name="save-outline"></ion-icon>
               Registrar </ion-button>
-            <ion-button *ngIf="estadoFormulario2 !== false" expand="full" color="secondary" expand="block" (click)="anterior()">              
+            <ion-button expand="full" color="secondary" expand="block" (click)="anterior()">              
               <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
               Anterior
             </ion-button>
