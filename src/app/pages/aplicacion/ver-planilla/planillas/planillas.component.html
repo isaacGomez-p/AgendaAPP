@@ -20,26 +20,44 @@
     
   </ion-refresher>
   <ion-list *ngFor="let planilla of planillas">
-    <ion-item>
-      <ion-icon slot="start" name="reader-outline" ></ion-icon>
-      <ion-label>
-        <h3>Formulación: </h3>
-        <h3>      {{planilla.fecha_formulacion}}</h3>
-        <p>Finca: {{planilla.fincaNombre}}</p>
-        <p>Lote: {{planilla.lote}}</p>
-        <p>Actividad: {{planilla.actividad}}</p>
-        <p>Control: {{planilla.control}}</p>
-        <p>Fertilización: {{planilla.fertilizacion}}</p>
-        <p>Producto: {{planilla.producto}}</p>
-        <p>Dosis: {{planilla.dosis}}</p>        
-        <p>Mezcla total: {{planilla.mezcla_total}}</p>
-        <p>Total dosis: {{planilla.total_dosis}}</p>
-        <p>Elaborado: {{planilla.elaborado}}</p>
-        <p>Aplicación: {{planilla.fecha_aplicacion}}</p>
-        <p>Estado: {{planilla.estado}}</p>
-        <p>Calidad ejecución: {{planilla.calidad_ejecucion}}</p>
-      </ion-label>
-    </ion-item>
+    <ion-grid>
+      <ion-row>
+        <ion-col size="3">
+          <ion-row>
+            <div>
+              <ion-icon slot="start" name="reader-outline" ></ion-icon>
+            </div>
+          </ion-row>
+          <ion-row>
+            <div>                   
+                <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.planilla_id)"></ion-icon>              
+            </div>
+          </ion-row>
+        </ion-col>
+        <ion-col>
+          <div>
+            <ion-label>
+              <h3>Formulación: </h3>
+              <h3>      {{planilla.fecha_formulacion}}</h3>
+              <p>Finca: {{planilla.fincaNombre}}</p>
+              <p>Lote: {{planilla.lote}}</p>
+              <p>Actividad: {{planilla.actividad}}</p>
+              <p>Control: {{planilla.control}}</p>
+              <p>Fertilización: {{planilla.fertilizacion}}</p>
+              <p>Producto: {{planilla.producto}}</p>
+              <p>Dosis: {{planilla.dosis}}</p>        
+              <p>Mezcla total: {{planilla.mezcla_total}}</p>
+              <p>Total dosis: {{planilla.total_dosis}}</p>
+              <p>Elaborado: {{planilla.elaborado}}</p>
+              <p>Aplicación: {{planilla.fecha_aplicacion}}</p>
+              <p>Estado: {{planilla.estado}}</p>
+              <p>Calidad ejecución: {{planilla.calidad_ejecucion}}</p>
+            </ion-label>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
   </ion-list>
   <section class="full-width">    
     <ion-button expand="full" color="secondary" (click)="registrar()">Ingresar nueva planilla</ion-button>

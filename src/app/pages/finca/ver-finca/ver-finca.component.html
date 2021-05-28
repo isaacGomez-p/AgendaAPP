@@ -19,12 +19,15 @@
     </ion-refresher-content>
     
   </ion-refresher>
-  <ion-list *ngFor="let finca of fincas">
-    <ion-item button (click)="verSiembras(finca.finca_id)">      
-      <ion-label>
-        <h2>{{finca.nombre}}</h2>        
-      </ion-label>
-      <ion-icon slot="end" name="leaf-outline" ></ion-icon>
-    </ion-item>
+  <ion-list *ngFor="let finca of fincas">        
+      <ion-item>  
+        <ion-label>
+          <h2>{{finca.nombre}}</h2>        
+        </ion-label>
+        <ion-fab-button (click)="editarFinca(finca.finca_id)" size="small">
+          <ion-icon name="pencil-outline"></ion-icon>
+        </ion-fab-button>
+        <ion-icon slot="end" name="leaf-outline" button (click)="verSiembras(finca.finca_id)">Ver siembras</ion-icon>
+      </ion-item>
   </ion-list>
 </ion-content>

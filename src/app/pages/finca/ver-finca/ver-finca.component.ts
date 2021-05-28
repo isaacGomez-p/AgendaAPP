@@ -74,4 +74,8 @@ export class VerFincaComponent implements OnInit {
     window.localStorage.setItem( "buscarSiembraFinca", JSON.stringify(id));
     this.router.navigateByUrl('/verSiembra');
   }
+
+  editarFinca(id){
+    this.router.navigateByUrl('/finca/Editar finca/'+id);    
+  }
 }

@@ -19,6 +19,10 @@ export class PlanillasComponent implements OnInit {
 
   constructor(private loadingController: LoadingController, private router: Router, private planillaService: PlanillaService, private toastController: ToastController, private fincaService: FincaService) { }
 
+  ionViewDidEnter(){
+    this.cargarPlanillasLS();
+  }
+
   ngOnInit() {
     this.cargarPlanillasLS();
   }
@@ -28,6 +32,11 @@ export class PlanillasComponent implements OnInit {
       this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
     }else{
       this.planillas =  JSON.parse(window.localStorage.getItem("planillas"));
+      this.planillas.map((item)=>{
+        if(item.n_planilla !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
+          this.planillas = [];
+        }
+      });
     }    
   }
 
@@ -65,13 +74,14 @@ export class PlanillasComponent implements OnInit {
           window.localStorage.setItem("planillas", JSON.stringify(data));
         }else{
           this.toastConfirmacion("No se encontraron planillas de aplicación registradas", "warning");
+          this.planillas= [];
         }
       }
     })
   }
 
   registrar(){
-    this.router.navigateByUrl('/aplicacion');
+    this.router.navigateByUrl('/aplicacion/0');
   }
 
   async toastConfirmacion(mensaje, colorT) {
@@ -81,6 +91,10 @@ export class PlanillasComponent implements OnInit {
       duration: 2000
     });
     toast.present();
+  }
+
+  editar(id){
+    this.router.navigateByUrl('/aplicacion/'+id);
   }
 
 }

@@ -28,6 +28,10 @@ export class FincaService {
     return this.http.post(`${this.urlService}/AGD_Finca`, datos);
   }
 
+  putFinca(datos: Finca, id: number){
+    return this.http.put(`${this.urlService}/AGD_Finca/`+id, datos);
+  }
+
   getAllUser(idUsuario: number): Observable<Finca[]>{       
     return this.http.get<Finca[]>(`${this.urlService}/AGD_Finca/`+idUsuario);
   }

@@ -11,7 +11,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomePageModule)
   },
   {
-    path: 'finca/:titulo',
+    path: 'finca/:titulo/:idEditar',
     loadChildren: () => import('./pages/finca/finca.module').then( m => m.CamaraPageModule)
   },
   {
@@ -27,7 +27,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/siembra/ver-siembra/ver-siembra.module').then( m => m.VerSiembraPageModule)
   },
   {
-    path: 'aplicacion',
+    path: 'aplicacion/:idEditar',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
   },
   {

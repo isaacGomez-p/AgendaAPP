@@ -25,7 +25,7 @@ export class VerPlanillaComponent implements OnInit {
     this.cargarPlanillasLS();
   }
 
-  async presentModal(planilla: Planilla) {
+  async presentModal(planilla) {
     const alert = await this.actionSheetCtrl.create({
       header: 'Acciones',
       buttons: [
@@ -76,8 +76,13 @@ export class VerPlanillaComponent implements OnInit {
   cargarPlanillasLS(){
     if(JSON.parse(window.localStorage.getItem("numeroPlanillas")) === null || JSON.parse(window.localStorage.getItem("numeroPlanillas")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
-    }else{
+    }else{            
       this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
+      this.planillas.map((item)=>{
+        if(item.n_planilla_id !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
+          this.planillas = [];
+        }
+      });
     }    
   }
 

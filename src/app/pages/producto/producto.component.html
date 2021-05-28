@@ -35,7 +35,7 @@
           <div padding>
             <ion-button expand="full" color="secondary" type="submit" [disabled]="form1.invalid" expand="block">
               <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
-                Registrar 
+                {{nombreBoton}} 
             </ion-button>
           </div>
         </ion-col>
@@ -43,12 +43,12 @@
     </ion-grid>
   </form>
   <ion-list *ngFor="let producto of productos">
-    <ion-item >
-      <ion-icon slot="start" name="cart-outline" ></ion-icon>      
+    <ion-item button (click)="editar(producto.producto_id)">
+      <ion-icon slot="start" name="cart-outline" ></ion-icon>
       <ion-label>
         <h2>Nombre: {{producto.nombre}}</h2>     
         <h3>Variedad: {{producto.variedad}}</h3>        
-      </ion-label>
+      </ion-label>      
     </ion-item>
   </ion-list>
   

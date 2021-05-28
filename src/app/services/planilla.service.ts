@@ -30,6 +30,10 @@ export class PlanillaService {
     return this.http.post(`${this.urlService}/AGD_Planilla_de_aplicacion`, datos);
   }
 
+  putPlanillaAplicacion(datos: Planilla, id: number){
+    return this.http.put(`${this.urlService}/AGD_Planilla_de_aplicacion/`+id, datos);
+  }
+
   postNumeroPlanilla(datos: NumeroPlanilla){
     return this.http.post(`${this.urlService}/AGD_N_Planilla`, datos);
   }

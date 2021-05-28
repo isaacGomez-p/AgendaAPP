@@ -25,6 +25,10 @@ export class ProductoService {
     return this.http.post(`${this.urlService}/AGD_Producto`, datos);
   }
 
+  putFinca(datos: Producto, id: number){
+    return this.http.put(`${this.urlService}/AGD_Producto/`+id, datos);
+  }
+
   getAll(idUsuario: number): Observable<Producto[]>{       
     return this.http.get<Producto[]>(`${this.urlService}/AGD_Producto/`+idUsuario);
   }
