@@ -4,6 +4,8 @@ import { AlertController, ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { PlanillaService } from 'src/app/services/planilla.service';
+import { ActionSheetController } from '@ionic/angular';
+import { Planilla } from 'src/app/model/planilla';
 
 
 @Component({
@@ -17,10 +19,53 @@ export class VerPlanillaComponent implements OnInit {
 
   duracionRefresh: number = 2000;
 
-  constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private alertController: AlertController) { }
+  constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private alertController: AlertController, public actionSheetCtrl: ActionSheetController) { }
 
   ngOnInit() {        
     this.cargarPlanillasLS();
+  }
+
+  async presentModal(planilla: Planilla) {
+    const alert = await this.actionSheetCtrl.create({
+      header: 'Acciones',
+      buttons: [
+        {
+          text: 'Editar',
+          role: 'selected',
+          icon: 'pencil-outline',
+          handler: () => {
+            //this.openAlert(pedido);
+          }
+        },{
+          text: 'Eliminar',
+          role: 'selected',
+          icon: 'close-outline',
+          handler: () => {
+            //this.pedidoCanceladoAlert(pedido)
+          }
+        },{
+          text: 'Ruta',
+          role: 'destructive',
+          icon: 'navigate-circle-outline',
+          handler: () => {
+            //this.ruta(pedido);
+          }
+        }
+      ]
+    });
+    await alert.present();
+    /*
+    window.localStorage.setItem( "pedido_actualizar", JSON.stringify(pedido));
+    const modal = await this.modalController.create({
+      component: ModalPage,
+      cssClass: 'my-custom-class',
+      componentProps: {
+        'firstName': 'Douglas',
+        'lastName': 'Adams',
+        'middleInitial': 'N'
+      }
+    });
+    return await modal.present();*/
   }
 
   verPlanillas(id){

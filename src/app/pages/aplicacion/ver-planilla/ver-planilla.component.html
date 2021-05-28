@@ -25,6 +25,9 @@
         <h2>{{planilla.n_planilla_id}}</h2>        
       </ion-label>
       <ion-icon slot="end" name="reader-outline" ></ion-icon>
+      <ion-fab-button (click)="presentModal(planilla)" size="small">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-fab-button>
     </ion-item>
   </ion-list>
   <ion-button expand="full" color="secondary" expand="block" (click)="nuevaPlanilla()">
