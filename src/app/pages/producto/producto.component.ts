@@ -28,32 +28,45 @@ export class ProductoComponent implements OnInit {
 
   registrar(form) {
     if (this.nombreBoton === "Editar") {
-      let datos = new Producto();
-      datos = {
-        nombre: form.value.nombre,
-        producto_id: this.productoId,
-        variedad: form.value.variedad
-      }
-      this.serviceProducto.putFinca(datos, this.productoId).subscribe(() => {
-        this.toastConfirmacion("Se edito correctamente", "success");
-        this.resetDatos();
-      }, err => {
-        this.toastConfirmacion("Error, ya se encuentra registrado.", "danger");
+
+      this.productos.map((item) => {
+        if (item.producto_id === this.productoId) {
+          item.nombre = form.value.nombre,
+          item.variedad = form.value.variedad
+          item.edicion = true;
+        }
       });
+      this.toastConfirmacion("Se edito correctamente", "success");
+      window.localStorage.setItem('productos', JSON.stringify(this.productos));      
     } else {
       if (this.nombreBoton === "Registrar") {
-        let datos = new Producto();
-        datos = {
-          nombre: form.value.nombre,
-          producto_id: 0,
-          variedad: form.value.variedad
-        }
-        this.serviceProducto.postFinca(datos).subscribe(() => {
+        this.productos = JSON.parse(window.localStorage.getItem('productos'));
+        let cont = 0;
+        this.productos.map((item) => {
+          if (item.producto_id <= 0) {
+            cont++;
+          }
+        })
+        let validacion = true;
+        this.productos.map((item) => {
+          if (item.nombre.toString() === form.value.nombre && item.variedad === form.value.variedad) {
+            validacion = false;
+          }
+        })
+        if (validacion === true) {
+          let datos = new Producto();
+          datos = {            
+            nombre: form.value.nombre,
+            producto_id: cont * -1,
+            variedad: form.value.variedad,
+            edicion: false
+          }
+          this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");
-          this.resetDatos();
-        }, err => {
-          this.toastConfirmacion("Error, ya se encuentra registrado.", "danger");
-        });
+          window.localStorage.setItem('productos', JSON.stringify(this.productos));
+        }else{
+          this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
+        }    
       }
     }
 
@@ -74,7 +87,7 @@ export class ProductoComponent implements OnInit {
   }
 
   doRefresh(event) {
-    this.cargarProductosBD();
+    this.cargarProductosLS();
     this.presentLoading();
     setTimeout(() => {
       event.target.complete();

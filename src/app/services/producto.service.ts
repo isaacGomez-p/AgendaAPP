@@ -21,11 +21,11 @@ export class ProductoService {
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }  
 
-  postFinca(datos: Producto){
+  postProducto(datos: Producto){
     return this.http.post(`${this.urlService}/AGD_Producto`, datos);
   }
 
-  putFinca(datos: Producto, id: number){
+  putProducto(datos: Producto, id: number){
     return this.http.put(`${this.urlService}/AGD_Producto/`+id, datos);
   }
 

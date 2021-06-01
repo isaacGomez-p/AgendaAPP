@@ -84,7 +84,8 @@ export class FincaComponent implements OnInit {
           nombre: form.value.nombreFinca,
           estado: 1, //Estado 1 indica que esta activo
           id_agricultor: this.agricultor[0].agricultor_id,
-          finca_id: cont * -1
+          finca_id: cont * -1,
+          edicion: false          
         }
         this.fincas.push(datos);     
         this.nombreFinca = null;   
@@ -101,6 +102,7 @@ export class FincaComponent implements OnInit {
             item.estado = this.estado;
             item.nombre = form.value.nombreFinca;
             item.id_agricultor = this.agricultor[0].agricultor_id;
+            item.edicion = true;
           }
         })        
         this.toastConfirmacion("Editado correctamente.","success");        

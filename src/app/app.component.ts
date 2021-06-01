@@ -10,6 +10,8 @@ import { PlanillaService } from './services/planilla.service';
 import { Agricultor } from './model/agricultor';
 import { FincaService } from './services/finca.service';
 import { Finca } from './model/finca';
+import { ProductoService } from './services/producto.service';
+import { Producto } from './model/producto';
 
 @Component({
   selector: 'app-root',
@@ -23,12 +25,13 @@ export class AppComponent implements OnInit {
   agricultor: Agricultor[];
   fincas: Finca[];
   numeroPlanillas: NumeroPlanilla[];
+  productos: Producto[];
 
   tituloFinca: String = '';
 
   loginEstado: boolean = false;  
 
-  constructor(private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
+  constructor(private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
 
   ngOnInit() {  
     
@@ -143,7 +146,14 @@ export class AppComponent implements OnInit {
           this.fincaService.postFinca(item).subscribe(()=>{
             
           });
+        }else{
+          if(item.edicion === true){
+            this.fincaService.putFinca(item, item.finca_id).subscribe(()=>{
+
+            })
+          }
         }
+        
       })
     }
 
@@ -157,6 +167,24 @@ export class AppComponent implements OnInit {
         }
       })
     }
+
+    this.productos = JSON.parse(window.localStorage.getItem('productos'));
+    if(this.productos.length > 0){
+      this.productos.map((item)=>{
+        if(item.producto_id <= 0){
+          this.serviceProducto.postProducto(item).subscribe(()=>{
+
+          });
+        } else{
+          if(item.edicion === true){
+            this.serviceProducto.putProducto(item, item.producto_id).subscribe(()=>{
+
+            })
+          }
+        }
+      });
+    }
+
   }
 
   descargarDatos(){    
@@ -164,10 +192,21 @@ export class AppComponent implements OnInit {
 
     this.planillaService.getNumerosPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
       window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));  
+    }, err => {
+      this.toastConfirmacion("Error en cargar planillar.", "danger");
     })
 
     this.fincaService.getAllUser(this.agricultor[0].agricultor_id).subscribe((data) => {
       window.localStorage.setItem("fincas", JSON.stringify(data));  
+    }, err => {
+      this.toastConfirmacion("Error en cargar fincas.", "danger");
+    })
+
+    this.serviceProducto.getAll(0).subscribe((data) => {
+      this.productos = data;
+      window.localStorage.setItem('productos', JSON.stringify(data));      
+    }, err => {
+      this.toastConfirmacion("Error en cargar productos.", "danger");
     })
   }
 
