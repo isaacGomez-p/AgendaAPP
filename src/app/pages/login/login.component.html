@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="light">
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>Agenda Agrícola</H6>
+        </i></div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <form #form="ngForm" (ngSubmit)="login(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>            
+            <ion-item>
+              <ion-label position="floating">Cedula</ion-label>
+              <ion-input [(ngModel)]="cedula" name="user" type="number" placeholder="No. Cédula" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input [(ngModel)]="clave" name="clave" type="password" placeholder="Contraseña" ngModel required></ion-input>
+            </ion-item>
+            <ion-button expand="full" color="success" type="submit" [disabled]="form.invalid" expand="block">
+              <ion-icon name="log-in-outline"></ion-icon> 
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>
+  <ion-label color="primary">¿No tiene una cuenta?</ion-label>
+  <ion-button expand="full" color="secondary" expand="block" (click)="registrar()">
+    Registrar    
+  </ion-button>
+
+</ion-content>
+

@@ -1,8 +1,15 @@
+import { NumeroPlanilla } from './model/numeroPlanilla';
 import { Component, OnInit } from '@angular/core';
 import { AlertController } from '@ionic/angular';
 import { ActionSheetController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { FincaComponent } from './pages/finca/finca.component';
+import { ToastController } from '@ionic/angular';
+import { LoginComponent } from '../app/pages/login/login.component';
+import { PlanillaService } from './services/planilla.service';
+import { Agricultor } from './model/agricultor';
+import { FincaService } from './services/finca.service';
+import { Finca } from './model/finca';
 
 @Component({
   selector: 'app-root',
@@ -11,12 +18,157 @@ import { FincaComponent } from './pages/finca/finca.component';
 })
 export class AppComponent implements OnInit {
   
+  usuario : string = "";
+
+  agricultor: Agricultor[];
+  fincas: Finca[];
+  numeroPlanillas: NumeroPlanilla[];
+
   tituloFinca: String = '';
 
-  constructor(private alertCtrl: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent) {}
+  loginEstado: boolean = false;  
+
+  constructor(private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
 
   ngOnInit() {  
     
+  }
+
+  async configuracion() {
+    const alert = await this.actionSheetCtrl.create({
+      header: 'Configuración',
+      buttons: [
+        {
+          text: 'Inicio',
+          role: 'selected',
+          icon: 'home-outline',
+          handler: () => {            
+            this.router.navigateByUrl('/home');
+          }
+        },
+        {
+          text: 'Sincronizar',
+          role: 'selected',          
+          icon: 'cloud-upload-outline',
+          handler: () => {            
+            this.presentAlertConfirmSincronizar()            
+          }
+        },
+        {
+          text: 'Descargar',
+          role: 'selected',          
+          icon: 'cloud-download-outline',
+          handler: () => {            
+            this.presentAlertConfirmDescargar();
+          }
+        },
+        {
+          text: 'Cerrar sesión',
+          role: 'selected',          
+          icon: 'power-outline',
+          handler: () => {                                    
+            this.loginEstado = false;
+            this.router.navigateByUrl('/login');
+          }
+        },
+        {
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async presentAlertConfirmDescargar() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Mensaje de confirmación',
+      message: '<strong>¿Desea descargar todos los datos?</strong>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confirmar',
+          handler: () => {
+            this.descargarDatos()
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  async presentAlertConfirmSincronizar() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Mensaje de confirmación',
+      message: '<strong>¿Desea sincronizar todos los datos?</strong>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confirmar',
+          handler: () => {
+            this.sincronizar();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  sincronizar(){
+    this.fincas = JSON.parse(window.localStorage.getItem('fincas'));
+    
+    if(this.fincas.length > 0){
+      this.fincas.map((item)=>{
+        if(item.finca_id <= 0 ){
+          this.fincaService.postFinca(item).subscribe(()=>{
+            
+          });
+        }
+      })
+    }
+
+    this.numeroPlanillas = JSON.parse(window.localStorage.getItem('numeroPlanillas'));
+    if(this.numeroPlanillas.length > 0){
+      this.numeroPlanillas.map((item)=>{
+        if(item.n_planilla_id <= 0){
+          this.planillaService.postNumeroPlanilla(item).subscribe(()=>{
+
+          })
+        }
+      })
+    }
+  }
+
+  descargarDatos(){    
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+
+    this.planillaService.getNumerosPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
+      window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));  
+    })
+
+    this.fincaService.getAllUser(this.agricultor[0].agricultor_id).subscribe((data) => {
+      window.localStorage.setItem("fincas", JSON.stringify(data));  
+    })
   }
 
   async menuFinca() {
@@ -42,7 +194,7 @@ export class AppComponent implements OnInit {
           }
         },
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -68,7 +220,7 @@ export class AppComponent implements OnInit {
           }
         },        
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -80,10 +232,9 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  //async menuPlanilla() {
-  menuPlanilla() {
-    this.router.navigateByUrl('/verPlanilla');
-    /*const alert = await this.actionSheetCtrl.create({
+  
+  async menuPlanilla() {    
+    const alert = await this.actionSheetCtrl.create({
       header: 'Aplicación',
       buttons: [
         {
@@ -95,7 +246,7 @@ export class AppComponent implements OnInit {
           }
         },
         {
-          text: 'Cancel',
+          text: 'Cancelar',
           icon: 'close',
           role: 'cancel',
           handler: () => {
@@ -104,10 +255,40 @@ export class AppComponent implements OnInit {
         }
       ]
     });
-    await alert.present();*/
+    await alert.present();
   }
 
-  menuProductos(){
-    this.router.navigateByUrl('/producto');
+  async menuProductos(){
+    const alert = await this.actionSheetCtrl.create({
+      header: 'Productos',
+      buttons: [
+        {
+          text: 'Ver productos',
+          role: 'selected',
+          icon: 'layers-outline',
+          handler: () => {
+            this.router.navigateByUrl('/producto');
+          }
+        },
+        {
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await alert.present();    
+  }
+
+  async toastConfirmacion(mensaje, colorT) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      color: colorT,
+      duration: 2000
+    });
+    toast.present();
   }
 }

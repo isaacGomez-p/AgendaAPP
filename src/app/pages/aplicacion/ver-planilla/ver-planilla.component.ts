@@ -1,3 +1,4 @@
+import { Agricultor } from './../../../model/agricultor';
 import { NumeroPlanilla } from './../../../model/numeroPlanilla';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -15,13 +16,19 @@ import { Planilla } from 'src/app/model/planilla';
 })
 export class VerPlanillaComponent implements OnInit {
 
+  agricultor: Agricultor[];
+
   planillas: NumeroPlanilla[];
 
   duracionRefresh: number = 2000;
 
   constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private alertController: AlertController, public actionSheetCtrl: ActionSheetController) { }
 
-  ngOnInit() {        
+  OnViewDidEnter(){    
+    this.cargarPlanillasLS();
+  }
+
+  ngOnInit() {            
     this.cargarPlanillasLS();
   }
 
@@ -73,16 +80,17 @@ export class VerPlanillaComponent implements OnInit {
     this.router.navigateByUrl('/planillas');
   }
 
-  cargarPlanillasLS(){
+  cargarPlanillasLS(){    
     if(JSON.parse(window.localStorage.getItem("numeroPlanillas")) === null || JSON.parse(window.localStorage.getItem("numeroPlanillas")).length === 0){
-      this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
-    }else{            
+      this.toastConfirmacion('No tiene planillas registradas.', 'warning');
       this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
-      this.planillas.map((item)=>{
+    }else{                  
+      this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
+      /*this.planillas.map((item)=>{
         if(item.n_planilla_id !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
           this.planillas = [];
         }
-      });
+      });*/
     }    
   }
 
@@ -97,7 +105,8 @@ export class VerPlanillaComponent implements OnInit {
 
   doRefresh(event) {    
     window.localStorage.removeItem("buscarPlanilla")
-    this.cargarPlanillasBD();
+    //this.cargarPlanillasBD();
+    this.cargarPlanillasLS();
     this.presentLoading();
     setTimeout(() => {  
       event.target.complete();
@@ -112,17 +121,6 @@ export class VerPlanillaComponent implements OnInit {
     });
     await loading.present();    
   }
-
-  cargarPlanillasBD(){
-    this.servicePlanilla.getNumerosPlanillas(1).subscribe((data) => {
-      if(data.length === 0){
-        this.toastConfirmacion('No se encontraron datos registrados.', 'warning');
-      }else{
-        this.planillas = data;
-        window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));
-      }      
-    })
-  }  
 
   async nuevaPlanilla() {
     const alert = await this.alertController.create({
@@ -148,15 +146,26 @@ export class VerPlanillaComponent implements OnInit {
   }
 
   registrar(){
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+
     let datos = new NumeroPlanilla();
-    datos = {
-      agricultor_id: 1,
-      fecha_creacion: new Date(),
-      n_planilla_id: 0
-    }
-    this.servicePlanilla.postNumeroPlanilla(datos).subscribe(() =>{
-      this.toastConfirmacion("Se registro correctamente", "success");
+    let cont = 0;
+    this.planillas.map((item)=>{
+      if(item.n_planilla_id <= 0){
+        cont++;
+      }
     })
+    datos = {
+      agricultor_id: this.agricultor[0].agricultor_id,
+      fecha_creacion: new Date(),
+      n_planilla_id: cont*-1
+    }
+    this.planillas.push(datos)
+    window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.planillas));
+    /*this.servicePlanilla.postNumeroPlanilla(datos).subscribe(() =>{
+      this.toastConfirmacion("Se registro correctamente", "success");
+    })*/
+    this.toastConfirmacion("Se registro correctamente", "success");
   }
 
 }

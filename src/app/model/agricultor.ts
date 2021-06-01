@@ -5,4 +5,5 @@ export class Agricultor{
     clave : String;
     cedula : number;
     estado : number;
+    
 }

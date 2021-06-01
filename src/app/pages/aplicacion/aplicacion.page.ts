@@ -106,6 +106,8 @@ export class AplicacionPage implements OnInit {
           this.fincaLista.map((finca) => {
             if(item.finca_id === finca.finca_id){
               this.nombreFincaEditar = 'Finca actual: ' + finca.nombre;
+              this.finca = finca.finca_id;
+              this.buscarLotesEditar(this.finca);
             }
           })
         }
@@ -138,6 +140,18 @@ export class AplicacionPage implements OnInit {
       }
     })
   }
+
+  buscarLotesEditar(id){
+    this.serviceSiembra.getSiembrasFinca(id).subscribe((data) => {
+      if (data.length > 0) {
+        this.listaLotes = data;
+        this.estadoSiguiente = true;
+      } else {
+        this.listaLotes = [];
+        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
+      }
+    })
+  }  
 
 
   registrar(form) {
@@ -176,12 +190,13 @@ export class AplicacionPage implements OnInit {
         this.estadoSiguiente = false;
       });
     }else{
-      this.servicePlanilla.postPlanillaAplicacion(datos).subscribe(() => {
+      /*this.servicePlanilla.postPlanillaAplicacion(datos).subscribe(() => {
         this.toastConfirmacion("Se registro correctamente", "success")
         this.resetDatos();
       }, err => {
         this.toastConfirmacion("Error.", "danger");
-      });
+      });*/
+      this.planillas.push(datos)
     }
     
   }

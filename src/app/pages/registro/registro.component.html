@@ -1,0 +1,49 @@
+<ion-header [translucent]="true">  
+  <ion-toolbar color="light">        
+    <ion-title stacked class="my-title" color="dark">
+      <div font size=4 align="center"><strong>AGENDA APP</strong></div>
+      <div font size=1 align="center"><i>
+          <H6>{{titulo}}</H6>
+        </i></div>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">  
+  <form #form="ngForm" (ngSubmit)="registro(form)">
+    <ion-grid>
+      <ion-row color="primary" justify-content-center>
+        <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
+          <div padding>            
+            <ion-item>
+              <ion-label position="floating">Nombre</ion-label>
+              <ion-input [(ngModel)]="nombre" name="nombre" type="text" placeholder="Nombre" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Apellido</ion-label>
+              <ion-input [(ngModel)]="apellido" name="apellido" type="text" placeholder="Apellido" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Cédula</ion-label>
+              <ion-input [(ngModel)]="cedula" name="cedula" type="number" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Contraseña</ion-label>
+              <ion-input [(ngModel)]="clave" name="clave" type="password" ngModel required></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Confirmar Contraseña</ion-label>
+              <ion-input [(ngModel)]="claveConfirmacion" name="claveConfirmacion" type="password" ngModel required></ion-input>
+            </ion-item>
+            <ion-button expand="full" color="success" type="submit" [disabled]="form.invalid" expand="block">
+              <ion-icon name="log-in-outline"></ion-icon> 
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </form>  
+  
+    <ion-button (click)="volver()" expand="full">Volver</ion-button>
+  
+</ion-content>

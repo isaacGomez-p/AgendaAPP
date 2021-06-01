@@ -22,16 +22,13 @@
   <ion-list *ngFor="let planilla of planillas">
     <ion-item button (click)="verPlanillas(planilla.n_planilla_id)">      
       <ion-label>
-        <h2>{{planilla.n_planilla_id}}</h2>        
+        <h2>Planilla {{planilla.n_planilla_id}}</h2>        
       </ion-label>
-      <ion-icon slot="end" name="reader-outline" ></ion-icon>
-      <ion-fab-button (click)="presentModal(planilla)" size="small">
-        <ion-icon name="add-circle-outline"></ion-icon>
-      </ion-fab-button>
+      <ion-icon slot="end" name="reader-outline" ></ion-icon>      
     </ion-item>
   </ion-list>
   <ion-button expand="full" color="secondary" expand="block" (click)="nuevaPlanilla()">
-    <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
+    <ion-icon slot="start" name="add-outline"></ion-icon>
       Registrar 
   </ion-button>
 </ion-content>

@@ -54,7 +54,7 @@ export class VerFincaComponent implements OnInit {
 
   doRefresh(event) {    
     window.localStorage.removeItem("buscarSiembraFinca")
-    this.cargarFincasBD();
+    this.cargarFincasLS();
     this.presentLoading();
     setTimeout(() => {  
       event.target.complete();

@@ -28,7 +28,7 @@
             <ion-label *ngIf="estadoFincaEditar === true">
               {{nombreFincaEditar}}
             </ion-label>
-            <ion-select [(ngModel)]="finca" name="finca" placeholder="Seleccione una finca">
+            <ion-select *ngIf="estadoFincaEditar === false" [(ngModel)]="finca" name="finca" placeholder="Seleccione una finca">
               <ion-select-option *ngFor="let fincas of fincaLista" value="{{fincas.finca_id}}" >{{fincas.nombre}}
               </ion-select-option>
             </ion-select>

@@ -1,5 +1,6 @@
+import { Agricultor } from './../../model/agricultor';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Finca } from 'src/app/model/finca';
 import { FincaService } from 'src/app/services/finca.service';
 import { ToastController } from '@ionic/angular';
@@ -10,7 +11,7 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./finca.component.scss'],
 })
 export class FincaComponent implements OnInit {
-
+  agricultor: Agricultor[];
   titulo: String;
 
   nombreFinca: String;
@@ -22,11 +23,21 @@ export class FincaComponent implements OnInit {
 
   nombreBoton: String;
 
-  constructor(private paramsUrl: ActivatedRoute, private fincaService: FincaService, private toastController: ToastController) {
+  constructor(private router: Router, private paramsUrl: ActivatedRoute, private fincaService: FincaService, private toastController: ToastController) {
 
   }
 
+  cargarFincasLS(){
+    if(JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0){
+      this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
+    }else{
+      this.fincas =  JSON.parse(window.localStorage.getItem("fincas"));
+    }
+  }
+
   ngOnInit() {
+    this.cargarFincasLS();
+    window.localStorage.removeItem("buscarSiembraFinca")
     this.titulo = this.paramsUrl.snapshot.paramMap.get('titulo')
     if (this.paramsUrl.snapshot.paramMap.get('idEditar') !== null && this.paramsUrl.snapshot.paramMap.get('idEditar') !== '0') {
       this.llenarCampoEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')))
@@ -53,33 +64,54 @@ export class FincaComponent implements OnInit {
   }
 
   agregarFinca(form) {
-    if (this.nombreBoton === "Agregar") {
-      let datos = new Finca();
-      datos.nombre = form.value.nombreFinca;
-      datos.estado = 1; //Estado 1 indica que esta activo
-      datos.id_agricultor = 1;
-      console.log('agrego');
-      this.fincaService.postFinca(datos).subscribe((data) => {
-        this.toastConfirmacion('Finca agregada correctamente.', 'success')
-        this.nombreFinca = null;
-      });
-    } else {
-      if (this.nombreBoton === "Editar") {
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    if (this.nombreBoton === "Agregar") {      
+      let cont = 0;
+      this.fincas.map((item)=>{
+        if(item.finca_id <= 0){
+          cont++;
+        }
+      })
+      let validacion = true;
+      this.fincas.map((item)=>{
+        if(item.nombre.toString() === form.value.nombreFinca){
+          validacion = false;          
+        }
+      })
+      if(validacion === true){
         let datos = new Finca();
-        datos.finca_id = this.idFinca;
-        datos.nombre = form.value.nombreFinca;
-        datos.estado = this.estado;
-        datos.id_agricultor = this.idAgricultor;
-        this.fincaService.putFinca(datos, this.idFinca).subscribe((data) => {
-          this.toastConfirmacion('Finca editada correctamente.', 'success')
-          this.nombreFinca = null;
-        });
+        datos = {
+          nombre: form.value.nombreFinca,
+          estado: 1, //Estado 1 indica que esta activo
+          id_agricultor: this.agricultor[0].agricultor_id,
+          finca_id: cont * -1
+        }
+        this.fincas.push(datos);     
+        this.nombreFinca = null;   
+        this.toastConfirmacion("Ingresado correctamente.","success");
+        window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
+        this.router.navigateByUrl('/verFinca');
+      }else{
+        this.toastConfirmacion("La finca ya se encuentra registrada.","warning");
+      }      
+    } else {
+      if (this.nombreBoton === "Editar") {        
+        this.fincas.map((item)=>{
+          if(item.finca_id === this.idFinca){
+            item.estado = this.estado;
+            item.nombre = form.value.nombreFinca;
+            item.id_agricultor = this.agricultor[0].agricultor_id;
+          }
+        })        
+        this.toastConfirmacion("Editado correctamente.","success");        
         console.log('edito');
+        window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
+        this.router.navigateByUrl('/verFinca');
       }else{
         console.log('no entro');
       }
     }
-
+    
   }
 
   async toastConfirmacion(mensaje, colorT) {
