@@ -28,7 +28,7 @@ export class PlanillasComponent implements OnInit {
   }
 
   cargarPlanillasLS(){
-    if(JSON.parse(window.localStorage.getItem("planillas")) === null || JSON.parse(window.localStorage.getItem("planillas")).length === 0){
+    if(JSON.parse(window.localStorage.getItem("planillas")) === null){
       this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
     }else{
       this.planillas =  JSON.parse(window.localStorage.getItem("planillas"));
@@ -37,7 +37,9 @@ export class PlanillasComponent implements OnInit {
           this.planillas = [];
         }
       });
+      this.cargarPlanillasBD();
     }    
+    
   }
 
   doRefresh(event) {    
@@ -59,29 +61,22 @@ export class PlanillasComponent implements OnInit {
   }
 
   cargarPlanillasBD(){
-    this.planillaService.getPlanillas(Number.parseInt(localStorage.getItem('buscarPlanilla'))).subscribe((data) => {
-      if(data !== null){
-        if(data.length > 0){           
-          let fincas = JSON.parse(window.localStorage.getItem('fincas'));
-          for(let item of data){                        
-            for(let f of fincas){              
-              if(f.finca_id === item.finca_id){                
-                item.fincaNombre = f.nombre;
-              }
-            }            
+    if(this.planillas !== null){
+      this.planillas.map(item =>{
+        let fincas = JSON.parse(window.localStorage.getItem('fincas'));
+        for(let f of fincas){
+          if(item.finca_id === f.finca_id){
+            item.fincaNombre = f.nombre;
           }
-          this.planillas = data;
-          window.localStorage.setItem("planillas", JSON.stringify(data));
-        }else{
-          this.toastConfirmacion("No se encontraron planillas de aplicación registradas", "warning");
-          this.planillas= [];
-        }
-      }
-    })
+        }      
+      })    
+    }else{
+      this.toastConfirmacion("No hay planillas registradas", "warning");
+    }
   }
 
   registrar(){
-    this.router.navigateByUrl('/aplicacion/0');
+    this.router.navigateByUrl('/aplicacion/a');
   }
 
   async toastConfirmacion(mensaje, colorT) {

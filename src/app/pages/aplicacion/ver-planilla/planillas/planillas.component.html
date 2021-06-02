@@ -19,46 +19,72 @@
     </ion-refresher-content>
     
   </ion-refresher>
-  <ion-list *ngFor="let planilla of planillas">
-    <ion-grid>
-      <ion-row>
-        <ion-col size="3">
-          <ion-row>
-            <div>
-              <ion-icon slot="start" name="reader-outline" ></ion-icon>
-            </div>
-          </ion-row>
-          <ion-row>
-            <div>                   
-                <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.planilla_id)"></ion-icon>              
-            </div>
-          </ion-row>
-        </ion-col>
-        <ion-col>
-          <div>
-            <ion-label>
-              <h3>Formulación: </h3>
-              <h3>      {{planilla.fecha_formulacion}}</h3>
-              <p>Finca: {{planilla.fincaNombre}}</p>
-              <p>Lote: {{planilla.lote}}</p>
-              <p>Actividad: {{planilla.actividad}}</p>
-              <p>Control: {{planilla.control}}</p>
-              <p>Fertilización: {{planilla.fertilizacion}}</p>
-              <p>Producto: {{planilla.producto}}</p>
-              <p>Dosis: {{planilla.dosis}}</p>        
-              <p>Mezcla total: {{planilla.mezcla_total}}</p>
-              <p>Total dosis: {{planilla.total_dosis}}</p>
-              <p>Elaborado: {{planilla.elaborado}}</p>
-              <p>Aplicación: {{planilla.fecha_aplicacion}}</p>
-              <p>Estado: {{planilla.estado}}</p>
-              <p>Calidad ejecución: {{planilla.calidad_ejecucion}}</p>
-            </ion-label>
-          </div>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    
-  </ion-list>
+  <ion-item-group *ngFor="let planilla of planillas">
+    <ion-item-divider>
+      <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.planilla_id)"></ion-icon> 
+      <ion-label> Formulación: </ion-label>        
+    </ion-item-divider>
+    <ion-item-divider>
+      <ion-label>{{planilla.fecha_formulacion}} </ion-label>
+    </ion-item-divider>
+
+    <ion-item>
+      <ion-label>Finca: </ion-label>
+      <ion-label>{{planilla.fincaNombre}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Lote: </ion-label>
+      <ion-label>{{planilla.lote}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Actividad: </ion-label>
+      <ion-label>{{planilla.actividad}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Control: </ion-label>
+      <ion-label>{{planilla.control}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fertilización: </ion-label>
+      <ion-label>{{planilla.fertilizacion}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Producto: </ion-label>
+      <ion-label>{{planilla.producto}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Dosis: </ion-label>
+      <ion-label>{{planilla.dosis}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Mezcla total: </ion-label>
+      <ion-label>{{planilla.mezcla_total}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Total dosis: </ion-label>
+      <ion-label>{{planilla.total_dosis}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Elaborado: </ion-label>
+      <ion-label> {{planilla.elaborado}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Fecha aplicación: </ion-label>
+      <ion-label> {{planilla.fecha_aplicacion}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Estado: </ion-label>
+      <ion-label>  {{planilla.estado}}</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-label>Calidad ejecución: </ion-label>
+      <ion-label>  {{planilla.calidad_ejecucion}}</ion-label>
+    </ion-item>
+  </ion-item-group>
+
+  <div>                   
+                 
+</div>
   <section class="full-width">    
     <ion-button expand="full" color="secondary" (click)="registrar()">Ingresar nueva planilla</ion-button>
   </section>

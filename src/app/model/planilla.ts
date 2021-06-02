@@ -16,7 +16,7 @@ export class Planilla{
     calidad_ejecucion: String;
     n_planilla: number;
     finca_id: number;
-
+    agricultor_id: number;
     //No mapeadas
     fincaNombre: String;
 }

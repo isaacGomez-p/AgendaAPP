@@ -9,6 +9,7 @@ import { SiembraService } from 'src/app/services/siembra.service';
 import { Siembra } from 'src/app/model/siembra';
 import { Planilla } from 'src/app/model/planilla';
 import { Producto } from 'src/app/model/producto';
+import { Agricultor } from 'src/app/model/agricultor';
 
 @Component({
   selector: 'app-aplicacion',
@@ -20,6 +21,7 @@ export class AplicacionPage implements OnInit {
   fincaLista: Finca[];
   listaLotes: Siembra[];
   productos: Producto[];
+  agricultor: Agricultor[];
 
   finca: number;
   lote: number;
@@ -61,7 +63,7 @@ export class AplicacionPage implements OnInit {
 
   planillas: Planilla[]
 
-  idPLanilla: number;
+  idPLanilla: number; 
 
   nombreBoton: String;
 
@@ -69,7 +71,7 @@ export class AplicacionPage implements OnInit {
 
   ngOnInit() {
     this.cargarFincasLS();
-    if(this.paramsUrl.snapshot.paramMap.get('idEditar') === '0'){
+    if(this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a'){
       this.titulo = "Planilla de aplicación";      
       this.nombreBoton = "Registrar";
     }else{
@@ -84,11 +86,12 @@ export class AplicacionPage implements OnInit {
   }
 
   cargarDatosEditar(id){
-    if (JSON.parse(window.localStorage.getItem("planillas")) === null || JSON.parse(window.localStorage.getItem("planillas")).length === 0) {
+    if (JSON.parse(window.localStorage.getItem("planillas")) === null) {
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
     } else {
       this.estadoFincaEditar = true;
       this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
+      console.log("planilla" + JSON.stringify(this.planillas));
       this.planillas.map((item) => {
         if (item.planilla_id === id) {
           this.idPLanilla = item.planilla_id;
@@ -126,6 +129,12 @@ export class AplicacionPage implements OnInit {
     } else {
       this.productos = JSON.parse(window.localStorage.getItem("productos"));
     }
+    if(JSON.parse(window.localStorage.getItem("planillas")) ===null) {
+      this.toastConfirmacion('No tiene planillas registradas.', 'warning');
+    }else{
+      this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
+    }
+    
   }
 
   buscarLotes(form) {
@@ -155,6 +164,8 @@ export class AplicacionPage implements OnInit {
 
 
   registrar(form) {
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
       console.log(' ' + JSON.stringify(p));
       if (p.producto_id === Number.parseInt(form.value.producto)) {
@@ -162,33 +173,42 @@ export class AplicacionPage implements OnInit {
       }
     }
 
-    let datos = new Planilla();
-    datos = {
-      actividad: form.value.actividad,
-      calidad_ejecucion: form.value.calidad_ejecucion,
-      control: form.value.control,
-      dosis: form.value.dosis,
-      elaborado: form.value.elaborado,
-      estado: form.value.ejecucion,
-      fecha_aplicacion: new Date(form.value.fecha_aplicacion),
-      fecha_formulacion: new Date(),
-      fertilizacion: form.value.fertilizacion,
-      lote: form.value.lote,
-      mezcla_total: form.value.mezcla_total,
-      planilla_id: this.idPLanilla,
-      prevencion: form.value.prevencion,
-      producto: this.producto,
-      total_dosis: form.value.total_dosis,
-      n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
-      finca_id: this.finca,
-      fincaNombre: null
-    }
+    
     if(this.titulo === "Editar planilla"){
-      this.servicePlanilla.putPlanillaAplicacion(datos, this.idPLanilla).subscribe(() => {
+      /*this.servicePlanilla.putPlanillaAplicacion(datos, this.idPLanilla).subscribe(() => {
         this.toastConfirmacion("Se edito correctamente correctamente", "success")
+        
         this.resetDatos();
         this.estadoSiguiente = false;
-      });
+      });*/
+      this.planillas.map( item => {
+        if(item.planilla_id === this.idPLanilla){
+          item.actividad = form.value.actividad
+          item.calidad_ejecucion = form.value.calidad_ejecucion
+          item.control= form.value.control
+          item.dosis= form.value.dosis
+          item.elaborado= form.value.elaborado
+          item.estado= form.value.ejecucion
+          item.fecha_aplicacion= new Date(form.value.fecha_aplicacion)
+          item.fecha_formulacion= new Date()
+          item.fertilizacion= form.value.fertilizacion
+          item.lote= form.value.lote
+          item.mezcla_total= form.value.mezcla_total
+          item.planilla_id= this.idPLanilla
+          item.prevencion=form.value.prevencion
+          item.producto=this.producto
+          item.total_dosis=form.value.total_dosis
+          item.n_planilla= Number.parseInt(localStorage.getItem('buscarPlanilla'))
+          item.finca_id= Number.parseInt(this.finca+""),
+          item.fincaNombre= null
+          this.toastConfirmacion('Planilla editada correctamente.', 'success');
+          this.resetDatos();
+          this.estadoSiguiente = false;
+          item.agricultor_id = this.agricultor[0].agricultor_id;
+        }        
+      })
+      
+
     }else{
       /*this.servicePlanilla.postPlanillaAplicacion(datos).subscribe(() => {
         this.toastConfirmacion("Se registro correctamente", "success")
@@ -196,9 +216,52 @@ export class AplicacionPage implements OnInit {
       }, err => {
         this.toastConfirmacion("Error.", "danger");
       });*/
-      this.planillas.push(datos)
+      let cont = 0;
+      this.planillas.map((item)=>{
+        if(item.planilla_id <= 0){
+          cont++;
+        }
+      })
+      let datos = new Planilla();
+      datos = {
+      actividad: form.value.actividad,
+      calidad_ejecucion: form.value.calidad_ejecucion,
+      control: form.value.control,
+      dosis: form.value.dosis,
+      elaborado: form.value.elaborado,
+      estado: form.value.ejecucion,
+      fecha_aplicacion: this.horaLocalCO(new Date(form.value.fecha_aplicacion)),
+      fecha_formulacion: this.horaLocalCO(new Date),
+      fertilizacion: form.value.fertilizacion,
+      lote: form.value.lote,
+      mezcla_total: form.value.mezcla_total,
+      planilla_id: cont*(-1),
+      prevencion: form.value.prevencion,
+      producto: this.producto,
+      total_dosis: form.value.total_dosis,
+      n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
+      finca_id: Number.parseInt(this.finca+""),
+      fincaNombre: null,
+      agricultor_id: this.agricultor[0].agricultor_id
     }
+      this.planillas.push(datos)
+      this.toastConfirmacion('Planilla registrada correctamente.', 'success');
+      this.resetDatos();
+    }
+    window.localStorage.setItem("planillas", JSON.stringify(this.planillas));
+    this.router.navigateByUrl('/planillas');
     
+  }
+
+  horaLocalCO(hora: Date): Date {
+    let HoraInicio = hora;
+    HoraInicio.setUTCFullYear(HoraInicio.getFullYear());
+    HoraInicio.setUTCMonth(HoraInicio.getMonth());
+    HoraInicio.setUTCDate(HoraInicio.getUTCDay());
+    HoraInicio.setUTCHours(HoraInicio.getUTCHours() - 5);
+    HoraInicio.setUTCMinutes(HoraInicio.getUTCMinutes());
+    HoraInicio.setUTCSeconds(HoraInicio.getUTCSeconds());
+    return HoraInicio;
   }
 
   resetDatos() {

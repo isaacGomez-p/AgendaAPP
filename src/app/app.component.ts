@@ -12,6 +12,7 @@ import { FincaService } from './services/finca.service';
 import { Finca } from './model/finca';
 import { ProductoService } from './services/producto.service';
 import { Producto } from './model/producto';
+import { Planilla } from './model/planilla';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit {
   fincas: Finca[];
   numeroPlanillas: NumeroPlanilla[];
   productos: Producto[];
+  planilla: Planilla[];
 
   tituloFinca: String = '';
 
@@ -187,13 +189,14 @@ export class AppComponent implements OnInit {
 
   }
 
-  descargarDatos(){    
+  descargarDatos(){  
+    let cont : number = 0;  
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
 
     this.planillaService.getNumerosPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
-      window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));  
+      window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));        
     }, err => {
-      this.toastConfirmacion("Error en cargar planillar.", "danger");
+      this.toastConfirmacion("Error en cargar todas las planillas.", "danger");
     })
 
     this.fincaService.getAllUser(this.agricultor[0].agricultor_id).subscribe((data) => {
@@ -204,9 +207,16 @@ export class AppComponent implements OnInit {
 
     this.serviceProducto.getAll(0).subscribe((data) => {
       this.productos = data;
-      window.localStorage.setItem('productos', JSON.stringify(data));      
+      window.localStorage.setItem('productos', JSON.stringify(data));
     }, err => {
       this.toastConfirmacion("Error en cargar productos.", "danger");
+    })    
+
+    this.planillaService.getPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
+      this.planilla = data;
+      window.localStorage.setItem('planillas', JSON.stringify(data));
+    }, err => {
+      this.toastConfirmacion("Error al cargar planilla.", "danger");
     })
   }
 
