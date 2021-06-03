@@ -20,14 +20,14 @@ export class PlanillasComponent implements OnInit {
   constructor(private loadingController: LoadingController, private router: Router, private planillaService: PlanillaService, private toastController: ToastController, private fincaService: FincaService) { }
 
   ionViewDidEnter(){
-    this.cargarPlanillasLS();
+    this.inicioCargarPlanillasLS();
   }
 
   ngOnInit() {
-    this.cargarPlanillasLS();
+    this.inicioCargarPlanillasLS();
   }
 
-  cargarPlanillasLS(){
+  inicioCargarPlanillasLS(){
     if(JSON.parse(window.localStorage.getItem("planillas")) === null){
       this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
     }else{
@@ -37,14 +37,14 @@ export class PlanillasComponent implements OnInit {
           this.planillas = [];
         }
       });
-      this.cargarPlanillasBD();
+      this.cargarPlanillasLS();
     }    
     
   }
 
   doRefresh(event) {    
     //window.localStorage.removeItem("buscarPlanilla")
-    this.cargarPlanillasBD();
+    this.cargarPlanillasLS();
     this.presentLoading();
     setTimeout(() => {  
       event.target.complete();
@@ -60,7 +60,7 @@ export class PlanillasComponent implements OnInit {
     await loading.present();    
   }
 
-  cargarPlanillasBD(){
+  cargarPlanillasLS(){
     if(this.planillas !== null){
       this.planillas.map(item =>{
         let fincas = JSON.parse(window.localStorage.getItem('fincas'));

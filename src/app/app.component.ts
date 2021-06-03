@@ -13,6 +13,8 @@ import { Finca } from './model/finca';
 import { ProductoService } from './services/producto.service';
 import { Producto } from './model/producto';
 import { Planilla } from './model/planilla';
+import { Siembra } from './model/siembra';
+import { SiembraService } from './services/siembra.service';
 
 @Component({
   selector: 'app-root',
@@ -28,12 +30,12 @@ export class AppComponent implements OnInit {
   numeroPlanillas: NumeroPlanilla[];
   productos: Producto[];
   planilla: Planilla[];
-
+  siembras: Siembra[];
   tituloFinca: String = '';
 
   loginEstado: boolean = false;  
 
-  constructor(private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
+  constructor(private siembraService: SiembraService, private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
 
   ngOnInit() {  
     
@@ -180,13 +182,23 @@ export class AppComponent implements OnInit {
         } else{
           if(item.edicion === true){
             this.serviceProducto.putProducto(item, item.producto_id).subscribe(()=>{
-
+              
             })
           }
         }
       });
     }
 
+    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    if(this.siembras.length > 0){
+      this.siembras.map((item) => {
+        if(item.plano_id <= 0){
+          this.siembraService.postSiembra(item).subscribe(()=>{
+
+          })
+        }
+      })
+    }
   }
 
   descargarDatos(){  
@@ -218,6 +230,15 @@ export class AppComponent implements OnInit {
     }, err => {
       this.toastConfirmacion("Error al cargar planilla.", "danger");
     })
+
+    this.siembras = [];
+    window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+    /*this.planillaService.getPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
+      this.planilla = data;
+      window.localStorage.setItem('planillas', JSON.stringify(data));
+    }, err => {
+      this.toastConfirmacion("Error al cargar planilla.", "danger");
+    })*/
   }
 
   async menuFinca() {

@@ -9,4 +9,5 @@ export class Siembra{
     anio: number;
     semana: number;
     dia: number;
+    agricultor_id: number;
 }

@@ -3,9 +3,6 @@ import { ToastController } from '@ionic/angular';
 import { Finca } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
-import { PlanillaService } from 'src/app/services/planilla.service';
-import { FincaService } from 'src/app/services/finca.service';
-import { SiembraService } from 'src/app/services/siembra.service';
 import { Siembra } from 'src/app/model/siembra';
 import { Planilla } from 'src/app/model/planilla';
 import { Producto } from 'src/app/model/producto';
@@ -17,6 +14,8 @@ import { Agricultor } from 'src/app/model/agricultor';
   styleUrls: ['aplicacion.page.scss']
 })
 export class AplicacionPage implements OnInit {
+
+  siembras: Siembra[];
 
   fincaLista: Finca[];
   listaLotes: Siembra[];
@@ -67,7 +66,7 @@ export class AplicacionPage implements OnInit {
 
   nombreBoton: String;
 
-  constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private serviceFinca: FincaService, private serviceSiembra: SiembraService) { }
+  constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { }
 
   ngOnInit() {
     this.cargarFincasLS();
@@ -139,7 +138,24 @@ export class AplicacionPage implements OnInit {
 
   buscarLotes(form) {
     this.finca = form.value.finca;
-    this.serviceSiembra.getSiembrasFinca(form.value.finca).subscribe((data) => {
+    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    if(this.siembras.length > 0){
+      this.listaLotes = [];
+      this.siembras.map((item)=>{
+        if(item.finca_id === parseInt(form.value.finca)){
+          this.listaLotes.push(item);
+        }
+      })
+      if(this.listaLotes.length <= 0){
+        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")  
+      }else{
+        this.estadoSiguiente = true;
+      }
+    }else{
+      this.listaLotes = [];
+      this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
+    }
+    /*this.serviceSiembra.getSiembrasFinca(form.value.finca).subscribe((data) => {
       if (data.length > 0) {
         this.listaLotes = data;
         this.estadoSiguiente = true;
@@ -147,11 +163,34 @@ export class AplicacionPage implements OnInit {
         this.listaLotes = [];
         this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
       }
-    })
+    })*/
   }
 
   buscarLotesEditar(id){
-    this.serviceSiembra.getSiembrasFinca(id).subscribe((data) => {
+    this.finca = id;
+    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    if(this.siembras.length > 0){
+      this.listaLotes = [];
+      this.siembras.map((item)=>{
+        if(item.finca_id === parseInt(id)){
+          this.listaLotes.push(item);
+        }
+      })
+      if(this.listaLotes.length <= 0){
+        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")  
+      }else{
+        this.estadoSiguiente = true;
+      }
+    }else{
+      this.listaLotes = [];
+      this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")
+    }
+
+
+
+
+
+    /*this.serviceSiembra.getSiembrasFinca(id).subscribe((data) => {
       if (data.length > 0) {
         this.listaLotes = data;
         this.estadoSiguiente = true;
@@ -159,7 +198,7 @@ export class AplicacionPage implements OnInit {
         this.listaLotes = [];
         this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
       }
-    })
+    })*/
   }  
 
 
@@ -284,7 +323,7 @@ export class AplicacionPage implements OnInit {
 
   doRefresh(event) {
     window.localStorage.removeItem("buscarPlanilla")
-    this.cargarFincasBD();
+    this.cargarFincasLS();
     this.presentLoading();
     setTimeout(() => {
       event.target.complete();
@@ -300,7 +339,7 @@ export class AplicacionPage implements OnInit {
     await loading.present();
   }
 
-  cargarFincasBD() {
+  /*cargarFincasBD() {
     this.serviceFinca.getAllUser(1).subscribe((data) => {
       if (data.length === 0) {
         this.toastConfirmacion('No se encontraron datos registrados.', 'warning');
@@ -309,7 +348,7 @@ export class AplicacionPage implements OnInit {
         window.localStorage.setItem("planillas", JSON.stringify(data));
       }
     })
-  }
+  }*/
 
   async toastConfirmacion(mensaje, colorT) {
     const toast = await this.toastController.create({
