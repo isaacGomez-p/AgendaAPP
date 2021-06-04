@@ -59,7 +59,9 @@ export class ProductoComponent implements OnInit {
             nombre: form.value.nombre,
             producto_id: cont * -1,
             variedad: form.value.variedad,
-            edicion: false
+            edicion: false,
+            agregar: false
+
           }
           this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");

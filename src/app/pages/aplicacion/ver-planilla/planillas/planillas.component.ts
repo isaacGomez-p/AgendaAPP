@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
 import { Finca } from 'src/app/model/finca';
 import { Planilla } from 'src/app/model/planilla';
+import { Siembra } from 'src/app/model/siembra';
 import { FincaService } from 'src/app/services/finca.service';
 import { PlanillaService } from 'src/app/services/planilla.service';
 
@@ -13,8 +14,9 @@ import { PlanillaService } from 'src/app/services/planilla.service';
 })
 export class PlanillasComponent implements OnInit {
 
+  planillasLS: Planilla[];
   planillas: Planilla[];
-
+  siembras: Siembra[];
   duracionRefresh: number = 2000;
 
   constructor(private loadingController: LoadingController, private router: Router, private planillaService: PlanillaService, private toastController: ToastController, private fincaService: FincaService) { }
@@ -29,17 +31,17 @@ export class PlanillasComponent implements OnInit {
 
   inicioCargarPlanillasLS(){
     if(JSON.parse(window.localStorage.getItem("planillas")) === null){
-      this.toastConfirmacion('No tiene planillas registradas. Por favor actualice la pagina.', 'warning');
+      this.toastConfirmacion('No tiene planillas registradas. Por favor descargue los datos.', 'warning');
     }else{
-      this.planillas =  JSON.parse(window.localStorage.getItem("planillas"));
-      this.planillas.map((item)=>{
-        if(item.n_planilla !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
-          this.planillas = [];
-        }
-      });
+      this.planillasLS =  JSON.parse(window.localStorage.getItem("planillas"));
+      this.planillas = [];
+      this.planillasLS.map((item)=>{
+        if(item.n_planilla === parseInt(window.localStorage.getItem('buscarPlanilla'))){
+          this.planillas.push(item)
+        }        
+      });      
       this.cargarPlanillasLS();
     }    
-    
   }
 
   doRefresh(event) {    
@@ -68,7 +70,13 @@ export class PlanillasComponent implements OnInit {
           if(item.finca_id === f.finca_id){
             item.fincaNombre = f.nombre;
           }
-        }      
+        }
+        let siembras =  JSON.parse(window.localStorage.getItem('siembras'));
+        for(let s of siembras){
+          if(parseInt(item.lote+"") === parseInt(s.plano_id)){
+            item.lote = s.lote + " - " + s.variedad
+          }
+        }
       })    
     }else{
       this.toastConfirmacion("No hay planillas registradas", "warning");

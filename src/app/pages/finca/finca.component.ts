@@ -67,17 +67,20 @@ export class FincaComponent implements OnInit {
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
     if (this.nombreBoton === "Agregar") {      
       let cont = 0;
-      this.fincas.map((item)=>{
-        if(item.finca_id <= 0){
-          cont++;
-        }
-      })
       let validacion = true;
-      this.fincas.map((item)=>{
-        if(item.nombre.toString() === form.value.nombreFinca){
-          validacion = false;          
-        }
-      })
+      this.fincas = JSON.parse(window.localStorage.getItem("fincas"));
+      if(this.fincas.length > 0){
+        this.fincas.map((item)=>{
+          if(item.finca_id <= 0){
+            cont++;
+          }
+        })
+        this.fincas.map((item)=>{
+          if(item.nombre.toString() === form.value.nombreFinca){
+            validacion = false;          
+          }
+        })
+      }      
       if(validacion === true){
         let datos = new Finca();
         datos = {
@@ -85,7 +88,9 @@ export class FincaComponent implements OnInit {
           estado: 1, //Estado 1 indica que esta activo
           id_agricultor: this.agricultor[0].agricultor_id,
           finca_id: cont * -1,
-          edicion: false          
+          edicion: false,
+          agregar: false,
+          codigo: this.generaCodigo()  
         }
         this.fincas.push(datos);     
         this.nombreFinca = null;   
@@ -114,6 +119,15 @@ export class FincaComponent implements OnInit {
       }
     }
     
+  }
+
+  generaCodigo(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';    
+    for (let i = 0; i < 7; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 
   async toastConfirmacion(mensaje, colorT) {

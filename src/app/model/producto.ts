@@ -4,4 +4,5 @@ export class Producto{
     variedad: String;
     //No mapeado
     edicion: boolean;
+    agregar: boolean;
 }

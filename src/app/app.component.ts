@@ -22,8 +22,8 @@ import { SiembraService } from './services/siembra.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
-  
-  usuario : string = "";
+
+  usuario: string = "";
 
   agricultor: Agricultor[];
   fincas: Finca[];
@@ -33,12 +33,12 @@ export class AppComponent implements OnInit {
   siembras: Siembra[];
   tituloFinca: String = '';
 
-  loginEstado: boolean = false;  
+  loginEstado: boolean = false;
 
-  constructor(private siembraService: SiembraService, private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) {}
+  constructor(private siembraService: SiembraService, private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) { }
 
-  ngOnInit() {  
-    
+  ngOnInit() {
+
   }
 
   async configuracion() {
@@ -49,31 +49,31 @@ export class AppComponent implements OnInit {
           text: 'Inicio',
           role: 'selected',
           icon: 'home-outline',
-          handler: () => {            
+          handler: () => {
             this.router.navigateByUrl('/home');
           }
         },
         {
           text: 'Sincronizar',
-          role: 'selected',          
+          role: 'selected',
           icon: 'cloud-upload-outline',
-          handler: () => {            
-            this.presentAlertConfirmSincronizar()            
+          handler: () => {
+            this.presentAlertConfirmSincronizar()
           }
         },
         {
           text: 'Descargar',
-          role: 'selected',          
+          role: 'selected',
           icon: 'cloud-download-outline',
-          handler: () => {            
+          handler: () => {
             this.presentAlertConfirmDescargar();
           }
         },
         {
           text: 'Cerrar sesión',
-          role: 'selected',          
+          role: 'selected',
           icon: 'power-outline',
-          handler: () => {                                    
+          handler: () => {
             this.loginEstado = false;
             this.router.navigateByUrl('/login');
           }
@@ -141,78 +141,107 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  sincronizar(){
+  sincronizar() {
     this.fincas = JSON.parse(window.localStorage.getItem('fincas'));
-    
-    if(this.fincas.length > 0){
-      this.fincas.map((item)=>{
-        if(item.finca_id <= 0 ){
-          this.fincaService.postFinca(item).subscribe(()=>{
-            
-          });
-        }else{
-          if(item.edicion === true){
-            this.fincaService.putFinca(item, item.finca_id).subscribe(()=>{
+
+    if (this.fincas.length > 0) {
+      this.fincas.map((item) => {
+        if (item.finca_id <= 0) {
+          if (item.agregar === false) {
+            this.fincaService.postFinca(item).subscribe(() => {
+              item.agregar = true;
+            });
+          }
+        } else {
+          if (item.edicion === true) {
+            this.fincaService.putFinca(item, item.finca_id).subscribe(() => {
 
             })
           }
         }
-        
+
       })
     }
+    window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
 
     this.numeroPlanillas = JSON.parse(window.localStorage.getItem('numeroPlanillas'));
-    if(this.numeroPlanillas.length > 0){
-      this.numeroPlanillas.map((item)=>{
-        if(item.n_planilla_id <= 0){
-          this.planillaService.postNumeroPlanilla(item).subscribe(()=>{
-
-          })
+    if (this.numeroPlanillas.length > 0) {
+      this.numeroPlanillas.map((item) => {
+        if (item.n_planilla_id <= 0) {
+          if (item.agregar === false) {
+            this.planillaService.postNumeroPlanilla(item).subscribe(() => {
+              item.agregar = true;
+            })
+          }
         }
       })
     }
+    window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.numeroPlanillas));
 
     this.productos = JSON.parse(window.localStorage.getItem('productos'));
-    if(this.productos.length > 0){
-      this.productos.map((item)=>{
-        if(item.producto_id <= 0){
-          this.serviceProducto.postProducto(item).subscribe(()=>{
+    if (this.productos.length > 0) {
+      this.productos.map((item) => {
+        if (item.producto_id <= 0) {
+          if (item.agregar === false) {
+            this.serviceProducto.postProducto(item).subscribe(() => {
+              item.agregar = true;
+            });
+          }
+        } else {
+          if (item.edicion === true) {
+            this.serviceProducto.putProducto(item, item.producto_id).subscribe(() => {
 
-          });
-        } else{
-          if(item.edicion === true){
-            this.serviceProducto.putProducto(item, item.producto_id).subscribe(()=>{
-              
             })
           }
         }
       });
     }
+    window.localStorage.setItem('productos', JSON.stringify(this.productos));
 
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
-    if(this.siembras.length > 0){
-      this.siembras.map((item) => {
-        if(item.plano_id <= 0){
-          this.siembraService.postSiembra(item).subscribe(()=>{
+    if (this.siembras !== null) {
+      if (this.siembras.length > 0) {
+        this.siembras.map((item) => {
+          if (item.plano_id <= 0) {
+            if (item.agregar === false) {
+              this.siembraService.postSiembra(item).subscribe(() => {
+                item.agregar = true;
+                
+              })
+            }
+          }
+        })
+      }
+    }
+    window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
 
+
+    this.planilla = JSON.parse(window.localStorage.getItem("planillas"));
+    if (this.planilla.length > 0) {
+      this.planilla.map((item) => {
+        if (item.planilla_id <= 0) {
+          console.log("  " + JSON.stringify(item))
+          this.planillaService.postPlanillaAplicacion(item).subscribe(() => {
+            item.agregar = true;
           })
         }
       })
     }
+    window.localStorage.setItem('planillas', JSON.stringify(this.planilla));
   }
 
-  descargarDatos(){  
-    let cont : number = 0;  
+  descargarDatos() {
+    let cont: number = 0;
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
 
     this.planillaService.getNumerosPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
-      window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));        
+      window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));
     }, err => {
       this.toastConfirmacion("Error en cargar todas las planillas.", "danger");
     })
 
     this.fincaService.getAllUser(this.agricultor[0].agricultor_id).subscribe((data) => {
-      window.localStorage.setItem("fincas", JSON.stringify(data));  
+      window.localStorage.setItem("fincas", JSON.stringify(data));
     }, err => {
       this.toastConfirmacion("Error en cargar fincas.", "danger");
     })
@@ -222,7 +251,7 @@ export class AppComponent implements OnInit {
       window.localStorage.setItem('productos', JSON.stringify(data));
     }, err => {
       this.toastConfirmacion("Error en cargar productos.", "danger");
-    })    
+    })
 
     this.planillaService.getPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
       this.planilla = data;
@@ -231,14 +260,12 @@ export class AppComponent implements OnInit {
       this.toastConfirmacion("Error al cargar planilla.", "danger");
     })
 
-    this.siembras = [];
-    window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
-    /*this.planillaService.getPlanillas(this.agricultor[0].agricultor_id).subscribe((data) => {
-      this.planilla = data;
-      window.localStorage.setItem('planillas', JSON.stringify(data));
+    this.siembraService.getSiembrasFinca(this.agricultor[0].agricultor_id).subscribe((data) => {
+      window.localStorage.setItem('siembras', JSON.stringify(data));
     }, err => {
-      this.toastConfirmacion("Error al cargar planilla.", "danger");
-    })*/
+      this.toastConfirmacion("Error al cargar siembras.", "danger");
+    })
+
   }
 
   async menuFinca() {
@@ -259,7 +286,7 @@ export class AppComponent implements OnInit {
           text: 'Ver todas las fincas',
           role: 'selected',
           icon: 'layers-outline',
-          handler: () => {                        
+          handler: () => {
             this.router.navigateByUrl('/verFinca');
           }
         },
@@ -275,7 +302,7 @@ export class AppComponent implements OnInit {
     });
     await alert.present();
   }
- 
+
   async menuSiembra() {
     const alert = await this.actionSheetCtrl.create({
       header: 'Siembra',
@@ -288,7 +315,7 @@ export class AppComponent implements OnInit {
             window.localStorage.removeItem("buscarSiembraFinca")
             this.router.navigateByUrl('/siembra');
           }
-        },        
+        },
         {
           text: 'Cancelar',
           icon: 'close',
@@ -302,8 +329,8 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  
-  async menuPlanilla() {    
+
+  async menuPlanilla() {
     const alert = await this.actionSheetCtrl.create({
       header: 'Aplicación',
       buttons: [
@@ -328,7 +355,7 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  async menuProductos(){
+  async menuProductos() {
     const alert = await this.actionSheetCtrl.create({
       header: 'Productos',
       buttons: [
@@ -350,7 +377,7 @@ export class AppComponent implements OnInit {
         }
       ]
     });
-    await alert.present();    
+    await alert.present();
   }
 
   async toastConfirmacion(mensaje, colorT) {

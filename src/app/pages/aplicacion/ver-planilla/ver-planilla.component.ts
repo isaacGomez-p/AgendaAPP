@@ -9,6 +9,7 @@ import { ActionSheetController } from '@ionic/angular';
 import { Planilla } from 'src/app/model/planilla';
 
 
+
 @Component({
   selector: 'app-ver-planilla',
   templateUrl: './ver-planilla.component.html',
@@ -18,8 +19,7 @@ export class VerPlanillaComponent implements OnInit {
 
   agricultor: Agricultor[];
 
-  planillas: NumeroPlanilla[];
-
+  planillas: NumeroPlanilla[];  
   duracionRefresh: number = 2000;
 
   constructor(private toastController: ToastController, private loadingController: LoadingController, private router: Router, private servicePlanilla: PlanillaService, private alertController: AlertController, public actionSheetCtrl: ActionSheetController) { }
@@ -84,8 +84,8 @@ export class VerPlanillaComponent implements OnInit {
     if(JSON.parse(window.localStorage.getItem("numeroPlanillas")) === null || JSON.parse(window.localStorage.getItem("numeroPlanillas")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
       this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
-    }else{                  
-      this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
+    }else{                   
+      this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));      
       /*this.planillas.map((item)=>{
         if(item.n_planilla_id !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
           this.planillas = [];
@@ -158,7 +158,9 @@ export class VerPlanillaComponent implements OnInit {
     datos = {
       agricultor_id: this.agricultor[0].agricultor_id,
       fecha_creacion: new Date(),
-      n_planilla_id: cont*-1
+      n_planilla_id: cont*-1,
+      agregar: false,
+      codigo: this.generaCodigo()
     }
     this.planillas.push(datos)
     window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.planillas));
@@ -166,6 +168,15 @@ export class VerPlanillaComponent implements OnInit {
       this.toastConfirmacion("Se registro correctamente", "success");
     })*/
     this.toastConfirmacion("Se registro correctamente", "success");
+  }
+
+  generaCodigo(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';    
+    for (let i = 0; i < 7; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 
 }

@@ -20,7 +20,7 @@ export class SiembraPage implements OnInit {
 
   //Primer formulario
   finca: number;
-  lote: String = '';
+  lote: string = '';
   nombreFinca: String;
 
   //Segundo Formulario
@@ -99,6 +99,15 @@ export class SiembraPage implements OnInit {
           cont++;
         }
       });
+
+      let fincas = JSON.parse(window.localStorage.getItem("fincas"));
+      let codigo = "";
+      for(let f of fincas){
+        if(f.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))){
+          codigo = f.codigo;
+        }
+      }
+
       siembra = {
         plano_id: cont * -1,
         plantas: form.value.cant_plantas,
@@ -110,7 +119,10 @@ export class SiembraPage implements OnInit {
         semana: form.value.semana,
         finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
         lote: this.lote,
-        agricultor_id: this.agricultor[0].agricultor_id
+        agricultor_id: this.agricultor[0].agricultor_id,
+        codigo: this.generaCodigo(),
+        agregar: false,
+        codigo_finca: codigo
       }
       this.siembras.push(siembra);
       this.toastConfirmacion("Siembra registrada correctamente", "success");
@@ -122,6 +134,16 @@ export class SiembraPage implements OnInit {
       this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
     }
   }
+
+  generaCodigo(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';    
+    for (let i = 0; i < 7; i++) {
+        result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
+  }
+
 
   async toastConfirmacion(mensaje, colorT) {
     const toast = await this.toastController.create({

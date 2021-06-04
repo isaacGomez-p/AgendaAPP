@@ -248,19 +248,29 @@ export class AplicacionPage implements OnInit {
       })
       
 
-    }else{
-      /*this.servicePlanilla.postPlanillaAplicacion(datos).subscribe(() => {
-        this.toastConfirmacion("Se registro correctamente", "success")
-        this.resetDatos();
-      }, err => {
-        this.toastConfirmacion("Error.", "danger");
-      });*/
+    }else{     
       let cont = 0;
       this.planillas.map((item)=>{
         if(item.planilla_id <= 0){
           cont++;
         }
       })
+      let codigo = "";      
+      this.siembras.map((item)=>{
+        if(item.plano_id === parseInt(form.value.lote)){
+          codigo = item.codigo
+        }
+      });
+
+      let numeroPlanilla = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
+      let codigoNumero = "";
+      for(let n of numeroPlanilla){
+        if(n.n_planilla_id === Number.parseInt(localStorage.getItem('buscarPlanilla'))){
+          codigoNumero = n.codigo
+        }
+      }
+      
+
       let datos = new Planilla();
       datos = {
       actividad: form.value.actividad,
@@ -281,7 +291,10 @@ export class AplicacionPage implements OnInit {
       n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
       finca_id: Number.parseInt(this.finca+""),
       fincaNombre: null,
-      agricultor_id: this.agricultor[0].agricultor_id
+      agricultor_id: this.agricultor[0].agricultor_id,
+      codigo: codigo,
+      agregar: false,
+      codigo_planilla: codigoNumero
     }
       this.planillas.push(datos)
       this.toastConfirmacion('Planilla registrada correctamente.', 'success');

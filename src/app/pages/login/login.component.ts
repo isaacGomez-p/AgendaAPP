@@ -35,6 +35,8 @@ export class LoginComponent implements OnInit {
         }else{          
           this.toastConfirmacion('Datos incorrectos.', 'danger');
         }
+      }, err => {
+        this.toastConfirmacion('Error con el servidor.', 'danger');
       });
        /*this.proveedorDatos.getLogin(form.value.password, form.value.user).subscribe((data)=>{
         
