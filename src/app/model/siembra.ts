@@ -13,5 +13,5 @@ export class Siembra{
     codigo: string;
     codigo_finca: string;
     //No mapeado
-    agregar: boolean;
+    agregar: boolean;    
 }

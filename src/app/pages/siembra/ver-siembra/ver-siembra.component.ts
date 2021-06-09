@@ -1,7 +1,9 @@
+import { Planilla } from 'src/app/model/planilla';
 import { Component, OnInit } from '@angular/core';
-import { LoadingController } from '@ionic/angular';
+import { LoadingController, ActionSheetController } from '@ionic/angular';
 import { Siembra } from 'src/app/model/siembra';
 import { SiembraService } from 'src/app/services/siembra.service';
+import { PlanillaService } from 'src/app/services/planilla.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
@@ -16,12 +18,15 @@ export class VerSiembraComponent implements OnInit {
   duracionRefresh: number = 2000;
 
   siembras: Siembra[];
+  planillas: Planilla[];
+  planillasEliminar: Planilla[];
+  lista: Siembra[];
   siembrasLS: Siembra[];
   enableBackdropDismiss = false;
   showBackdrop = true;
   shouldPropagate = false;
 
-  constructor(private serviceSiembra: SiembraService, private loadingController: LoadingController, public alertController: AlertController, private router: Router, private toastController: ToastController) { }
+  constructor(private planillaService: PlanillaService, private siembraService: SiembraService, private actionSheetCtrl: ActionSheetController, private serviceSiembra: SiembraService, private loadingController: LoadingController, public alertController: AlertController, private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {
     this.cargarSiembrasLS();
@@ -40,7 +45,9 @@ export class VerSiembraComponent implements OnInit {
         if (this.siembrasLS.length > 0) {
           this.siembras = [];
           this.siembrasLS.map((item) => {
+            console.log("antes: " + item.finca_id);
             if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+              console.log("entro: " + item.finca_id);
               this.siembras.push(item);
             }
           });
@@ -127,7 +134,125 @@ export class VerSiembraComponent implements OnInit {
   }
 
   agregarSiembra() {
-    this.router.navigateByUrl('/siembra');
+    this.router.navigateByUrl('/siembra/Agregar/A');
   }
 
+  async menuSiembras(siembra) {
+    const alert = await this.actionSheetCtrl.create({
+      header: 'Eventos',
+      buttons: [
+        {
+          text: 'Detalles',
+          role: 'selected',
+          icon: 'add-outline',
+          handler: () => {
+            this.masInfo(siembra);
+          }
+        },
+        {
+          text: 'Editar',
+          role: 'selected',
+          icon: 'layers-outline',
+          handler: () => {
+            this.router.navigateByUrl('/siembra/Editar/' + siembra.plano_id);
+          }
+        },
+        {
+          text: 'Eliminar',
+          role: 'selected',
+          icon: 'layers-outline',
+          handler: () => {
+            this.eliminarAlert(siembra);
+          }
+        },
+        {
+          text: 'Cancelar',
+          icon: 'close',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async eliminarAlert(siembra) {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Alerta!',
+      message: '¿Está seguro que desea <strong>eliminar</strong>?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Confirmar',
+          handler: () => {
+            this.eliminar(siembra)
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
+  eliminar(siembra) {
+    if (siembra.plano_id <= 0) {
+      this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
+      let validacion = false;
+      this.planillasEliminar = []
+      if (this.planillas.length > 0) {
+        this.planillas.map((item) => {
+          if (parseInt(item.lote + "") !== siembra.plano_id) {
+            this.planillasEliminar.push(item)
+          }
+        })
+        this.planillas = []
+        this.planillas = this.planillasEliminar
+        validacion = true;
+      } else {
+        validacion = true;
+      }
+      if (validacion === true) {
+        this.lista = [];
+        this.siembras.map((item) => {
+          if (item.plano_id !== siembra.plano_id) {
+            this.lista.push(item)
+          }
+        })
+        this.siembras = [];
+        this.siembras = this.lista;
+
+        this.toastConfirmacion("Siembra eliminada exitosamente.", "success")
+        window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+        window.localStorage.setItem('planillas', JSON.stringify(this.planillas));
+      }
+
+    } else {
+      this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
+      this.planillas.map((item) => {
+        if (parseInt(item.lote + "") === siembra.plano_id) {
+          this.planillaService.deletePlanillas(item.planilla_id).subscribe(() => {
+
+          }, error => {
+            this.toastConfirmacion("Por favor asegurese que tiene conexión a internet.", "danger")
+          })
+        }
+      })
+
+      this.siembraService.deleteSiembra(siembra.plano_id).subscribe(() => {
+        this.toastConfirmacion("Siembra eliminada exitosamente..", "success")
+      }, error => {
+        this.toastConfirmacion("Por favor asegurese que tiene conexión a internet.", "danger")
+      })
+
+    }
+  }
 }

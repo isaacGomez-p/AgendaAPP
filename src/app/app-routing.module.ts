@@ -28,7 +28,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/finca/ver-finca/ver-finca.module').then( m => m.VerFincaPageModule)
   },
   {
-    path: 'siembra',
+    path: 'siembra/:titulo/:idEditar',
     loadChildren: () => import('./pages/siembra/siembra.module').then( m => m.SiembraPageModule)
   },
   {

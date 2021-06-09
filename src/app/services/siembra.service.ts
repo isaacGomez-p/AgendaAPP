@@ -27,4 +27,8 @@ export class SiembraService {
         return this.http.get<Siembra[]>(`${this.urlService}/AGD_Plano_de_siembra/` + idFinca);
     }
 
+    deleteSiembra(idSiembra: number){
+        return this.http.delete(`${this.urlService}/AGD_Plano_de_siembra?plano_id=` + idSiembra);
+    }
+
 }

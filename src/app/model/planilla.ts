@@ -22,4 +22,5 @@ export class Planilla{
     //No mapeadas
     fincaNombre: String;
     agregar: boolean;
+    fechaString: string;
 }

@@ -3,7 +3,7 @@
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
       <div font size=1 align="center"><i>
-          <H6>Plano de Siembra</H6>
+          <H6>{{titulo}}</H6>
         </i></div>
     </ion-title>    
   </ion-toolbar>
@@ -24,13 +24,19 @@
       <ion-row color="primary" justify-content-center>
         <ion-col>
           <div padding>            
-            <ion-item *ngIf="estadoFormulario2 === false">              
-              <ion-label position="floating">Finca:</ion-label>              
-              <ion-input [(ngModel)]="nombreFinca" name="nombreFinca" type="text" placeholder="Lote" ngModel required disabled></ion-input>
-            </ion-item>            
             <ion-item *ngIf="estadoFormulario2 === false">
+              <ion-label position="floating">Finca:</ion-label>     
+              <ion-input [(ngModel)]="nombreFinca" name="nombreFinca" type="text" placeholder="Lote" ngModel required disabled></ion-input>
+            </ion-item>
+            <br>            
+            <ion-select *ngIf="estadoFormulario2 === false" [(ngModel)]="loteSeleccionado" name="loteSeleccionado" (ionChange)="seleccionarLote(loteSeleccionado)" placeholder="Seleccione un lote" ngModel required>              
+              <ion-select-option *ngFor="let lote of lotes" value="{{lote}}" >
+                {{lote}}
+              </ion-select-option>
+            </ion-select>            
+            <ion-item *ngIf="estadoLoteNuevo === false && estadoFormulario2 === false" >
               <ion-label position="floating">Lote</ion-label>
-              <ion-input [(ngModel)]="lote" name="lote" type="text" placeholder="Lote" ngModel required></ion-input>
+              <ion-input [(ngModel)]="lote" name="lote" type="text" placeholder="Lote" ngModel required disabled={{estadoCampoLote}}></ion-input>
             </ion-item>
           </div>
           <div padding>
@@ -78,7 +84,7 @@
           <div padding>
             <ion-button expand="full" color="success" type="submit" [disabled]="form2.invalid" expand="block">
               <ion-icon slot="start" name="save-outline"></ion-icon>
-              Registrar </ion-button>
+              {{nombreBoton}} </ion-button>
             <ion-button expand="full" color="secondary" expand="block" (click)="anterior()">              
               <ion-icon slot="start" name="arrow-back-outline"></ion-icon>
               Anterior

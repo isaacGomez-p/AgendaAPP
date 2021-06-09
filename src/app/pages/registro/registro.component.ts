@@ -18,6 +18,10 @@ export class RegistroComponent implements OnInit {
   clave: string;
   claveConfirmacion: string;
 
+  correo: string;
+  departamento: string;
+  ciudad: string;
+
   constructor(private toastController: ToastController, private paramsUrl: ActivatedRoute, private router: Router, private modalController: ModalController, private agricultorService: AgricultorService) {
     this.titulo = this.paramsUrl.snapshot.paramMap.get('titulo')
   }
@@ -43,7 +47,10 @@ export class RegistroComponent implements OnInit {
         cedula: form.value.cedula,
         clave: form.value.clave,
         estado: 1,
-        nombre: form.value.nombre
+        nombre: form.value.nombre,
+        ciudad: form.value.ciudad,
+        correo: form.value.correo,
+        depto: form.value.depto
       }
       this.agricultorService.postAgricultor(datos).subscribe(() => {
         this.toastConfirmacion("Guardado Correctamente.", "success");
@@ -55,12 +62,15 @@ export class RegistroComponent implements OnInit {
     }
   }
 
-  reset(){
+  reset() {
     this.nombre = null;
     this.apellido = null;
     this.cedula = null;
     this.clave = null;
     this.claveConfirmacion = null;
+    this.correo = null;
+    this.ciudad = null;
+    this.departamento = null;
   }
 
   validarDatos(form): boolean {
@@ -68,14 +78,21 @@ export class RegistroComponent implements OnInit {
     let claveConfirmacion: String
     clave = form.value.clave;
     claveConfirmacion = form.value.claveConfirmacion;
-    console.log('1 - ' +clave)
-    console.log('2 - ' +claveConfirmacion)
+    console.log('1 - ' + clave)
+    console.log('2 - ' + claveConfirmacion)
     if (clave !== claveConfirmacion) {
       this.toastConfirmacion("Las claves no coinciden.", "warning");
       return false;
     }
 
-    if (form.value.cedula > 999999999) {
+    let posicionArroba = form.value.correo.lastIndexOf('@');
+    let posicionPunto = form.value.correo.lastIndexOf('.');
+    if (!(posicionArroba < posicionPunto && posicionArroba > 0 && form.value.correo.indexOf('@@') === -1 && posicionPunto > 2 && (form.value.correo.length - posicionPunto) > 2)) {
+      this.toastConfirmacion("Por favor, ingrese un correo válido.", "warning");      
+      return false;
+    }
+
+    if (form.value.cedula > 99999999999) {
       this.toastConfirmacion("Cédula incorrecta.", "warning");
       return false;
     }

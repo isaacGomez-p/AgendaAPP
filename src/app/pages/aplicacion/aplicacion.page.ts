@@ -43,8 +43,10 @@ export class AplicacionPage implements OnInit {
 
   estadoFincaEditar: boolean = false;
   nombreFincaEditar: String;
+  estadoEditar: boolean = false;
+  controlTipo = ["Control", "Fertilización", "Prevención"]
 
-  listaEjecucion = ["Ejecutado", "No ejecutado"];
+  listaEjecucion = ["Ejecutado", "No ejecutado", "Por ejecutar"];
 
   listaActividad = ["Foliar", "Drench", "Biologic", "Protección Flor (Insect.)",
     "Protección Flor (Fungi.)",
@@ -66,22 +68,28 @@ export class AplicacionPage implements OnInit {
 
   nombreBoton: String;
 
+  loteNombre: String;
+  productoNombre: String;
+  ejecucionNombre: String;
+
   constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { }
 
   ngOnInit() {
-    this.cargarFincasLS();
-    if(this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a'){
-      this.titulo = "Planilla de aplicación";      
-      this.nombreBoton = "Registrar";
-    }else{
-      this.titulo = "Editar planilla";
-      this.nombreBoton = "Editar";
-      this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
-    }        
+  
   }
 
   ionViewDidEnter() {
     this.cargarFincasLS();
+    if(this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a'){
+      this.titulo = "Planilla de aplicación";      
+      this.nombreBoton = "Registrar";
+      this.estadoEditar = false;
+    }else{
+      this.titulo = "Editar planilla";
+      this.nombreBoton = "Editar";
+      this.estadoEditar = true;
+      this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
+    }
   }
 
   cargarDatosEditar(id){
@@ -94,6 +102,9 @@ export class AplicacionPage implements OnInit {
       this.planillas.map((item) => {
         if (item.planilla_id === id) {
           this.idPLanilla = item.planilla_id;
+          
+          this.productoNombre = item.producto                  
+          this.ejecucionNombre = item.estado
           this.actividad = item.actividad;
           this.control = item.control;
           this.prevencion = item.prevencion;
@@ -111,6 +122,11 @@ export class AplicacionPage implements OnInit {
               this.finca = finca.finca_id;
               this.buscarLotesEditar(this.finca);
             }
+          })
+          this.listaLotes.map((itemLote)=>{
+            if(itemLote.plano_id === parseInt(item.lote+"")){
+              this.loteNombre = itemLote.lote + " - Surco: " + itemLote.surco
+            }            
           })
         }
       });
@@ -186,10 +202,6 @@ export class AplicacionPage implements OnInit {
       this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")
     }
 
-
-
-
-
     /*this.serviceSiembra.getSiembrasFinca(id).subscribe((data) => {
       if (data.length > 0) {
         this.listaLotes = data;
@@ -230,11 +242,11 @@ export class AplicacionPage implements OnInit {
           item.estado= form.value.ejecucion
           item.fecha_aplicacion= new Date(form.value.fecha_aplicacion)
           item.fecha_formulacion= new Date()
-          item.fertilizacion= form.value.fertilizacion
+          item.fertilizacion= form.value.control
           item.lote= form.value.lote
           item.mezcla_total= form.value.mezcla_total
           item.planilla_id= this.idPLanilla
-          item.prevencion=form.value.prevencion
+          item.prevencion=form.value.control
           item.producto=this.producto
           item.total_dosis=form.value.total_dosis
           item.n_planilla= Number.parseInt(localStorage.getItem('buscarPlanilla'))
@@ -281,11 +293,11 @@ export class AplicacionPage implements OnInit {
       estado: form.value.ejecucion,
       fecha_aplicacion: this.horaLocalCO(new Date(form.value.fecha_aplicacion)),
       fecha_formulacion: this.horaLocalCO(new Date),
-      fertilizacion: form.value.fertilizacion,
+      fertilizacion: form.value.control,
       lote: form.value.lote,
       mezcla_total: form.value.mezcla_total,
       planilla_id: cont*(-1),
-      prevencion: form.value.prevencion,
+      prevencion: form.value.control,
       producto: this.producto,
       total_dosis: form.value.total_dosis,
       n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
@@ -294,7 +306,8 @@ export class AplicacionPage implements OnInit {
       agricultor_id: this.agricultor[0].agricultor_id,
       codigo: codigo,
       agregar: false,
-      codigo_planilla: codigoNumero
+      codigo_planilla: codigoNumero,
+      fechaString: null
     }
       this.planillas.push(datos)
       this.toastConfirmacion('Planilla registrada correctamente.', 'success');
@@ -373,7 +386,12 @@ export class AplicacionPage implements OnInit {
   }
 
   volver(){
-    this.estadoSiguiente = false;
+    if(this.nombreBoton === "Editar"){
+      
+      this.router.navigateByUrl('/planillas');      
+    }else{
+      this.estadoSiguiente = false;
+    }    
   }
 
 }

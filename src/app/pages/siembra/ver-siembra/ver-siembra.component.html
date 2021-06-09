@@ -19,7 +19,7 @@
     </ion-refresher-content>
   </ion-refresher>
   <ion-list *ngFor="let siembra of siembras">
-    <ion-item button (click)="masInfo(siembra)">
+    <ion-item button (click)="menuSiembras(siembra)">
       <ion-icon slot="start" name="leaf-outline" ></ion-icon>      
       <ion-label>
         <h2>Lote: {{siembra.lote}}</h2>     

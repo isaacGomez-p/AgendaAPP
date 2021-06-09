@@ -39,7 +39,7 @@ export class FincaComponent implements OnInit {
     this.cargarFincasLS();
     window.localStorage.removeItem("buscarSiembraFinca")
     this.titulo = this.paramsUrl.snapshot.paramMap.get('titulo')
-    if (this.paramsUrl.snapshot.paramMap.get('idEditar') !== null && this.paramsUrl.snapshot.paramMap.get('idEditar') !== '0') {
+    if (this.paramsUrl.snapshot.paramMap.get('idEditar') !== null && this.paramsUrl.snapshot.paramMap.get('idEditar') !== 'A') {
       this.llenarCampoEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')))
       this.nombreBoton = "Editar";
     } else {

@@ -1,6 +1,6 @@
 import { Planilla } from './../model/planilla';
 import { NumeroPlanilla } from './../model/numeroPlanilla';
-import{ HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
@@ -20,29 +20,33 @@ export class PlanillaService {
   //private urlService: string = "https://localhost:44341/api";
   private login = [];
 
-  constructor(private http: HttpClient, public navCtrl: NavController) {    
+  constructor(private http: HttpClient, public navCtrl: NavController) {
   }
 
   latitud: number = 0;
   longitud: number = 0;
 
-  postPlanillaAplicacion(datos: Planilla){
+  postPlanillaAplicacion(datos: Planilla) {
     return this.http.post(`${this.urlService}/AGD_Planilla_de_aplicacion`, datos);
   }
 
-  putPlanillaAplicacion(datos: Planilla, id: number){
-    return this.http.put(`${this.urlService}/AGD_Planilla_de_aplicacion/`+id, datos);
+  putPlanillaAplicacion(datos: Planilla, id: number) {
+    return this.http.put(`${this.urlService}/AGD_Planilla_de_aplicacion/` + id, datos);
   }
 
-  postNumeroPlanilla(datos: NumeroPlanilla){
+  postNumeroPlanilla(datos: NumeroPlanilla) {
     return this.http.post(`${this.urlService}/AGD_N_Planilla`, datos);
   }
 
-  getNumerosPlanillas(idUsuario: number): Observable<NumeroPlanilla[]>{       
-    return this.http.get<NumeroPlanilla[]>(`${this.urlService}/AGD_N_Planilla/`+idUsuario);
+  getNumerosPlanillas(idUsuario: number): Observable<NumeroPlanilla[]> {
+    return this.http.get<NumeroPlanilla[]>(`${this.urlService}/AGD_N_Planilla/` + idUsuario);
   }
 
-  getPlanillas(idPlanilla: number): Observable<Planilla[]>{       
-    return this.http.get<Planilla[]>(`${this.urlService}/AGD_Planilla_de_aplicacion/`+idPlanilla);
+  getPlanillas(idPlanilla: number): Observable<Planilla[]> {
+    return this.http.get<Planilla[]>(`${this.urlService}/AGD_Planilla_de_aplicacion/` + idPlanilla);
+  }
+
+  deletePlanillas(idPlanilla: number) {
+    return this.http.delete(`${this.urlService}/AGD_Planilla_de_aplicacion?planilla_id=` + idPlanilla);
   }
 }

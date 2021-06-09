@@ -6,7 +6,7 @@ import { ToastController } from '@ionic/angular';
 import { Finca } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { FincaService } from 'src/app/services/finca.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { Producto } from 'src/app/model/producto';
 
 @Component({
@@ -22,7 +22,7 @@ export class SiembraPage implements OnInit {
   finca: number;
   lote: string = '';
   nombreFinca: String;
-
+  loteSeleccionado: string;
   //Segundo Formulario
   surco: number;
   producto: String;
@@ -34,24 +34,61 @@ export class SiembraPage implements OnInit {
 
   listaFincas: Finca[];
   productos: Producto[];
-
+  lotes = ["-- Nuevo --"];
   //Control para los formularios
   estadoFormulario2: boolean = false;
   estadoFincaAsignada: boolean = false;
+  estadoLoteNuevo: boolean = false;
+  estadoCampoLote: boolean = true;
   //Variable para los metodos de refresh
   duracionRefresh: number = 2000;
 
   siembras: Siembra[];
 
-  constructor(private toastController: ToastController, private siembraService: SiembraService, private loadingController: LoadingController, private fincaService: FincaService, private router: Router) {
+  titulo: string;
+  nombreBoton: string;
+
+  constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private siembraService: SiembraService, private loadingController: LoadingController, private fincaService: FincaService, private router: Router) {
   }
 
   ngOnInit() {
-    this.cargarDatosLS();
+
+    /*if (this.paramsUrl.snapshot.paramMap.get('idEditar') === 'A') {
+      this.titulo = "Plano de siembra";
+      this.nombreBoton = "Registrar";
+    } else {
+      this.titulo = "Editar siembra";
+      this.nombreBoton = "Editar";
+      this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
+    }
+    this.cargarDatosLS();*/
   }
 
   ionViewDidEnter() {
+    if (this.paramsUrl.snapshot.paramMap.get('idEditar') === 'A') {
+      this.titulo = "Plano de siembra";
+      this.nombreBoton = "Registrar";
+    } else {
+      this.titulo = "Editar siembra";
+      this.nombreBoton = "Editar";
+      this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
+    }
     this.cargarDatosLS();
+  }
+
+  cargarDatosEditar(id) {
+    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    this.siembras.map((item) => {
+      if (item.plano_id === id) {
+        this.lote = item.lote
+        this.surco = item.surco
+        this.producto = item.producto
+        this.cant_plantas = item.plantas
+        this.anio = item.anio
+        this.semana = item.semana
+        this.dia = item.dia
+      }
+    });
   }
 
   cargarDatos() {
@@ -71,7 +108,9 @@ export class SiembraPage implements OnInit {
 
   siguiente1(form) {
     this.finca = form.value.finca;
-    this.lote = form.value.lote;
+    if (this.loteSeleccionado === "--Nuevo--") {
+      this.lote = form.value.lote;
+    }
     this.estadoFormulario2 = true;
   }
 
@@ -82,34 +121,80 @@ export class SiembraPage implements OnInit {
   registrar(form) {
 
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
-    let validacion = true;
 
-    if (validacion === true) {
-      let siembra = new Siembra();
+    if (this.nombreBoton === "Registrar") {
+      let validacion = true;
+      if (validacion === true) {
+        let siembra = new Siembra();
+        for (let p of this.productos) {
+          if (p.producto_id === Number.parseInt(form.value.producto)) {
+            this.variedad = p.variedad;
+            this.producto = p.nombre;
+          }
+        }
+        let cont = 0;
+        this.siembras.map((item) => {
+          if (item.plano_id <= 0) {
+            cont++;
+          }
+        });
+
+        let fincas = JSON.parse(window.localStorage.getItem("fincas"));
+        let codigo = "";
+        for (let f of fincas) {
+          if (f.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+            codigo = f.codigo;
+          }
+        }
+
+        siembra = {
+          plano_id: cont * -1,
+          plantas: form.value.cant_plantas,
+          surco: form.value.surco,
+          variedad: this.variedad,
+          producto: this.producto,
+          anio: form.value.anio,
+          dia: form.value.dia,
+          semana: form.value.semana,
+          finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+          lote: this.lote,
+          agricultor_id: this.agricultor[0].agricultor_id,
+          codigo: this.generaCodigo(),
+          agregar: false,
+          codigo_finca: codigo
+        }
+        this.siembras.push(siembra);
+        this.toastConfirmacion("Siembra registrada correctamente", "success");
+        this.formatearValores()
+        window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+        this.router.navigateByUrl('/verSiembra');
+
+      } else {
+        this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
+      }
+    } else {
+      let id = parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar'))      
       for (let p of this.productos) {
-        console.log(' ' + JSON.stringify(p));
         if (p.producto_id === Number.parseInt(form.value.producto)) {
           this.variedad = p.variedad;
           this.producto = p.nombre;
         }
       }
-      let cont = 0;
-      this.siembras.map((item) => {
-        if (item.plano_id <= 0) {
-          cont++;
-        }
-      });
-
       let fincas = JSON.parse(window.localStorage.getItem("fincas"));
       let codigo = "";
-      for(let f of fincas){
-        if(f.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))){
-          codigo = f.codigo;
-        }
-      }
+      let codigo_finca = "";
+      let finca_id = 0;
 
+      this.siembras.map((item) => {
+        if (item.plano_id === id) {
+          codigo_finca = item.codigo_finca
+          finca_id = item.finca_id
+          codigo = item.codigo
+        }
+      })
+      let siembra = new Siembra();
       siembra = {
-        plano_id: cont * -1,
+        plano_id: id,
         plantas: form.value.cant_plantas,
         surco: form.value.surco,
         variedad: this.variedad,
@@ -117,29 +202,42 @@ export class SiembraPage implements OnInit {
         anio: form.value.anio,
         dia: form.value.dia,
         semana: form.value.semana,
-        finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+        finca_id: finca_id,
         lote: this.lote,
         agricultor_id: this.agricultor[0].agricultor_id,
-        codigo: this.generaCodigo(),
+        codigo: codigo,
         agregar: false,
-        codigo_finca: codigo
+        codigo_finca: codigo_finca
       }
-      this.siembras.push(siembra);
-      this.toastConfirmacion("Siembra registrada correctamente", "success");
-      this.formatearValores()
-      window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
-      this.router.navigateByUrl('/verSiembra');
-
-    } else {
-      this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
+      let validacion = 0;
+      console.log(" " + JSON.stringify(siembra))
+      this.siembras.map((item) => {
+        if (item.finca_id === id) {
+          item.surco = form.value.surco
+          item.variedad = this.variedad
+          item.producto = this.producto
+          item.lote = this.lote
+          item.dia = form.value.dia
+          item.semana = form.value.semana
+          item.anio = form.value.anio
+          item.plantas = form.value.cant_plantas
+          validacion = 1
+        }
+      })
+      if (validacion === 1) {
+        this.toastConfirmacion("Siembra editada correctamente", "success");
+        this.formatearValores()
+        window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+        this.router.navigateByUrl('/verSiembra');
+      }
     }
   }
 
   generaCodigo(): string {
     let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';    
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';
     for (let i = 0; i < 7; i++) {
-        result += characters.charAt(Math.floor(Math.random() * characters.length));
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
     }
     return result;
   }
@@ -160,6 +258,22 @@ export class SiembraPage implements OnInit {
       this.toastConfirmacion('No tiene siembras registradas.', 'warning');
     } else {
       this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+      this.lotes = [];
+      this.lotes.push("--Nuevo--");
+      this.siembras.map((item) => {
+        if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+          console.log("entro " + item.finca_id + " - " + item.plano_id);
+          let validacion = true;
+          this.lotes.map((l) => {
+            if (l === item.lote) {
+              validacion = false;
+            }
+          });
+          if (validacion === true) {
+            this.lotes.push(item.lote);
+          }
+        }
+      })
     }
 
     if (JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0) {
@@ -173,6 +287,18 @@ export class SiembraPage implements OnInit {
     } else {
       this.productos = JSON.parse(window.localStorage.getItem("productos"));
     }
+
+
+  }
+
+  seleccionarLote(lote) {
+    if (lote !== "--Nuevo--") {
+      this.lote = lote;
+      this.estadoCampoLote = true;
+    } else {
+      this.lote = null;
+      this.estadoCampoLote = false;
+    }
   }
 
   formatearValores() {
@@ -185,6 +311,7 @@ export class SiembraPage implements OnInit {
     this.cant_plantas = null;
     this.dia = null;
     this.estadoFormulario2 = false;
+    this.loteSeleccionado = null;
   }
 
   // Función para refrescar la página
@@ -205,5 +332,6 @@ export class SiembraPage implements OnInit {
     });
     await loading.present();
   }
+
 
 }

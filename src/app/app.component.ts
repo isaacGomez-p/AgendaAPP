@@ -279,7 +279,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.tituloFinca = "Agregar una finca";
             //this.finca.setTitulo("Agregar una finca")            
-            this.router.navigateByUrl('/finca/Agregar una finca/0');
+            this.router.navigateByUrl('/finca/Agregar una finca/A');
           }
         },
         {

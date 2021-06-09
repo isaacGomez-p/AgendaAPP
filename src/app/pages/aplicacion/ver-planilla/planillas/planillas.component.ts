@@ -74,7 +74,9 @@ export class PlanillasComponent implements OnInit {
         let siembras =  JSON.parse(window.localStorage.getItem('siembras'));
         for(let s of siembras){
           if(parseInt(item.lote+"") === parseInt(s.plano_id)){
-            item.lote = s.lote + " - " + s.variedad
+            let split = item.fecha_formulacion.toString().split('T')
+            item.fechaString = split[0]
+            item.lote = s.lote + " - Surco: " + s.surco
           }
         }
       })    
