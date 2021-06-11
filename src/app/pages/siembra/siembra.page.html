@@ -58,8 +58,7 @@
             <ion-item>
               <ion-label position="floating">Surco</ion-label>
               <ion-input [(ngModel)]="surco"  name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
-            </ion-item>
-                        
+            </ion-item>            
             <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required>
               <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
                 {{producto.nombre}} - {{producto.variedad}}

@@ -19,8 +19,10 @@ export class Planilla{
     agricultor_id: number;
     codigo: string;
     codigo_planilla: string;
+    codigo_finca: string;
     //No mapeadas
     fincaNombre: String;
     agregar: boolean;
     fechaString: string;
+    fechaAplicacionString: string;
 }

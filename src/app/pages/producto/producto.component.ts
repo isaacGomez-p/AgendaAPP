@@ -1,8 +1,10 @@
+import { Planilla } from 'src/app/model/planilla';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
 import { Producto } from 'src/app/model/producto';
 import { ProductoService } from 'src/app/services/producto.service';
+import { Siembra } from 'src/app/model/siembra';
 
 @Component({
   selector: 'app-producto',
@@ -12,7 +14,9 @@ import { ProductoService } from 'src/app/services/producto.service';
 export class ProductoComponent implements OnInit {
 
   productos: Producto[];
-
+  productosEliminar: Producto[];
+  planillas: Planilla[];
+  siembras: Siembra[];
   nombre: String;
   variedad: String;
 
@@ -20,6 +24,8 @@ export class ProductoComponent implements OnInit {
 
   duracionRefresh: number = 2000;
   nombreBoton: String = "Registrar";
+
+  estadoBotonEliminar: boolean = true;
   constructor(private loadingController: LoadingController, private serviceProducto: ProductoService, public alertController: AlertController, private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {
@@ -32,12 +38,12 @@ export class ProductoComponent implements OnInit {
       this.productos.map((item) => {
         if (item.producto_id === this.productoId) {
           item.nombre = form.value.nombre,
-          item.variedad = form.value.variedad
+            item.variedad = form.value.variedad
           item.edicion = true;
         }
       });
       this.toastConfirmacion("Se edito correctamente", "success");
-      window.localStorage.setItem('productos', JSON.stringify(this.productos));      
+      window.localStorage.setItem('productos', JSON.stringify(this.productos));
     } else {
       if (this.nombreBoton === "Registrar") {
         this.productos = JSON.parse(window.localStorage.getItem('productos'));
@@ -55,7 +61,7 @@ export class ProductoComponent implements OnInit {
         })
         if (validacion === true) {
           let datos = new Producto();
-          datos = {            
+          datos = {
             nombre: form.value.nombre,
             producto_id: cont * -1,
             variedad: form.value.variedad,
@@ -66,9 +72,9 @@ export class ProductoComponent implements OnInit {
           this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");
           window.localStorage.setItem('productos', JSON.stringify(this.productos));
-        }else{
+        } else {
           this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
-        }    
+        }
       }
     }
 
@@ -77,6 +83,7 @@ export class ProductoComponent implements OnInit {
   resetDatos() {
     this.nombre = null;
     this.variedad = null;
+    this.productoId = null;
     this.nombreBoton = "Registrar";
   }
 
@@ -134,7 +141,53 @@ export class ProductoComponent implements OnInit {
         this.variedad = item.variedad;
         this.productoId = item.producto_id;
         this.nombreBoton = "Editar";
+        this.estadoBotonEliminar = false;
       }
     });
+  }
+
+  eliminar(form) {
+    this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
+    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    let validacionPlanillas = true;
+    let validacionSiembras = true;
+    this.planillas.map((item) => {
+      if (parseInt(item.producto + "") === this.productoId) {
+        validacionPlanillas = false;
+      }
+    })
+    this.siembras.map((item)=>{
+      if(parseInt(item.producto+"") === this.productoId) {
+        validacionSiembras = false;
+      }
+    })
+    if (validacionSiembras === true) {
+      if (validacionPlanillas === true) {
+        if (this.productoId <= 0) {
+          this.productosEliminar = [];
+          this.productos.map((item)=>{
+            if(item.producto_id !== this.productoId){
+              this.productosEliminar.push(item);
+            }
+          })
+          this.productos = []
+          this.productos = this.productosEliminar
+        } else {
+          this.serviceProducto.deleteProducto(this.productoId).subscribe(() => {
+            this.toastConfirmacion('Producto eliminado correctamente.', 'success');
+            this.serviceProducto.getAll(0).subscribe((data)=>{
+              this.productos = data
+            })            
+          }, error => {
+            this.toastConfirmacion('Por favor asegurese que tiene conexión a internet.', 'danger');
+          })          
+        }
+        this.resetDatos();
+      } else {
+        this.toastConfirmacion('El producto esta asignado a una planilla.', 'danger');
+      }
+    } else {
+      this.toastConfirmacion('El producto esta asignado a una siembra.', 'danger');
+    }
   }
 }

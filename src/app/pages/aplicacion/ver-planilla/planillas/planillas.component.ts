@@ -67,7 +67,7 @@ export class PlanillasComponent implements OnInit {
       this.planillas.map(item =>{
         let fincas = JSON.parse(window.localStorage.getItem('fincas'));
         for(let f of fincas){
-          if(item.finca_id === f.finca_id){
+          if(item.codigo_finca === f.codigo){
             item.fincaNombre = f.nombre;
           }
         }
@@ -79,6 +79,17 @@ export class PlanillasComponent implements OnInit {
             item.lote = s.lote + " - Surco: " + s.surco
           }
         }
+
+        let productos =  JSON.parse(window.localStorage.getItem('productos'));
+        for(let s of productos){
+          if(parseInt(item.producto+"") === parseInt(s.producto_id+"")){                        
+            item.producto = s.nombre + " - Variedad: " + s.variedad
+          }
+        } 
+
+        let split = item.fecha_aplicacion.toString().split('T')
+        item.fechaAplicacionString = split[0]
+
       })    
     }else{
       this.toastConfirmacion("No hay planillas registradas", "warning");

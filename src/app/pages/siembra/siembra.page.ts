@@ -27,6 +27,7 @@ export class SiembraPage implements OnInit {
   surco: number;
   producto: String;
   variedad: String;
+  productoNombre: String;
   cant_plantas: number;
   anio: number;
   semana: number;
@@ -39,7 +40,7 @@ export class SiembraPage implements OnInit {
   estadoFormulario2: boolean = false;
   estadoFincaAsignada: boolean = false;
   estadoLoteNuevo: boolean = false;
-  estadoCampoLote: boolean = true;
+  estadoCampoLote: boolean = true;  
   //Variable para los metodos de refresh
   duracionRefresh: number = 2000;
 
@@ -69,8 +70,8 @@ export class SiembraPage implements OnInit {
       this.titulo = "Plano de siembra";
       this.nombreBoton = "Registrar";
     } else {
-      this.titulo = "Editar siembra";
-      this.nombreBoton = "Editar";
+      this.titulo = "Actualizar siembra";
+      this.nombreBoton = "Actualizar";
       this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
     }
     this.cargarDatosLS();
@@ -78,15 +79,22 @@ export class SiembraPage implements OnInit {
 
   cargarDatosEditar(id) {
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    this.productos = JSON.parse(window.localStorage.getItem("productos"));
     this.siembras.map((item) => {
       if (item.plano_id === id) {
         this.lote = item.lote
         this.surco = item.surco
-        this.producto = item.producto
+        this.productos.map((itemP)=>{
+          if(itemP.producto_id === parseInt(item.producto+"")){
+            this.producto = item.producto
+          }
+        })         
         this.cant_plantas = item.plantas
         this.anio = item.anio
         this.semana = item.semana
         this.dia = item.dia
+        this.productoNombre = "Producto: " +item.producto + " - " + item.variedad
+        this.loteSeleccionado = item.lote
       }
     });
   }
@@ -129,7 +137,7 @@ export class SiembraPage implements OnInit {
         for (let p of this.productos) {
           if (p.producto_id === Number.parseInt(form.value.producto)) {
             this.variedad = p.variedad;
-            this.producto = p.nombre;
+            this.producto = p.producto_id + "";
           }
         }
         let cont = 0;
@@ -177,10 +185,9 @@ export class SiembraPage implements OnInit {
       for (let p of this.productos) {
         if (p.producto_id === Number.parseInt(form.value.producto)) {
           this.variedad = p.variedad;
-          this.producto = p.nombre;
+          this.producto = p.producto_id + "";
         }
-      }
-      let fincas = JSON.parse(window.localStorage.getItem("fincas"));
+      }      
       let codigo = "";
       let codigo_finca = "";
       let finca_id = 0;
@@ -212,7 +219,7 @@ export class SiembraPage implements OnInit {
       let validacion = 0;
       console.log(" " + JSON.stringify(siembra))
       this.siembras.map((item) => {
-        if (item.finca_id === id) {
+        if (item.plano_id === id) {
           item.surco = form.value.surco
           item.variedad = this.variedad
           item.producto = this.producto
@@ -225,7 +232,7 @@ export class SiembraPage implements OnInit {
         }
       })
       if (validacion === 1) {
-        this.toastConfirmacion("Siembra editada correctamente", "success");
+        this.toastConfirmacion("Siembra actualizada correctamente", "success");
         this.formatearValores()
         window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
         this.router.navigateByUrl('/verSiembra');

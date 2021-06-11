@@ -37,6 +37,10 @@
               <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>
                 {{nombreBoton}} 
             </ion-button>
+            <ion-button expand="full" color="danger" expand="block" (click)="eliminar(form1)" disabled={{estadoBotonEliminar}}>
+              <ion-icon slot="start" name="trash-outline"></ion-icon>              
+                Eliminar
+            </ion-button>
           </div>
         </ion-col>
       </ion-row>

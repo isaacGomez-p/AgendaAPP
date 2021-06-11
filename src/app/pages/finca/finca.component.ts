@@ -26,24 +26,24 @@ export class FincaComponent implements OnInit {
   constructor(private router: Router, private paramsUrl: ActivatedRoute, private fincaService: FincaService, private toastController: ToastController) {
 
   }
-
-  cargarFincasLS(){
-    if(JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0){
-      this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
-    }else{
-      this.fincas =  JSON.parse(window.localStorage.getItem("fincas"));
-    }
-  }
-
+  
   ngOnInit() {
     this.cargarFincasLS();
     window.localStorage.removeItem("buscarSiembraFinca")
     this.titulo = this.paramsUrl.snapshot.paramMap.get('titulo')
     if (this.paramsUrl.snapshot.paramMap.get('idEditar') !== null && this.paramsUrl.snapshot.paramMap.get('idEditar') !== 'A') {
       this.llenarCampoEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')))
-      this.nombreBoton = "Editar";
+      this.nombreBoton = "Actualizar";
     } else {
       this.nombreBoton = "Agregar";
+    }
+  }
+
+  cargarFincasLS(){
+    if(JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0){
+      this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
+    }else{
+      this.fincas =  JSON.parse(window.localStorage.getItem("fincas"));
     }
   }
 
@@ -101,7 +101,7 @@ export class FincaComponent implements OnInit {
         this.toastConfirmacion("La finca ya se encuentra registrada.","warning");
       }      
     } else {
-      if (this.nombreBoton === "Editar") {        
+      if (this.nombreBoton === "Actualizar") {        
         this.fincas.map((item)=>{
           if(item.finca_id === this.idFinca){
             item.estado = this.estado;
@@ -110,7 +110,7 @@ export class FincaComponent implements OnInit {
             item.edicion = true;
           }
         })        
-        this.toastConfirmacion("Editado correctamente.","success");        
+        this.toastConfirmacion("Actualizado correctamente.","success");        
         console.log('edito');
         window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
         this.router.navigateByUrl('/verFinca');

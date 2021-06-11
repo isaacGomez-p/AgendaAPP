@@ -59,12 +59,7 @@
             <ion-select [(ngModel)]="control" name="control" placeholder="Seleccione una opción">
               <ion-select-option *ngFor="let controlL of controlTipo" value="{{controlL}}">{{controlL}}
               </ion-select-option>
-            </ion-select>
-            <ion-item>
-              <ion-label *ngIf="estadoEditar === true">
-                {{this.productoNombre}}
-              </ion-label>
-            </ion-item>            
+            </ion-select>                     
             <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required>
               <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
                 {{producto.nombre}} - {{producto.variedad}}
@@ -94,12 +89,7 @@
               <ion-label position="floating">Fecha aplicacion</ion-label>
               <ion-datetime [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" value="2021-05-20"
                 placeholder="Seleccionar fecha" ngModel required></ion-datetime>
-            </ion-item>
-            <ion-item>
-              <ion-label *ngIf="estadoEditar === true">
-                {{this.ejecucionNombre}}
-              </ion-label>
-            </ion-item>
+            </ion-item>            
             <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione una ejecución">
               <ion-select-option *ngFor="let ejec of listaEjecucion" value="{{ejec}}">{{ ejec }}</ion-select-option>
             </ion-select>

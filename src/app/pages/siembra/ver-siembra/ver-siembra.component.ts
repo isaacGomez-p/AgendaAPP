@@ -7,6 +7,7 @@ import { PlanillaService } from 'src/app/services/planilla.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
+import { Producto } from 'src/app/model/producto';
 
 @Component({
   selector: 'app-ver-siembra',
@@ -19,6 +20,7 @@ export class VerSiembraComponent implements OnInit {
 
   siembras: Siembra[];
   planillas: Planilla[];
+  productos: Producto[];
   planillasEliminar: Planilla[];
   lista: Siembra[];
   siembrasLS: Siembra[];
@@ -28,8 +30,7 @@ export class VerSiembraComponent implements OnInit {
 
   constructor(private planillaService: PlanillaService, private siembraService: SiembraService, private actionSheetCtrl: ActionSheetController, private serviceSiembra: SiembraService, private loadingController: LoadingController, public alertController: AlertController, private router: Router, private toastController: ToastController) { }
 
-  ngOnInit() {
-    this.cargarSiembrasLS();
+  ngOnInit() {    
   }
 
   ionViewDidEnter() {
@@ -41,14 +42,18 @@ export class VerSiembraComponent implements OnInit {
       this.router.navigateByUrl('/verFinca');
     } else {
       this.siembrasLS = JSON.parse(window.localStorage.getItem("siembras"));
+      this.productos = JSON.parse(window.localStorage.getItem("productos"));
       if (this.siembrasLS !== null) {
         if (this.siembrasLS.length > 0) {
           this.siembras = [];
-          this.siembrasLS.map((item) => {
-            console.log("antes: " + item.finca_id);
-            if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
-              console.log("entro: " + item.finca_id);
-              this.siembras.push(item);
+          this.siembrasLS.map((item) => {            
+            if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
+              this.productos.map((itemP)=>{
+                if(itemP.producto_id === parseInt(item.producto+"")){
+                  item.producto = itemP.nombre
+                  this.siembras.push(item);
+                }
+              })              
             }
           });
           if (this.siembras.length <= 0) {
@@ -104,7 +109,51 @@ export class VerSiembraComponent implements OnInit {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Detalles',
-      message: '<strong>Variedad: </strong> ' + siembra.variedad + '<br><strong>Plantas: </strong>' + siembra.plantas + '<br><strong>Año: </strong>' + siembra.anio + '<br><strong>Semana: </strong>' + siembra.semana + '<br><strong>Día: </strong>' + siembra.dia,
+      message:  '<table>  '+
+                ' <caption> Detalles </caption>'+
+                ' <tr> '+
+                '   <th> '+
+                '     Variedad:   '+
+                '   </th> '+
+                '   <td> '+ siembra.variedad +
+                '   </td> '+
+                ' </tr>  '+
+                ' <tr> '+
+                '   <th> '+
+                '     Productos:    '+
+                '   </th> '+
+                '   <td> '+ siembra.producto +
+                '   </td> '+
+                ' </tr>  '+
+                ' <tr> '+
+                '   <th> '+
+                '     Plantas:    '+
+                '   </th> '+
+                '   <td> '+ siembra.plantas +
+                '   </td> '+
+                ' </tr>  '+
+                ' <tr> '+
+                '   <th> '+
+                '     Año:    '+
+                '   </th> '+
+                '   <td> '+ siembra.anio +
+                '   </td> '+
+                ' </tr>  '+
+                ' <tr> '+
+                '   <th> '+
+                '     Semana:    '+
+                '   </th> '+
+                '   <td> '+ siembra.semana +
+                '   </td> '+
+                ' </tr>  '+
+                ' <tr> '+
+                '   <th> '+
+                '     Día:   '+
+                '   </th> '+
+                '   <td> '+ siembra.dia +
+                '   </td> '+
+                ' </tr>  '+
+                '</table>',                               
       buttons: [
         /*{
           text: 'Cancel',
@@ -144,15 +193,15 @@ export class VerSiembraComponent implements OnInit {
         {
           text: 'Detalles',
           role: 'selected',
-          icon: 'add-outline',
+          icon: 'information-circle-outline',
           handler: () => {
             this.masInfo(siembra);
           }
         },
         {
           text: 'Editar',
-          role: 'selected',
-          icon: 'layers-outline',
+          role: 'selected',          
+          icon: 'create-outline',
           handler: () => {
             this.router.navigateByUrl('/siembra/Editar/' + siembra.plano_id);
           }
@@ -160,7 +209,7 @@ export class VerSiembraComponent implements OnInit {
         {
           text: 'Eliminar',
           role: 'selected',
-          icon: 'layers-outline',
+          icon: 'trash-outline',
           handler: () => {
             this.eliminarAlert(siembra);
           }

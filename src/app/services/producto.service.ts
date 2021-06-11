@@ -32,4 +32,8 @@ export class ProductoService {
   getAll(idUsuario: number): Observable<Producto[]>{       
     return this.http.get<Producto[]>(`${this.urlService}/AGD_Producto/`+idUsuario);
   }
+
+  deleteProducto(idProducto: number) {
+    return this.http.delete(`${this.urlService}/AGD_Producto?producto_id=` + idProducto);
+  }
 }

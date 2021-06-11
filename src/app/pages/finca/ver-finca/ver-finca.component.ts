@@ -18,7 +18,10 @@ export class VerFincaComponent implements OnInit {
   constructor(private fincaService: FincaService, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { 
   }
 
-  ngOnInit() {
+  ngOnInit() {    
+  }
+
+  ionViewDidEnter() {
     this.cargarFincasLS();
     window.localStorage.removeItem("buscarSiembraFinca")
   }

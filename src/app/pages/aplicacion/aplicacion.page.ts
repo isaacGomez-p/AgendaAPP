@@ -36,7 +36,7 @@ export class AplicacionPage implements OnInit {
   fecha_aplicacion: String;
   ejecucion: String;
   calidad_ejecucion: number;
-
+  codigoFinca: String;
   duracionRefresh: number = 2000;
 
   estadoSiguiente: boolean = false;
@@ -64,7 +64,7 @@ export class AplicacionPage implements OnInit {
 
   planillas: Planilla[]
 
-  idPLanilla: number; 
+  idPLanilla: number;
 
   nombreBoton: String;
 
@@ -75,16 +75,16 @@ export class AplicacionPage implements OnInit {
   constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { }
 
   ngOnInit() {
-  
+
   }
 
   ionViewDidEnter() {
     this.cargarFincasLS();
-    if(this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a'){
-      this.titulo = "Planilla de aplicación";      
+    if (this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a') {
+      this.titulo = "Planilla de aplicación";
       this.nombreBoton = "Registrar";
       this.estadoEditar = false;
-    }else{
+    } else {
       this.titulo = "Editar planilla";
       this.nombreBoton = "Editar";
       this.estadoEditar = true;
@@ -92,7 +92,7 @@ export class AplicacionPage implements OnInit {
     }
   }
 
-  cargarDatosEditar(id){
+  cargarDatosEditar(id) {
     if (JSON.parse(window.localStorage.getItem("planillas")) === null) {
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
     } else {
@@ -101,9 +101,12 @@ export class AplicacionPage implements OnInit {
       console.log("planilla" + JSON.stringify(this.planillas));
       this.planillas.map((item) => {
         if (item.planilla_id === id) {
+          this.lote = parseInt(item.lote+"")
+          console.log(" lote " + this.lote)
+          this.ejecucion = item.estado
           this.idPLanilla = item.planilla_id;
-          
-          this.productoNombre = item.producto                  
+          this.producto = item.producto
+          this.productoNombre = item.producto
           this.ejecucionNombre = item.estado
           this.actividad = item.actividad;
           this.control = item.control;
@@ -113,24 +116,25 @@ export class AplicacionPage implements OnInit {
           this.mezcla_total = item.mezcla_total;
           this.total_dosis = item.total_dosis;
           this.elaborado = item.elaborado;
-          this.fecha_aplicacion = item.fecha_aplicacion+"";
-          this.calidad_ejecucion = parseInt(item.calidad_ejecucion+"");
+          this.fecha_aplicacion = item.fecha_aplicacion + "";
+          this.calidad_ejecucion = parseInt(item.calidad_ejecucion + "");
           //this.calidad_ejecucion = item.calidad_ejecucion;
           this.fincaLista.map((finca) => {
-            if(item.finca_id === finca.finca_id){
+            if (item.finca_id === finca.finca_id) {
               this.nombreFincaEditar = 'Finca actual: ' + finca.nombre;
               this.finca = finca.finca_id;
+              this.codigoFinca = finca.codigo;
               this.buscarLotesEditar(this.finca);
+              this.listaLotes.map((itemLote) => {
+                if (itemLote.plano_id === parseInt(item.lote + "")) {
+                  this.loteNombre = itemLote.lote + " - Surco: " + itemLote.surco
+                }
+              })
             }
-          })
-          this.listaLotes.map((itemLote)=>{
-            if(itemLote.plano_id === parseInt(item.lote+"")){
-              this.loteNombre = itemLote.lote + " - Surco: " + itemLote.surco
-            }            
-          })
+          })          
         }
       });
-    }    
+    }
   }
 
   cargarFincasLS() {
@@ -144,30 +148,36 @@ export class AplicacionPage implements OnInit {
     } else {
       this.productos = JSON.parse(window.localStorage.getItem("productos"));
     }
-    if(JSON.parse(window.localStorage.getItem("planillas")) ===null) {
+    if (JSON.parse(window.localStorage.getItem("planillas")) === null) {
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
-    }else{
+    } else {
       this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
     }
-    
+
   }
 
   buscarLotes(form) {
     this.finca = form.value.finca;
+    this.fincaLista.map((item)=>{
+      if(parseInt(this.finca+"") === item.finca_id){
+        console.log("entro codigo " + item.codigo)
+        this.codigoFinca = item.codigo
+      }
+    })
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
-    if(this.siembras.length > 0){
+    if (this.siembras.length > 0) {
       this.listaLotes = [];
-      this.siembras.map((item)=>{
-        if(item.finca_id === parseInt(form.value.finca)){
+      this.siembras.map((item) => {
+        if (item.finca_id === parseInt(form.value.finca)) {
           this.listaLotes.push(item);
         }
       })
-      if(this.listaLotes.length <= 0){
-        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")  
-      }else{
+      if (this.listaLotes.length <= 0) {
+        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
+      } else {
         this.estadoSiguiente = true;
       }
-    }else{
+    } else {
       this.listaLotes = [];
       this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
     }
@@ -182,22 +192,28 @@ export class AplicacionPage implements OnInit {
     })*/
   }
 
-  buscarLotesEditar(id){
+  buscarLotesEditar(id) {
     this.finca = id;
+    this.fincaLista.map((item)=>{
+      if(this.finca === item.finca_id){
+        console.log("entro codigo editar " + item.codigo)
+        this.codigoFinca = item.codigo
+      }
+    })
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
-    if(this.siembras.length > 0){
+    if (this.siembras.length > 0) {
       this.listaLotes = [];
-      this.siembras.map((item)=>{
-        if(item.finca_id === parseInt(id)){
+      this.siembras.map((item) => {
+        if (item.finca_id === parseInt(id)) {
           this.listaLotes.push(item);
         }
       })
-      if(this.listaLotes.length <= 0){
-        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")  
-      }else{
+      if (this.listaLotes.length <= 0) {
+        this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")
+      } else {
         this.estadoSiguiente = true;
       }
-    }else{
+    } else {
       this.listaLotes = [];
       this.toastConfirmacion("La finca seleccionada no tiene siembras registradas - Editar", "warning")
     }
@@ -211,7 +227,7 @@ export class AplicacionPage implements OnInit {
         this.toastConfirmacion("La finca seleccionada no tiene siembras registradas", "warning")
       }
     })*/
-  }  
+  }
 
 
   registrar(form) {
@@ -220,102 +236,104 @@ export class AplicacionPage implements OnInit {
     for (let p of this.productos) {
       console.log(' ' + JSON.stringify(p));
       if (p.producto_id === Number.parseInt(form.value.producto)) {
-        this.producto = p.nombre + " - " + p.variedad;
+        this.producto = p.producto_id+"";
       }
     }
 
-    
-    if(this.titulo === "Editar planilla"){
+
+    if (this.titulo === "Editar planilla") {
       /*this.servicePlanilla.putPlanillaAplicacion(datos, this.idPLanilla).subscribe(() => {
         this.toastConfirmacion("Se edito correctamente correctamente", "success")
         
         this.resetDatos();
         this.estadoSiguiente = false;
       });*/
-      this.planillas.map( item => {
-        if(item.planilla_id === this.idPLanilla){
+      this.planillas.map(item => {
+        if (item.planilla_id === this.idPLanilla) {
           item.actividad = form.value.actividad
           item.calidad_ejecucion = form.value.calidad_ejecucion
-          item.control= form.value.control
-          item.dosis= form.value.dosis
-          item.elaborado= form.value.elaborado
-          item.estado= form.value.ejecucion
-          item.fecha_aplicacion= new Date(form.value.fecha_aplicacion)
-          item.fecha_formulacion= new Date()
-          item.fertilizacion= form.value.control
-          item.lote= form.value.lote
-          item.mezcla_total= form.value.mezcla_total
-          item.planilla_id= this.idPLanilla
-          item.prevencion=form.value.control
-          item.producto=this.producto
-          item.total_dosis=form.value.total_dosis
-          item.n_planilla= Number.parseInt(localStorage.getItem('buscarPlanilla'))
-          item.finca_id= Number.parseInt(this.finca+""),
-          item.fincaNombre= null
+          item.control = form.value.control
+          item.dosis = form.value.dosis
+          item.elaborado = form.value.elaborado
+          item.estado = form.value.ejecucion
+          item.fecha_aplicacion = new Date(form.value.fecha_aplicacion)
+          item.fecha_formulacion = new Date()
+          item.fertilizacion = form.value.control
+          item.lote = form.value.lote
+          item.mezcla_total = form.value.mezcla_total
+          item.planilla_id = this.idPLanilla
+          item.prevencion = form.value.control
+          item.producto = this.producto
+          item.total_dosis = form.value.total_dosis
+          item.n_planilla = Number.parseInt(localStorage.getItem('buscarPlanilla'))
+          item.finca_id = Number.parseInt(this.finca + "")
+          item.codigo_finca = this.codigoFinca + ""
+          item.fincaNombre = null
           this.toastConfirmacion('Planilla editada correctamente.', 'success');
           this.resetDatos();
           this.estadoSiguiente = false;
           item.agricultor_id = this.agricultor[0].agricultor_id;
-        }        
+        }
       })
-      
 
-    }else{     
+
+    } else {
       let cont = 0;
-      this.planillas.map((item)=>{
-        if(item.planilla_id <= 0){
+      this.planillas.map((item) => {
+        if (item.planilla_id <= 0) {
           cont++;
         }
       })
-      let codigo = "";      
-      this.siembras.map((item)=>{
-        if(item.plano_id === parseInt(form.value.lote)){
+      let codigo = "";
+      this.siembras.map((item) => {
+        if (item.plano_id === parseInt(form.value.lote)) {
           codigo = item.codigo
         }
       });
 
       let numeroPlanilla = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
       let codigoNumero = "";
-      for(let n of numeroPlanilla){
-        if(n.n_planilla_id === Number.parseInt(localStorage.getItem('buscarPlanilla'))){
+      for (let n of numeroPlanilla) {
+        if (n.n_planilla_id === Number.parseInt(localStorage.getItem('buscarPlanilla'))) {
           codigoNumero = n.codigo
         }
-      }
-      
+      }      
 
       let datos = new Planilla();
       datos = {
-      actividad: form.value.actividad,
-      calidad_ejecucion: form.value.calidad_ejecucion,
-      control: form.value.control,
-      dosis: form.value.dosis,
-      elaborado: form.value.elaborado,
-      estado: form.value.ejecucion,
-      fecha_aplicacion: this.horaLocalCO(new Date(form.value.fecha_aplicacion)),
-      fecha_formulacion: this.horaLocalCO(new Date),
-      fertilizacion: form.value.control,
-      lote: form.value.lote,
-      mezcla_total: form.value.mezcla_total,
-      planilla_id: cont*(-1),
-      prevencion: form.value.control,
-      producto: this.producto,
-      total_dosis: form.value.total_dosis,
-      n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
-      finca_id: Number.parseInt(this.finca+""),
-      fincaNombre: null,
-      agricultor_id: this.agricultor[0].agricultor_id,
-      codigo: codigo,
-      agregar: false,
-      codigo_planilla: codigoNumero,
-      fechaString: null
-    }
+        actividad: form.value.actividad,
+        calidad_ejecucion: form.value.calidad_ejecucion,
+        control: form.value.control,
+        dosis: form.value.dosis,
+        elaborado: form.value.elaborado,
+        estado: form.value.ejecucion,
+        fecha_aplicacion: this.horaLocalCO(new Date(form.value.fecha_aplicacion)),
+        fecha_formulacion: this.horaLocalCO(new Date),
+        fertilizacion: form.value.control,
+        lote: form.value.lote,
+        mezcla_total: form.value.mezcla_total,
+        planilla_id: cont * (-1),
+        prevencion: form.value.control,
+        producto: this.producto,
+        total_dosis: form.value.total_dosis,
+        n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
+        finca_id: Number.parseInt(this.finca + ""),
+        fincaNombre: null,
+        agricultor_id: this.agricultor[0].agricultor_id,
+        codigo: codigo,
+        agregar: false,
+        codigo_planilla: codigoNumero,
+        fechaString: null,
+        codigo_finca: this.codigoFinca + "",
+        fechaAplicacionString: null
+      }
       this.planillas.push(datos)
       this.toastConfirmacion('Planilla registrada correctamente.', 'success');
       this.resetDatos();
     }
     window.localStorage.setItem("planillas", JSON.stringify(this.planillas));
     this.router.navigateByUrl('/planillas');
-    
+
   }
 
   horaLocalCO(hora: Date): Date {
@@ -345,6 +363,7 @@ export class AplicacionPage implements OnInit {
     this.ejecucion = null;
     this.calidad_ejecucion = null;
     this.estadoSiguiente = false;
+    this.codigoFinca = null;
   }
 
   doRefresh(event) {
@@ -385,13 +404,13 @@ export class AplicacionPage implements OnInit {
     toast.present();
   }
 
-  volver(){
-    if(this.nombreBoton === "Editar"){
-      
-      this.router.navigateByUrl('/planillas');      
-    }else{
+  volver() {
+    if (this.nombreBoton === "Editar") {
+
+      this.router.navigateByUrl('/planillas');
+    } else {
       this.estadoSiguiente = false;
-    }    
+    }
   }
 
 }
