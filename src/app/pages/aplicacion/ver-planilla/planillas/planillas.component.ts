@@ -82,7 +82,7 @@ export class PlanillasComponent implements OnInit {
 
         let productos =  JSON.parse(window.localStorage.getItem('productos'));
         for(let s of productos){
-          if(parseInt(item.producto+"") === parseInt(s.producto_id+"")){                        
+          if(item.producto === s.codigo){                        
             item.producto = s.nombre + " - Variedad: " + s.variedad
           }
         } 

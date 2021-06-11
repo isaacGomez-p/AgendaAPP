@@ -40,7 +40,7 @@ export class SiembraPage implements OnInit {
   estadoFormulario2: boolean = false;
   estadoFincaAsignada: boolean = false;
   estadoLoteNuevo: boolean = false;
-  estadoCampoLote: boolean = true;  
+  estadoCampoLote: boolean = true;
   //Variable para los metodos de refresh
   duracionRefresh: number = 2000;
 
@@ -84,16 +84,16 @@ export class SiembraPage implements OnInit {
       if (item.plano_id === id) {
         this.lote = item.lote
         this.surco = item.surco
-        this.productos.map((itemP)=>{
-          if(itemP.producto_id === parseInt(item.producto+"")){
-            this.producto = item.producto
+        this.productos.map((itemP) => {
+          if (itemP.codigo === item.producto) {
+            this.producto = itemP.producto_id+""
           }
-        })         
+        })
         this.cant_plantas = item.plantas
         this.anio = item.anio
         this.semana = item.semana
         this.dia = item.dia
-        this.productoNombre = "Producto: " +item.producto + " - " + item.variedad
+        this.productoNombre = "Producto: " + item.producto + " - " + item.variedad
         this.loteSeleccionado = item.lote
       }
     });
@@ -126,37 +126,99 @@ export class SiembraPage implements OnInit {
     this.estadoFormulario2 = false;
   }
 
+  validacionDatos(form): boolean {
+    if (form.value.dia > 31 || form.value.dia < 1) {
+      this.toastConfirmacion("Error, verifique el día", "warning");
+      return false;
+    }
+    if (form.value.semana > 52 || form.value.semana < 1) {
+      this.toastConfirmacion("Error, verifique la semana", "warning");
+      return false;
+    }
+    let fecha = new Date();
+
+    if (form.value.anio > fecha.getFullYear() || form.value.anio < 1990) {
+      this.toastConfirmacion("Error, verifique el año", "warning");
+      return false;
+    }
+    return true;
+  }
+
   registrar(form) {
-
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    if (this.validacionDatos(form) === true) {
+      if (this.nombreBoton === "Registrar") {
+        let validacion = true;
+        if (validacion === true) {
+          let siembra = new Siembra();
+          for (let p of this.productos) {
+            if (p.producto_id === Number.parseInt(form.value.producto)) {
+              this.variedad = p.variedad;
+              this.producto = p.codigo
+            }
+          }
+          let cont = 0;
+          this.siembras.map((item) => {
+            if (item.plano_id <= 0) {
+              cont++;
+            }
+          });
 
-    if (this.nombreBoton === "Registrar") {
-      let validacion = true;
-      if (validacion === true) {
-        let siembra = new Siembra();
+          let fincas = JSON.parse(window.localStorage.getItem("fincas"));
+          let codigo = "";
+          for (let f of fincas) {
+            if (f.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+              codigo = f.codigo;
+            }
+          }
+
+          siembra = {
+            plano_id: cont * -1,
+            plantas: form.value.cant_plantas,
+            surco: form.value.surco,
+            variedad: this.variedad,
+            producto: this.producto,
+            anio: form.value.anio,
+            dia: form.value.dia,
+            semana: form.value.semana,
+            finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+            lote: this.lote,
+            agricultor_id: this.agricultor[0].agricultor_id,
+            codigo: this.generaCodigo(),
+            agregar: false,
+            codigo_finca: codigo
+          }
+          this.siembras.push(siembra);
+          this.toastConfirmacion("Siembra registrada correctamente", "success");
+          this.formatearValores()
+          window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+          this.router.navigateByUrl('/verSiembra');
+
+        } else {
+          this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
+        }
+      } else {
+        let id = parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar'))
         for (let p of this.productos) {
           if (p.producto_id === Number.parseInt(form.value.producto)) {
             this.variedad = p.variedad;
-            this.producto = p.producto_id + "";
+            this.producto = p.codigo
           }
         }
-        let cont = 0;
-        this.siembras.map((item) => {
-          if (item.plano_id <= 0) {
-            cont++;
-          }
-        });
-
-        let fincas = JSON.parse(window.localStorage.getItem("fincas"));
         let codigo = "";
-        for (let f of fincas) {
-          if (f.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
-            codigo = f.codigo;
-          }
-        }
+        let codigo_finca = "";
+        let finca_id = 0;
 
+        this.siembras.map((item) => {
+          if (item.plano_id === id) {
+            codigo_finca = item.codigo_finca
+            finca_id = item.finca_id
+            codigo = item.codigo
+          }
+        })
+        let siembra = new Siembra();
         siembra = {
-          plano_id: cont * -1,
+          plano_id: id,
           plantas: form.value.cant_plantas,
           surco: form.value.surco,
           variedad: this.variedad,
@@ -164,78 +226,34 @@ export class SiembraPage implements OnInit {
           anio: form.value.anio,
           dia: form.value.dia,
           semana: form.value.semana,
-          finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+          finca_id: finca_id,
           lote: this.lote,
           agricultor_id: this.agricultor[0].agricultor_id,
-          codigo: this.generaCodigo(),
+          codigo: codigo,
           agregar: false,
-          codigo_finca: codigo
+          codigo_finca: codigo_finca
         }
-        this.siembras.push(siembra);
-        this.toastConfirmacion("Siembra registrada correctamente", "success");
-        this.formatearValores()
-        window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
-        this.router.navigateByUrl('/verSiembra');
-
-      } else {
-        this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
-      }
-    } else {
-      let id = parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar'))      
-      for (let p of this.productos) {
-        if (p.producto_id === Number.parseInt(form.value.producto)) {
-          this.variedad = p.variedad;
-          this.producto = p.producto_id + "";
+        let validacion = 0;
+        console.log(" " + JSON.stringify(siembra))
+        this.siembras.map((item) => {
+          if (item.plano_id === id) {
+            item.surco = form.value.surco
+            item.variedad = this.variedad
+            item.producto = this.producto
+            item.lote = this.lote
+            item.dia = form.value.dia
+            item.semana = form.value.semana
+            item.anio = form.value.anio
+            item.plantas = form.value.cant_plantas
+            validacion = 1
+          }
+        })
+        if (validacion === 1) {
+          this.toastConfirmacion("Siembra actualizada correctamente", "success");
+          this.formatearValores()
+          window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+          this.router.navigateByUrl('/verSiembra');
         }
-      }      
-      let codigo = "";
-      let codigo_finca = "";
-      let finca_id = 0;
-
-      this.siembras.map((item) => {
-        if (item.plano_id === id) {
-          codigo_finca = item.codigo_finca
-          finca_id = item.finca_id
-          codigo = item.codigo
-        }
-      })
-      let siembra = new Siembra();
-      siembra = {
-        plano_id: id,
-        plantas: form.value.cant_plantas,
-        surco: form.value.surco,
-        variedad: this.variedad,
-        producto: this.producto,
-        anio: form.value.anio,
-        dia: form.value.dia,
-        semana: form.value.semana,
-        finca_id: finca_id,
-        lote: this.lote,
-        agricultor_id: this.agricultor[0].agricultor_id,
-        codigo: codigo,
-        agregar: false,
-        codigo_finca: codigo_finca
-      }
-      let validacion = 0;
-      console.log(" " + JSON.stringify(siembra))
-      this.siembras.map((item) => {
-        if (item.plano_id === id) {
-          item.surco = form.value.surco
-          item.variedad = this.variedad
-          item.producto = this.producto
-          item.lote = this.lote
-          item.dia = form.value.dia
-          item.semana = form.value.semana
-          item.anio = form.value.anio
-          item.plantas = form.value.cant_plantas
-          validacion = 1
-        }
-      })
-      if (validacion === 1) {
-        this.toastConfirmacion("Siembra actualizada correctamente", "success");
-        this.formatearValores()
-        window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
-        this.router.navigateByUrl('/verSiembra');
       }
     }
   }
@@ -291,11 +309,12 @@ export class SiembraPage implements OnInit {
     }
     if (JSON.parse(window.localStorage.getItem("productos")) === null || JSON.parse(window.localStorage.getItem("productos")).length === 0) {
       this.toastConfirmacion('No tiene productos registrados.', 'warning');
-    } else {
+    } else {      
       this.productos = JSON.parse(window.localStorage.getItem("productos"));
+      if(this.productos.length === 0){
+        this.toastConfirmacion('Por favor registre productos.', 'warning');
+      }
     }
-
-
   }
 
   seleccionarLote(lote) {

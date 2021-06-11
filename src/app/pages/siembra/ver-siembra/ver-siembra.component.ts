@@ -49,7 +49,7 @@ export class VerSiembraComponent implements OnInit {
           this.siembrasLS.map((item) => {            
             if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
               this.productos.map((itemP)=>{
-                if(itemP.producto_id === parseInt(item.producto+"")){
+                if(itemP.codigo === item.producto){
                   item.producto = itemP.nombre
                   this.siembras.push(item);
                 }
@@ -109,7 +109,7 @@ export class VerSiembraComponent implements OnInit {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Detalles',
-      message:  '<table>  '+
+      message:  '<table align="left">  '+
                 ' <caption> Detalles </caption>'+
                 ' <tr> '+
                 '   <th> '+

@@ -236,11 +236,9 @@ export class AplicacionPage implements OnInit {
     for (let p of this.productos) {
       console.log(' ' + JSON.stringify(p));
       if (p.producto_id === Number.parseInt(form.value.producto)) {
-        this.producto = p.producto_id+"";
+        this.producto = p.codigo
       }
     }
-
-
     if (this.titulo === "Editar planilla") {
       /*this.servicePlanilla.putPlanillaAplicacion(datos, this.idPLanilla).subscribe(() => {
         this.toastConfirmacion("Se edito correctamente correctamente", "success")

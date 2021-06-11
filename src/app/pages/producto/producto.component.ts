@@ -21,7 +21,7 @@ export class ProductoComponent implements OnInit {
   variedad: String;
 
   productoId: number;
-
+  codigo: String;
   duracionRefresh: number = 2000;
   nombreBoton: String = "Registrar";
 
@@ -39,7 +39,7 @@ export class ProductoComponent implements OnInit {
         if (item.producto_id === this.productoId) {
           item.nombre = form.value.nombre,
             item.variedad = form.value.variedad
-          item.edicion = true;
+            item.edicion = true;
         }
       });
       this.toastConfirmacion("Se edito correctamente", "success");
@@ -66,11 +66,12 @@ export class ProductoComponent implements OnInit {
             producto_id: cont * -1,
             variedad: form.value.variedad,
             edicion: false,
-            agregar: false
-
+            agregar: false,
+            codigo: this.generaCodigo()
           }
           this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");
+          this.resetDatos()
           window.localStorage.setItem('productos', JSON.stringify(this.productos));
         } else {
           this.toastConfirmacion("Error, ya se encuentra registrado.", "warning");
@@ -83,7 +84,8 @@ export class ProductoComponent implements OnInit {
   resetDatos() {
     this.nombre = null;
     this.variedad = null;
-    this.productoId = null;
+    this.productoId = null; 
+    this.codigo = null;
     this.nombreBoton = "Registrar";
   }
 
@@ -140,10 +142,20 @@ export class ProductoComponent implements OnInit {
         this.nombre = item.nombre;
         this.variedad = item.variedad;
         this.productoId = item.producto_id;
+        this.codigo = item.codigo;
         this.nombreBoton = "Editar";
         this.estadoBotonEliminar = false;
       }
     });
+  }
+
+  generaCodigo(): string {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+ABCDEFGHIJKLMNOPQRSTUVXYZ';
+    for (let i = 0; i < 7; i++) {
+      result += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+    return result;
   }
 
   eliminar(form) {
@@ -152,12 +164,12 @@ export class ProductoComponent implements OnInit {
     let validacionPlanillas = true;
     let validacionSiembras = true;
     this.planillas.map((item) => {
-      if (parseInt(item.producto + "") === this.productoId) {
+      if (item.producto === this.codigo) {
         validacionPlanillas = false;
       }
     })
     this.siembras.map((item)=>{
-      if(parseInt(item.producto+"") === this.productoId) {
+      if(item.producto === this.codigo) {
         validacionSiembras = false;
       }
     })
@@ -172,12 +184,16 @@ export class ProductoComponent implements OnInit {
           })
           this.productos = []
           this.productos = this.productosEliminar
+          this.estadoBotonEliminar = true;
+          window.localStorage.setItem("productos", JSON.stringify(this.productos));
         } else {
           this.serviceProducto.deleteProducto(this.productoId).subscribe(() => {
             this.toastConfirmacion('Producto eliminado correctamente.', 'success');
             this.serviceProducto.getAll(0).subscribe((data)=>{
               this.productos = data
-            })            
+              window.localStorage.setItem("productos", JSON.stringify(data));
+            })
+            this.estadoBotonEliminar = true;            
           }, error => {
             this.toastConfirmacion('Por favor asegurese que tiene conexión a internet.', 'danger');
           })          
