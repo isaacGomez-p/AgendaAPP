@@ -53,13 +53,14 @@
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col>
+          <ion-label  *ngIf="productos.length === 0" position="floating">No hay productos registrados. Para continuar, inserte productos.</ion-label>   
           <div padding>  
 
             <ion-item>
               <ion-label position="floating">Surco</ion-label>
               <ion-input [(ngModel)]="surco"  name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
-            </ion-item>            
-            <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required>
+            </ion-item>
+            <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" *ngIf="productos.length !== 0" ngModel required>
               <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
                 {{producto.nombre}} - {{producto.variedad}}
               </ion-select-option>

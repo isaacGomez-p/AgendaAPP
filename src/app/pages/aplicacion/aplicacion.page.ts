@@ -62,7 +62,7 @@ export class AplicacionPage implements OnInit {
 
   titulo: String;
 
-  planillas: Planilla[]
+  planillas: Planilla[] = [];
 
   idPLanilla: number;
 
@@ -138,6 +138,7 @@ export class AplicacionPage implements OnInit {
   }
 
   cargarFincasLS() {
+    console.log("planillas"+this.planillas);
     if (JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0) {
       this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
     } else {

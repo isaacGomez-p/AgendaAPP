@@ -81,6 +81,7 @@ export class VerPlanillaComponent implements OnInit {
   }
 
   cargarPlanillasLS(){    
+    console.log("Cargando planillas")
     if(JSON.parse(window.localStorage.getItem("numeroPlanillas")) === null || JSON.parse(window.localStorage.getItem("numeroPlanillas")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
       this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));

@@ -33,8 +33,8 @@ export class SiembraPage implements OnInit {
   semana: number;
   dia: number;
 
-  listaFincas: Finca[];
-  productos: Producto[];
+  listaFincas: Finca[] = [];
+  productos: Producto[] = [];
   lotes = ["-- Nuevo --"];
   //Control para los formularios
   estadoFormulario2: boolean = false;
@@ -75,6 +75,7 @@ export class SiembraPage implements OnInit {
       this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
     }
     this.cargarDatosLS();
+    console.log("productos"+ this.productos.length);
   }
 
   cargarDatosEditar(id) {
@@ -287,7 +288,6 @@ export class SiembraPage implements OnInit {
       this.lotes.push("--Nuevo--");
       this.siembras.map((item) => {
         if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
-          console.log("entro " + item.finca_id + " - " + item.plano_id);
           let validacion = true;
           this.lotes.map((l) => {
             if (l === item.lote) {

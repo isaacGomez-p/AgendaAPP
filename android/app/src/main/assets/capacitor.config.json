@@ -1,0 +1,6 @@
+{
+	"appId": "com.agenda.v1",
+	"appName": "AgendaApp",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}

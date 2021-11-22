@@ -204,9 +204,22 @@ export class AppComponent implements OnInit {
         this.siembras.map((item) => {
           if (item.plano_id <= 0) {
             if (item.agregar === false) {
-              this.siembraService.postSiembra(item).subscribe(() => {
-                item.agregar = true;
-                
+              this.siembraService.postSiembra(item).subscribe(siembras_ => {
+                item.agregar = true;                
+                if(siembras_){
+                  this.planilla = JSON.parse(window.localStorage.getItem("planillas"));
+                  if (this.planilla.length > 0) {
+                    this.planilla.map((item) => {
+                      if (item.planilla_id <= 0) {
+                        console.log("  " + JSON.stringify(item))
+                        this.planillaService.postPlanillaAplicacion(item).subscribe(() => {
+                          item.agregar = true;
+                      })
+                    }
+                  })
+                }
+                window.localStorage.setItem('planillas', JSON.stringify(this.planilla));
+                }
               })
             }
           }
@@ -215,19 +228,7 @@ export class AppComponent implements OnInit {
     }
     window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
 
-
-    this.planilla = JSON.parse(window.localStorage.getItem("planillas"));
-    if (this.planilla.length > 0) {
-      this.planilla.map((item) => {
-        if (item.planilla_id <= 0) {
-          console.log("  " + JSON.stringify(item))
-          this.planillaService.postPlanillaAplicacion(item).subscribe(() => {
-            item.agregar = true;
-          })
-        }
-      })
-    }
-    window.localStorage.setItem('planillas', JSON.stringify(this.planilla));
+    
   }
 
   descargarDatos() {
