@@ -13,7 +13,8 @@ export class HomeComponent implements OnInit {
   whatsappnumber: string = "3046818117";
   url: string = "https://wa.me/"+this.countrycode+this.whatsappnumber+"?text=hi";
 
-  constructor(private actionSheetCtrl: ActionSheetController, private router: Router, private toastController: ToastController) { }
+  constructor(private actionSheetCtrl: ActionSheetController, 
+    private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {}
 

@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { PushNotifications,
 PushNotificationToken,
 PushNotificationActionPerformed } from '@capacitor/push-notifications';
+import { ToastController } from '@ionic/angular';
  
 const { PushNotification } = Plugins;
  
@@ -15,8 +16,18 @@ const { PushNotification } = Plugins;
 })
 export class FcmService {
  
-  constructor(private router: Router) { }
+  constructor(private router: Router,
+    private toastController: ToastController) { }
  
+  async toastConfirmacion(mensaje, colorT) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      color: colorT,
+      duration: 2000
+    });
+    toast.present();
+  }
+
   initPush() {
     if (Capacitor.platform !== 'web') {
       this.registerPush();
@@ -36,6 +47,7 @@ export class FcmService {
     PushNotifications.addListener(
       'registration',
       (token: PushNotificationToken) => {
+        this.toastConfirmacion("Token: " + JSON.stringify(token), "success")
         console.log('My token: ' + JSON.stringify(token));
       }
     );
@@ -62,4 +74,6 @@ export class FcmService {
       }
     );
   }
+
+  
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Plugins } from '@capacitor/core';
+import { ToastController } from '@ionic/angular';
 const { PushNotifications } = Plugins;
  
 @Component({
@@ -9,13 +10,16 @@ const { PushNotifications } = Plugins;
   styleUrls: ['./details.page.scss'],
 })
 export class DetailsPage implements OnInit {
-  id = null;
+  
+  id: string = null;
  
-  constructor(private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute,
+    private toastController: ToastController) { }
  
-  ngOnInit() {
+  ngOnInit() {    
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
+      this.toastConfirmacion(JSON.stringify(params), "success")
     });
   }
  
@@ -23,4 +27,13 @@ export class DetailsPage implements OnInit {
     PushNotifications.removeAllDeliveredNotifications();
   }
  
+  async toastConfirmacion(mensaje, colorT) {
+    const toast = await this.toastController.create({
+      message: mensaje,
+      color: colorT,
+      duration: 2000
+    });
+    toast.present();
+  }
+
 }
