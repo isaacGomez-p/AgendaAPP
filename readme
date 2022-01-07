@@ -4,6 +4,7 @@ Para generar apk con Capacitor
 
 1. ionic build
 2. npx cap init
+2.1 EDIT CAPACITOR.CONFIG.TS
 3. npx cap add android
 4. npx cap sync 
 5. npx cap open android
@@ -14,3 +15,16 @@ Para generar apk con Capacitor
     android:usesCleartextTraffic="true"
     ...
 </application>
+
+
+Capacitor.
+,
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 0
+    },
+    "PushNotifications": {
+      "presentationOptions": ["badge", "sound", "alert"]
+    }
+  }
+};

@@ -15,6 +15,10 @@ import { Producto } from './model/producto';
 import { Planilla } from './model/planilla';
 import { Siembra } from './model/siembra';
 import { SiembraService } from './services/siembra.service';
+import { Platform } from '@ionic/angular';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { FcmService } from './services/fcm.service';
 
 @Component({
   selector: 'app-root',
@@ -35,7 +39,32 @@ export class AppComponent implements OnInit {
 
   loginEstado: boolean = false;
 
-  constructor(private siembraService: SiembraService, private serviceProducto: ProductoService, private fincaService: FincaService, private planillaService: PlanillaService, private alertController: AlertController, private actionSheetCtrl: ActionSheetController, private router: Router, private finca: FincaComponent, private toastController: ToastController) { }
+  constructor(
+    private siembraService: SiembraService, 
+    private serviceProducto: ProductoService, 
+    private fincaService: FincaService, 
+    private planillaService: PlanillaService, 
+    private alertController: AlertController, 
+    private actionSheetCtrl: ActionSheetController, 
+    private router: Router, 
+    private finca: FincaComponent, 
+    private toastController: ToastController,
+    private platform: Platform,
+    private splashScreen: SplashScreen,
+    private statusBar: StatusBar,
+    private fcmService: FcmService) { 
+    this.initializeApp();
+  }
+
+  initializeApp() {
+    this.platform.ready().then(() => {
+      this.statusBar.styleDefault();
+      this.splashScreen.hide();
+ 
+      // Trigger the push setup 
+      this.fcmService.initPush();
+    });
+  }
 
   ngOnInit() {
 

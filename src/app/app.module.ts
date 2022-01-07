@@ -7,6 +7,8 @@ import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { SplashScreen } from '@ionic-native/splash-screen/ngx';
+import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 //Components
 import { FincaComponent } from './pages/finca/finca.component';
@@ -24,6 +26,8 @@ import { FincaService } from './services/finca.service';
     FincaComponent,  
     VerFincaComponent,    
     SiembraPage,    
+    StatusBar,
+    SplashScreen,
     //Services
     FincaService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
