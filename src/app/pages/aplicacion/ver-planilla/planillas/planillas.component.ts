@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController, ToastController } from '@ionic/angular';
-import { Finca } from 'src/app/model/finca';
 import { Planilla } from 'src/app/model/planilla';
 import { Siembra } from 'src/app/model/siembra';
 import { FincaService } from 'src/app/services/finca.service';

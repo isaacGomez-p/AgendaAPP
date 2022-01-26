@@ -5,6 +5,7 @@ import { ToastController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AgricultorService } from 'src/app/services/agricultor.service';
+import { UserEntity } from 'src/app/model/userEntity';
 
 @Component({
   selector: 'app-login',
@@ -24,14 +25,18 @@ export class LoginComponent implements OnInit {
     if(form.value.clave === 0 && form.value.user ===''){
       this.toastConfirmacion('Ingrese las credenciales.', 'danger');
     }else{
-      this.agricultorService.login(parseInt(form.value.user), form.value.clave).subscribe((data)=>{
-        if(data.length > 0){
+      let user = new UserEntity();
+      user.document = form.value.user+"";
+      user.password = form.value.clave;
+      this.agricultorService.login(user).subscribe((data)=>{
+        console.log("data-> " +JSON.stringify(data) +  " - " + data.status);
+        if(data.status == 200){
           this.cedula = null;
           this.clave = null;
           this.router.navigateByUrl('/home');
           this.appComponent.loginEstado = true;
-          window.localStorage.setItem("agricultor", JSON.stringify(data));
-          this.toastConfirmacion('Bienvenido ' + data[0].nombre + " " + data[0].apellido, 'success');
+          window.localStorage.setItem("agricultor", JSON.stringify(data.result));
+          this.toastConfirmacion('Bienvenido ' + data.result.firstName + " " + data.result.lastName, 'success');
         }else{          
           this.toastConfirmacion('Datos incorrectos.', 'danger');
         }

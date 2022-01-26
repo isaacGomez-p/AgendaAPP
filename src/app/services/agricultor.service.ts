@@ -2,7 +2,9 @@ import{ HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
-import { Agricultor } from '../model/agricultor';
+import { UserEntity } from '../model/userEntity';
+import { environment } from 'src/environments/environment';
+import { ApiResponse } from '../model/apiResponse';
 
 
 @Injectable({
@@ -11,31 +13,33 @@ import { Agricultor } from '../model/agricultor';
 
 export class AgricultorService {
 
-  private dataUrl: string = "assets/json/pedidos.json"
+  //private dataUrl: string = "assets/json/pedidos.json"
 
-  private urlService: string = "http://190.60.254.186/Publicada/api"
-
-  //private urlService: string = "https://localhost:44341/api";
-  
+  private urlService: string = environment.url
+  private _controller: string = this.urlService + "/user/"
+  private _guardarAgricultor: string = this._controller + "saveUser"  
+  private _traerTodosUsuarios: string = this._controller + "getUsers"  
+  private _login: string = this.urlService + "/login/validation"
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }
 
   latitud: number = 0;
   longitud: number = 0;
 
-  postAgricultor(datos: Agricultor){
-    return this.http.post(`${this.urlService}/AGD_Agricultor`, datos);
+  postAgricultor(user: UserEntity){
+    return this.http.post(`${this._guardarAgricultor}`, user);
   }
 
-  putAgricultor(datos: Agricultor, id: number){
+  putAgricultor(datos: UserEntity, id: number){
     return this.http.put(`${this.urlService}/AGD_Agricultor/`+id, datos);
   }
 
-  login(cedula: number, clave: string){
-    return this.http.get<Agricultor[]>(`${this.urlService}/AGD_Agricultor?cedula=`+cedula+`&clave=`+clave);
+  login(user: UserEntity){
+    //return this.http.get<UserEntity[]>(`${this.urlService}/AGD_Agricultor?cedula=`+cedula+`&clave=`+clave);
+    return this.http.post<ApiResponse>(`${this._login}`, user);
   }
 
-  getAllUser(idUsuario: number): Observable<Agricultor[]>{       
-    return this.http.get<Agricultor[]>(`${this.urlService}/AGD_Finca/`+idUsuario);
+  getAllUser(idUsuario: number): Observable<UserEntity[]>{       
+    return this.http.get<UserEntity[]>(`${this._traerTodosUsuarios}`+idUsuario);
   }
 }

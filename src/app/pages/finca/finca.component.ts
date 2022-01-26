@@ -1,7 +1,7 @@
-import { Agricultor } from './../../model/agricultor';
+import { UserEntity } from '../../model/userEntity';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Finca } from 'src/app/model/finca';
+import { LandEntity } from 'src/app/model/finca';
 import { FincaService } from 'src/app/services/finca.service';
 import { ToastController } from '@ionic/angular';
 
@@ -11,7 +11,7 @@ import { ToastController } from '@ionic/angular';
   styleUrls: ['./finca.component.scss'],
 })
 export class FincaComponent implements OnInit {
-  agricultor: Agricultor[];
+  agricultor: UserEntity;
   titulo: String;
 
   nombreFinca: String;
@@ -19,7 +19,7 @@ export class FincaComponent implements OnInit {
   idAgricultor: number;
   estado: number;
 
-  fincas: Finca[];
+  fincas: LandEntity[];
 
   nombreBoton: String;
 
@@ -53,11 +53,11 @@ export class FincaComponent implements OnInit {
     } else {
       this.fincas = JSON.parse(window.localStorage.getItem("fincas"));
       this.fincas.map((item) => {
-        if (item.finca_id === id) {
-          this.nombreFinca = item.nombre;
-          this.estado = item.estado;
-          this.idFinca = item.finca_id;
-          this.idAgricultor = item.id_agricultor;
+        if (item.land_id === id) {
+          this.nombreFinca = item.name;
+          this.estado = item.status;
+          this.idFinca = item.land_id;
+          this.idAgricultor = item.user.id;
         }
       });
     }
@@ -69,28 +69,32 @@ export class FincaComponent implements OnInit {
       let cont = 0;
       let validacion = true;
       this.fincas = JSON.parse(window.localStorage.getItem("fincas"));
+      if(this.fincas == null){
+        this.fincas = [];
+        window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
+      }
       if(this.fincas.length > 0){
         this.fincas.map((item)=>{
-          if(item.finca_id <= 0){
+          if(item.land_id <= 0){
             cont++;
           }
         })
         this.fincas.map((item)=>{
-          if(item.nombre.toString() === form.value.nombreFinca){
-            validacion = false;          
+          if(item.name.toString() === form.value.nombreFinca){
+            validacion = false;
           }
         })
       }      
       if(validacion === true){
-        let datos = new Finca();
+        let datos = new LandEntity();
         datos = {
-          nombre: form.value.nombreFinca,
-          estado: 1, //Estado 1 indica que esta activo
-          id_agricultor: this.agricultor[0].agricultor_id,
-          finca_id: cont * -1,
+          name: form.value.nombreFinca,
+          status: 1, //Estado 1 indica que esta activo
+          user: this.agricultor,
+          land_id: cont * -1,
           edicion: false,
           agregar: false,
-          codigo: this.generaCodigo()  
+          code: this.generaCodigo()  
         }
         this.fincas.push(datos);     
         this.nombreFinca = null;   
@@ -100,13 +104,14 @@ export class FincaComponent implements OnInit {
       }else{
         this.toastConfirmacion("La finca ya se encuentra registrada.","warning");
       }      
+     
     } else {
       if (this.nombreBoton === "Actualizar") {        
         this.fincas.map((item)=>{
-          if(item.finca_id === this.idFinca){
-            item.estado = this.estado;
-            item.nombre = form.value.nombreFinca;
-            item.id_agricultor = this.agricultor[0].agricultor_id;
+          if(item.land_id === this.idFinca){
+            item.status = this.estado;
+            item.name = form.value.nombreFinca;
+            item.user = this.agricultor;
             item.edicion = true;
           }
         })        

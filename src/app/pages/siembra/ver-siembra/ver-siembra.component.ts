@@ -49,8 +49,8 @@ export class VerSiembraComponent implements OnInit {
           this.siembrasLS.map((item) => {            
             if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
               this.productos.map((itemP)=>{
-                if(itemP.codigo === item.producto){
-                  item.producto = itemP.nombre
+                if(itemP.code === item.producto){
+                  item.producto = itemP.name
                   this.siembras.push(item);
                 }
               })              

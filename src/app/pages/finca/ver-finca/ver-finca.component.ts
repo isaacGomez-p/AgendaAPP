@@ -1,6 +1,6 @@
 import { FincaService } from './../../../services/finca.service';
 import { Component, OnInit } from '@angular/core';
-import { Finca } from 'src/app/model/finca';
+import { LandEntity } from 'src/app/model/finca';
 import { ToastController } from '@ionic/angular';
 import { LoadingController } from '@ionic/angular';
 import { Router, PreloadAllModules } from '@angular/router';
@@ -12,7 +12,7 @@ import { Router, PreloadAllModules } from '@angular/router';
 })
 export class VerFincaComponent implements OnInit {
 
-  fincas: Finca[];
+  fincas: LandEntity[];
   duracionRefresh: number = 2000;
 
   constructor(private fincaService: FincaService, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { 
@@ -36,9 +36,9 @@ export class VerFincaComponent implements OnInit {
   }
 
   cargarFincasBD(){
-    this.fincaService.getAllUser(1).subscribe((data)=>{
-      if(data.length > 0){
-        this.fincas = data;      
+    this.fincaService.getAllLands(1).subscribe((data)=>{
+      if(data.status === 200){
+        this.fincas = data.result;      
         window.localStorage.setItem( "fincas", JSON.stringify(data));
       }else{
         this.toastConfirmacion('No tiene fincas registradas.', 'warning') 

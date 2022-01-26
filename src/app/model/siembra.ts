@@ -4,7 +4,7 @@ export class Siembra{
     lote: string;
     surco: number;
     producto: String;
-    variedad: String;
+    variedad: String; // tiene producto
     plantas: number;
     anio: number;
     semana: number;

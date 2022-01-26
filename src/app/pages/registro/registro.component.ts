@@ -2,7 +2,7 @@ import { AgricultorService } from './../../services/agricultor.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ModalController, ToastController } from '@ionic/angular';
-import { Agricultor } from 'src/app/model/agricultor';
+import { UserEntity } from 'src/app/model/userEntity';
 
 @Component({
   selector: 'app-registro',
@@ -40,18 +40,19 @@ export class RegistroComponent implements OnInit {
 
   registro(form) {
     if (this.validarDatos(form) === true) {
-      let datos = new Agricultor();
+      let datos = new UserEntity();
       datos = {
-        agricultor_id: 0,
-        apellido: form.value.apellido,
-        cedula: form.value.cedula,
-        clave: form.value.clave,
-        estado: 1,
-        nombre: form.value.nombre,
-        ciudad: form.value.ciudad,
-        correo: form.value.correo,
-        depto: form.value.depto
+        id: 0,
+        lastName: form.value.apellido,
+        document: form.value.cedula,
+        password: form.value.clave,
+        status: 1,
+        firstName: form.value.nombre,
+        city: form.value.ciudad,
+        email: form.value.correo,
+        dept: form.value.depto
       }
+      console.log("userEntity -> " + JSON.stringify(datos));
       this.agricultorService.postAgricultor(datos).subscribe(() => {
         this.toastConfirmacion("Guardado Correctamente.", "success");
         this.reset();

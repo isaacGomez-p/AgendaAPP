@@ -1,9 +1,12 @@
-export class Finca{
-    finca_id: number;
-    nombre: String;
-    estado: number;
-    id_agricultor: number;
-    codigo: string;
+import { UserEntity } from "./userEntity";
+
+//Finca
+export class LandEntity{
+    land_id: number;
+    name: String;
+    status: number;
+    user: UserEntity;
+    code: string;
     //No mapeado
     edicion: boolean;
     agregar: boolean;

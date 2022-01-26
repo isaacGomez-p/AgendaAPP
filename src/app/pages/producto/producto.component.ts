@@ -36,9 +36,9 @@ export class ProductoComponent implements OnInit {
     if (this.nombreBoton === "Editar") {
 
       this.productos.map((item) => {
-        if (item.producto_id === this.productoId) {
-          item.nombre = form.value.nombre,
-            item.variedad = form.value.variedad
+        if (item.product_id === this.productoId) {
+          item.name = form.value.nombre,
+            item.variety = form.value.variedad
             item.edicion = true;
         }
       });
@@ -49,25 +49,25 @@ export class ProductoComponent implements OnInit {
         this.productos = JSON.parse(window.localStorage.getItem('productos'));
         let cont = 0;
         this.productos.map((item) => {
-          if (item.producto_id <= 0) {
+          if (item.product_id <= 0) {
             cont++;
           }
         })
         let validacion = true;
         this.productos.map((item) => {
-          if (item.nombre.toString() === form.value.nombre && item.variedad === form.value.variedad) {
+          if (item.name.toString() === form.value.nombre && item.variety === form.value.variedad) {
             validacion = false;
           }
         })
         if (validacion === true) {
           let datos = new Producto();
           datos = {
-            nombre: form.value.nombre,
-            producto_id: cont * -1,
-            variedad: form.value.variedad,
+            name: form.value.nombre,
+            product_id: cont * -1,
+            variety: form.value.variedad,
             edicion: false,
             agregar: false,
-            codigo: this.generaCodigo()
+            code: this.generaCodigo()
           }
           this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");
@@ -138,11 +138,11 @@ export class ProductoComponent implements OnInit {
 
   editar(id) {
     this.productos.map((item) => {
-      if (item.producto_id === id) {
-        this.nombre = item.nombre;
-        this.variedad = item.variedad;
-        this.productoId = item.producto_id;
-        this.codigo = item.codigo;
+      if (item.product_id === id) {
+        this.nombre = item.name;
+        this.variedad = item.variety;
+        this.productoId = item.product_id;
+        this.codigo = item.code;
         this.nombreBoton = "Editar";
         this.estadoBotonEliminar = false;
       }
@@ -178,7 +178,7 @@ export class ProductoComponent implements OnInit {
         if (this.productoId <= 0) {
           this.productosEliminar = [];
           this.productos.map((item)=>{
-            if(item.producto_id !== this.productoId){
+            if(item.product_id !== this.productoId){
               this.productosEliminar.push(item);
             }
           })

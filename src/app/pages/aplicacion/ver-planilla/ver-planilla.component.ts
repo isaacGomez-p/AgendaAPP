@@ -1,4 +1,4 @@
-import { Agricultor } from './../../../model/agricultor';
+import { UserEntity } from '../../../model/userEntity';
 import { NumeroPlanilla } from './../../../model/numeroPlanilla';
 import { Component, OnInit } from '@angular/core';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -17,7 +17,7 @@ import { Planilla } from 'src/app/model/planilla';
 })
 export class VerPlanillaComponent implements OnInit {
 
-  agricultor: Agricultor[];
+  agricultor: UserEntity[];
 
   planillas: NumeroPlanilla[];  
   duracionRefresh: number = 2000;
@@ -157,7 +157,7 @@ export class VerPlanillaComponent implements OnInit {
       }
     })
     datos = {
-      agricultor_id: this.agricultor[0].agricultor_id,
+      agricultor_id: this.agricultor[0].id,
       fecha_creacion: new Date(),
       n_planilla_id: cont*-1,
       agregar: false,

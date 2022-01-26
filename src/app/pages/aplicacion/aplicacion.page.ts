@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Finca } from 'src/app/model/finca';
+import { LandEntity } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Siembra } from 'src/app/model/siembra';
 import { Planilla } from 'src/app/model/planilla';
 import { Producto } from 'src/app/model/producto';
-import { Agricultor } from 'src/app/model/agricultor';
+import { UserEntity } from 'src/app/model/userEntity';
 
 @Component({
   selector: 'app-aplicacion',
@@ -17,10 +17,10 @@ export class AplicacionPage implements OnInit {
 
   siembras: Siembra[];
 
-  fincaLista: Finca[];
+  fincaLista: LandEntity[];
   listaLotes: Siembra[];
   productos: Producto[];
-  agricultor: Agricultor[];
+  agricultor: UserEntity[];
 
   finca: number;
   lote: number;
@@ -120,10 +120,10 @@ export class AplicacionPage implements OnInit {
           this.calidad_ejecucion = parseInt(item.calidad_ejecucion + "");
           //this.calidad_ejecucion = item.calidad_ejecucion;
           this.fincaLista.map((finca) => {
-            if (item.finca_id === finca.finca_id) {
-              this.nombreFincaEditar = 'Finca actual: ' + finca.nombre;
-              this.finca = finca.finca_id;
-              this.codigoFinca = finca.codigo;
+            if (item.finca_id === finca.land_id) {
+              this.nombreFincaEditar = 'Finca actual: ' + finca.name;
+              this.finca = finca.land_id;
+              this.codigoFinca = finca.code;
               this.buscarLotesEditar(this.finca);
               this.listaLotes.map((itemLote) => {
                 if (itemLote.plano_id === parseInt(item.lote + "")) {
@@ -160,9 +160,9 @@ export class AplicacionPage implements OnInit {
   buscarLotes(form) {
     this.finca = form.value.finca;
     this.fincaLista.map((item)=>{
-      if(parseInt(this.finca+"") === item.finca_id){
-        console.log("entro codigo " + item.codigo)
-        this.codigoFinca = item.codigo
+      if(parseInt(this.finca+"") === item.land_id){
+        console.log("entro codigo " + item.code)
+        this.codigoFinca = item.code
       }
     })
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
@@ -196,9 +196,9 @@ export class AplicacionPage implements OnInit {
   buscarLotesEditar(id) {
     this.finca = id;
     this.fincaLista.map((item)=>{
-      if(this.finca === item.finca_id){
-        console.log("entro codigo editar " + item.codigo)
-        this.codigoFinca = item.codigo
+      if(this.finca === item.land_id){
+        console.log("entro codigo editar " + item.code)
+        this.codigoFinca = item.code
       }
     })
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
@@ -236,8 +236,8 @@ export class AplicacionPage implements OnInit {
     console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
       console.log(' ' + JSON.stringify(p));
-      if (p.producto_id === Number.parseInt(form.value.producto)) {
-        this.producto = p.codigo
+      if (p.product_id === Number.parseInt(form.value.producto)) {
+        this.producto = p.code
       }
     }
     if (this.titulo === "Editar planilla") {
@@ -271,7 +271,7 @@ export class AplicacionPage implements OnInit {
           this.toastConfirmacion('Planilla editada correctamente.', 'success');
           this.resetDatos();
           this.estadoSiguiente = false;
-          item.agricultor_id = this.agricultor[0].agricultor_id;
+          item.agricultor_id = this.agricultor[0].id;
         }
       })
 
@@ -318,7 +318,7 @@ export class AplicacionPage implements OnInit {
         n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
         finca_id: Number.parseInt(this.finca + ""),
         fincaNombre: null,
-        agricultor_id: this.agricultor[0].agricultor_id,
+        agricultor_id: this.agricultor[0].id,
         codigo: codigo,
         agregar: false,
         codigo_planilla: codigoNumero,

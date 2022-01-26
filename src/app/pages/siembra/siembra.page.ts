@@ -1,9 +1,9 @@
-import { Agricultor } from './../../model/agricultor';
+import { UserEntity } from '../../model/userEntity';
 import { SiembraService } from './../../services/siembra.service';
 import { Siembra } from './../../model/siembra';
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
-import { Finca } from 'src/app/model/finca';
+import { LandEntity } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { FincaService } from 'src/app/services/finca.service';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -16,7 +16,7 @@ import { Producto } from 'src/app/model/producto';
 })
 export class SiembraPage implements OnInit {
 
-  agricultor: Agricultor[];
+  agricultor: UserEntity[];
 
   //Primer formulario
   finca: number;
@@ -33,7 +33,7 @@ export class SiembraPage implements OnInit {
   semana: number;
   dia: number;
 
-  listaFincas: Finca[] = [];
+  listaFincas: LandEntity[] = [];
   productos: Producto[] = [];
   lotes = ["-- Nuevo --"];
   //Control para los formularios
@@ -86,8 +86,8 @@ export class SiembraPage implements OnInit {
         this.lote = item.lote
         this.surco = item.surco
         this.productos.map((itemP) => {
-          if (itemP.codigo === item.producto) {
-            this.producto = itemP.producto_id+""
+          if (itemP.code === item.producto) {
+            this.producto = itemP.product_id+""
           }
         })
         this.cant_plantas = item.plantas
@@ -104,9 +104,9 @@ export class SiembraPage implements OnInit {
     if (JSON.parse(window.localStorage.getItem("buscarSiembraFinca")) !== null) {
       if (this.listaFincas.length > 0) {
         for (let i = 0; i < this.listaFincas.length; i++) {
-          if (this.listaFincas[i].finca_id === JSON.parse(window.localStorage.getItem("buscarSiembraFinca"))) {
-            this.finca = this.listaFincas[i].finca_id;
-            this.nombreFinca = this.listaFincas[i].nombre;
+          if (this.listaFincas[i].land_id === JSON.parse(window.localStorage.getItem("buscarSiembraFinca"))) {
+            this.finca = this.listaFincas[i].land_id;
+            this.nombreFinca = this.listaFincas[i].name;
           }
         }
       }
@@ -153,9 +153,9 @@ export class SiembraPage implements OnInit {
         if (validacion === true) {
           let siembra = new Siembra();
           for (let p of this.productos) {
-            if (p.producto_id === Number.parseInt(form.value.producto)) {
-              this.variedad = p.variedad;
-              this.producto = p.codigo
+            if (p.product_id === Number.parseInt(form.value.producto)) {
+              this.variedad = p.variety;
+              this.producto = p.code
             }
           }
           let cont = 0;
@@ -184,7 +184,7 @@ export class SiembraPage implements OnInit {
             semana: form.value.semana,
             finca_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
             lote: this.lote,
-            agricultor_id: this.agricultor[0].agricultor_id,
+            agricultor_id: this.agricultor[0].id,
             codigo: this.generaCodigo(),
             agregar: false,
             codigo_finca: codigo
@@ -201,9 +201,9 @@ export class SiembraPage implements OnInit {
       } else {
         let id = parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar'))
         for (let p of this.productos) {
-          if (p.producto_id === Number.parseInt(form.value.producto)) {
-            this.variedad = p.variedad;
-            this.producto = p.codigo
+          if (p.product_id === Number.parseInt(form.value.producto)) {
+            this.variedad = p.variety;
+            this.producto = p.code
           }
         }
         let codigo = "";
@@ -229,7 +229,7 @@ export class SiembraPage implements OnInit {
           semana: form.value.semana,
           finca_id: finca_id,
           lote: this.lote,
-          agricultor_id: this.agricultor[0].agricultor_id,
+          agricultor_id: this.agricultor[0].id,
           codigo: codigo,
           agregar: false,
           codigo_finca: codigo_finca

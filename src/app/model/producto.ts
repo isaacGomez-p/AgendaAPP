@@ -1,8 +1,8 @@
 export class Producto{
-    producto_id: number;
-    nombre: String;
-    variedad: String;
-    codigo: String;
+    product_id: number;
+    name: String;
+    variety: String;
+    code: String;
     //No mapeado
     edicion: boolean;
     agregar: boolean;
