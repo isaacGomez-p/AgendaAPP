@@ -264,39 +264,44 @@ export class AppComponent implements OnInit {
     let cont: number = 0;
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
 
-    /*this.planillaService.getNumerosPlanillas(this.agricultor[0].id).subscribe((data) => {
+    this.planillaService.getNumerosPlanillas(this.agricultor.id).subscribe((data) => {
       window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));
     }, err => {
+      window.localStorage.setItem("numeroPlanillas", JSON.stringify([]));
       this.toastConfirmacion("Error en cargar todas las planillas.", "danger");
-    })*/
+    })
     
     this.fincaService.getAllLands(this.agricultor.id).subscribe((data) => {
       console.log(" -------- finca : " + JSON.stringify(data));
       window.localStorage.setItem("fincas", JSON.stringify(data.result));
     }, err => {
+      window.localStorage.setItem("fincas", JSON.stringify([]));
       this.toastConfirmacion("Error en cargar fincas.", "danger");
     })
 
-    /*this.serviceProducto.getAll(0).subscribe((data) => {
+    this.serviceProducto.getAll(0).subscribe((data) => {
       this.productos = data;
       window.localStorage.setItem('productos', JSON.stringify(data));
     }, err => {
+      window.localStorage.setItem('productos', JSON.stringify([]));
       this.toastConfirmacion("Error en cargar productos.", "danger");
     })
 
-    this.planillaService.getPlanillas(this.agricultor[0].id).subscribe((data) => {
+    this.planillaService.getPlanillas(this.agricultor.id).subscribe((data) => {
       this.planilla = data;
       window.localStorage.setItem('planillas', JSON.stringify(data));
     }, err => {
+      window.localStorage.setItem('planillas', JSON.stringify([]));
       this.toastConfirmacion("Error al cargar planilla.", "danger");
     })
 
-    this.siembraService.getSiembrasFinca(this.agricultor[0].id).subscribe((data) => {
+    this.siembraService.getSiembrasFinca(this.agricultor.id).subscribe((data) => {
       window.localStorage.setItem('siembras', JSON.stringify(data));
     }, err => {
+      window.localStorage.setItem('siembras', JSON.stringify([]));
       this.toastConfirmacion("Error al cargar siembras.", "danger");
     })
-    */
+    
   }
 
   async menuFinca() {

@@ -54,15 +54,15 @@
       <ion-row color="primary" justify-content-center>
         <ion-col>
           <ion-label  *ngIf="productos.length === 0" position="floating">No hay productos registrados. Para continuar, inserte productos.</ion-label>   
-          <div padding>  
+          <div padding *ngIf="productos.length !== 0">  
 
             <ion-item>
               <ion-label position="floating">Surco</ion-label>
               <ion-input [(ngModel)]="surco"  name="surco" type="number" placeholder="Surco" ngModel required></ion-input>
             </ion-item>
             <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" *ngIf="productos.length !== 0" ngModel required>
-              <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
-                {{producto.nombre}} - {{producto.variedad}}
+              <ion-select-option *ngFor="let producto of productos" value="{{producto.product_id}}">
+                {{producto.name}} - {{producto.variety}}
               </ion-select-option>
             </ion-select>
                         
@@ -85,8 +85,8 @@
           </div>
 
           <div padding>
-            <ion-button expand="full" color="success" type="submit" [disabled]="form2.invalid" expand="block">
-              <ion-icon slot="start" name="save-outline"></ion-icon>
+            <ion-button expand="full" color="success" type="submit" [disabled]="form2.invalid" expand="block" *ngIf="productos.length !== 0">
+              <ion-icon slot="start" name="save-outline" ></ion-icon>
               {{nombreBoton}} </ion-button>
             <ion-button expand="full" color="secondary" expand="block" (click)="anterior()">              
               <ion-icon slot="start" name="arrow-back-outline"></ion-icon>

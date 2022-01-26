@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { Siembra } from '../model/siembra';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -11,7 +12,10 @@ import { Siembra } from '../model/siembra';
 
 export class SiembraService {
 
-    private urlService: string = "http://190.60.254.186/Publicada/api"
+    //private urlService: string = "http://190.60.254.186/Publicada/api"
+
+    private urlService: string = environment.url
+    private _controller: string = this.urlService + "/user/"
 
     constructor(private http: HttpClient, public navCtrl: NavController) {
     }

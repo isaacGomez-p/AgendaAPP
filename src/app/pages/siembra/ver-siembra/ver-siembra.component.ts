@@ -47,10 +47,10 @@ export class VerSiembraComponent implements OnInit {
         if (this.siembrasLS.length > 0) {
           this.siembras = [];
           this.siembrasLS.map((item) => {            
-            if (item.finca_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
+            if (item.land_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
               this.productos.map((itemP)=>{
                 if(itemP.code === item.producto){
-                  item.producto = itemP.name
+                  item.producto = itemP.name + " " + itemP.variety;
                   this.siembras.push(item);
                 }
               })              
@@ -105,7 +105,7 @@ export class VerSiembraComponent implements OnInit {
     await loading.present();
   }
 
-  async masInfo(siembra) {
+  async masInfo(siembra: Siembra) {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',
       header: 'Detalles',
@@ -129,28 +129,28 @@ export class VerSiembraComponent implements OnInit {
                 '   <th> '+
                 '     Plantas:    '+
                 '   </th> '+
-                '   <td> '+ siembra.plantas +
+                '   <td> '+ siembra.plants +
                 '   </td> '+
                 ' </tr>  '+
                 ' <tr> '+
                 '   <th> '+
                 '     Año:    '+
                 '   </th> '+
-                '   <td> '+ siembra.anio +
+                '   <td> '+ siembra.year +
                 '   </td> '+
                 ' </tr>  '+
                 ' <tr> '+
                 '   <th> '+
                 '     Semana:    '+
                 '   </th> '+
-                '   <td> '+ siembra.semana +
+                '   <td> '+ siembra.week +
                 '   </td> '+
                 ' </tr>  '+
                 ' <tr> '+
                 '   <th> '+
                 '     Día:   '+
                 '   </th> '+
-                '   <td> '+ siembra.dia +
+                '   <td> '+ siembra.day +
                 '   </td> '+
                 ' </tr>  '+
                 '</table>',                               
@@ -186,7 +186,7 @@ export class VerSiembraComponent implements OnInit {
     this.router.navigateByUrl('/siembra/Agregar/A');
   }
 
-  async menuSiembras(siembra) {
+  async menuSiembras(siembra: Siembra) {
     const alert = await this.actionSheetCtrl.create({
       header: 'Eventos',
       buttons: [
@@ -203,7 +203,7 @@ export class VerSiembraComponent implements OnInit {
           role: 'selected',          
           icon: 'create-outline',
           handler: () => {
-            this.router.navigateByUrl('/siembra/Editar/' + siembra.plano_id);
+            this.router.navigateByUrl('/siembra/Editar/' + siembra.id);
           }
         },
         {
@@ -272,7 +272,7 @@ export class VerSiembraComponent implements OnInit {
       if (validacion === true) {
         this.lista = [];
         this.siembras.map((item) => {
-          if (item.plano_id !== siembra.plano_id) {
+          if (item.id !== siembra.plano_id) {
             this.lista.push(item)
           }
         })
@@ -288,7 +288,7 @@ export class VerSiembraComponent implements OnInit {
       this.planillas = JSON.parse(window.localStorage.getItem("planillas"));
       this.planillas.map((item) => {
         if (parseInt(item.lote + "") === siembra.plano_id) {
-          this.planillaService.deletePlanillas(item.planilla_id).subscribe(() => {
+          this.planillaService.deletePlanillas(item.spreadsheetId).subscribe(() => {
 
           }, error => {
             this.toastConfirmacion("Por favor asegurese que tiene conexión a internet.", "danger")

@@ -1,8 +1,10 @@
+import { UserEntity } from "./userEntity";
+
 export class NumeroPlanilla{
-    n_planilla_id: number;
-    fecha_creacion: Date;
-    agricultor_id: number;
-    codigo: string;
+    nSpreadsheetId: number;
+    creationDate: Date;
+    user: UserEntity;
+    code: string;
     //No mapeado
     agregar: boolean;
 }

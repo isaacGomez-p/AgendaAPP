@@ -1,25 +1,27 @@
 export class Planilla{
-    planilla_id: number;
-    fecha_formulacion: Date;
+    spreadsheetId: number;
+    filingDate: Date; //Fecha de formulación
     lote: String;
-    actividad: String;
+    activity: String;
     control: String;
-    prevencion: String;
-    fertilizacion: String;
+    prevention: String;
+    fertilization: String;    
+    dose: number;
+    totalMix: number;
+    totalDose: number;
+    madeBy: String;
+    applicationDate: Date;
+    status: String;
+    quality: String;
+    code: string;
+    codeNSpreadsheet: string;
+    codeLand: string;
+
     producto: String;
-    dosis: number;
-    mezcla_total: number;
-    total_dosis: number;
-    elaborado: String;
-    fecha_aplicacion: Date;
-    estado: String;
-    calidad_ejecucion: String;
-    n_planilla: number;
-    finca_id: number;
+    land_id: number;
     agricultor_id: number;
-    codigo: string;
-    codigo_planilla: string;
-    codigo_finca: string;
+    n_planilla: number;
+
     //No mapeadas
     fincaNombre: String;
     agregar: boolean;

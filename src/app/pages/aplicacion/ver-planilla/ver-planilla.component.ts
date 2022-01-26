@@ -17,7 +17,7 @@ import { Planilla } from 'src/app/model/planilla';
 })
 export class VerPlanillaComponent implements OnInit {
 
-  agricultor: UserEntity[];
+  agricultor: UserEntity;
 
   planillas: NumeroPlanilla[];  
   duracionRefresh: number = 2000;
@@ -148,27 +148,31 @@ export class VerPlanillaComponent implements OnInit {
 
   registrar(){
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
-
+    
     let datos = new NumeroPlanilla();
     let cont = 0;
-    this.planillas.map((item)=>{
-      if(item.n_planilla_id <= 0){
-        cont++;
+    if(this.planillas == null){
+      this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");      
+    }else{      
+      this.planillas.map((item)=>{
+        if(item.nSpreadsheetId <= 0){
+          cont++;
+        }
+      })
+      datos = {
+        user: this.agricultor,
+        creationDate: new Date(),
+        nSpreadsheetId: cont*-1,
+        agregar: false,
+        code: this.generaCodigo()
       }
-    })
-    datos = {
-      agricultor_id: this.agricultor[0].id,
-      fecha_creacion: new Date(),
-      n_planilla_id: cont*-1,
-      agregar: false,
-      codigo: this.generaCodigo()
-    }
-    this.planillas.push(datos)
-    window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.planillas));
-    /*this.servicePlanilla.postNumeroPlanilla(datos).subscribe(() =>{
+      this.planillas.push(datos)
+      window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.planillas));
+      /*this.servicePlanilla.postNumeroPlanilla(datos).subscribe(() =>{
+        this.toastConfirmacion("Se registro correctamente", "success");
+      })*/
       this.toastConfirmacion("Se registro correctamente", "success");
-    })*/
-    this.toastConfirmacion("Se registro correctamente", "success");
+    }
   }
 
   generaCodigo(): string {

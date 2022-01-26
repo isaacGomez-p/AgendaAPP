@@ -66,14 +66,14 @@ export class PlanillasComponent implements OnInit {
       this.planillas.map(item =>{
         let fincas = JSON.parse(window.localStorage.getItem('fincas'));
         for(let f of fincas){
-          if(item.codigo_finca === f.codigo){
+          if(item.codeLand === f.codigo){
             item.fincaNombre = f.nombre;
           }
         }
         let siembras =  JSON.parse(window.localStorage.getItem('siembras'));
         for(let s of siembras){
           if(parseInt(item.lote+"") === parseInt(s.plano_id)){
-            let split = item.fecha_formulacion.toString().split('T')
+            let split = item.filingDate.toString().split('T')
             item.fechaString = split[0]
             item.lote = s.lote + " - Surco: " + s.surco
           }
@@ -86,7 +86,7 @@ export class PlanillasComponent implements OnInit {
           }
         } 
 
-        let split = item.fecha_aplicacion.toString().split('T')
+        let split = item.filingDate.toString().split('T')
         item.fechaAplicacionString = split[0]
 
       })    

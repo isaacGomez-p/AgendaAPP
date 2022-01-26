@@ -1,17 +1,17 @@
 export class Siembra{
-    plano_id: number;
-    finca_id: number;
-    lote: string;
-    surco: number;
+    id: number;
+    land_id: number;
+    batch: string; // LOTE
+    groove: number; //SURCO
     producto: String;
     variedad: String; // tiene producto
-    plantas: number;
-    anio: number;
-    semana: number;
-    dia: number;
+    plants: number; //plantas
+    year: number;
+    week: number;
+    day: number;
     agricultor_id: number;
-    codigo: string;
-    codigo_finca: string;
+    code: string;
+    landCode: string; // código de finca
     //No mapeado
     agregar: boolean;    
 }
