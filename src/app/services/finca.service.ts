@@ -16,8 +16,8 @@ export class FincaService {
 
   private urlService: string = environment.url;
   private _controller: string = this.urlService + "/land/";
-  private _guardarFinca: string = this._controller + "saveLand";
-  private _traerTodosFincas: string = this._controller + "getLands";    
+  private _guardarFinca: string = this._controller + "save";
+  private _traerTodosFincas: string = this._controller + "list";    
 
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }

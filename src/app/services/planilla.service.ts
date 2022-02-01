@@ -21,6 +21,7 @@ export class PlanillaService {
   private urlService: string = environment.url
   private _controller: string = this.urlService + "/spreedsheet/"
   private _guardar: string = this._controller + "save"  
+  private _cargarDatos: string = this._controller + "list"
   
   private login = [];
 
@@ -31,11 +32,11 @@ export class PlanillaService {
   longitud: number = 0;
 
   postPlanillaAplicacion(datos: Planilla) {
-    return this.http.post(`${this.urlService}/AGD_Planilla_de_aplicacion`, datos);
+    return this.http.post(`${this._guardar}/`, datos);
   }
 
   putPlanillaAplicacion(datos: Planilla, id: number) {
-    return this.http.put(`${this.urlService}/AGD_Planilla_de_aplicacion/` + id, datos);
+    return this.http.put(`${this._cargarDatos}/`+ + id, datos);
   }
 
   postNumeroPlanilla(datos: NumeroPlanilla) {

@@ -17,8 +17,8 @@ export class AgricultorService {
 
   private urlService: string = environment.url
   private _controller: string = this.urlService + "/user/"
-  private _guardarAgricultor: string = this._controller + "saveUser"  
-  private _traerTodosUsuarios: string = this._controller + "getUsers"  
+  private _guardarAgricultor: string = this._controller + "save"  
+  private _traerTodosUsuarios: string = this._controller + "list"  
   private _login: string = this.urlService + "/login/validation"
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }

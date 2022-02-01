@@ -15,7 +15,8 @@ export class SiembraService {
     //private urlService: string = "http://190.60.254.186/Publicada/api"
 
     private urlService: string = environment.url
-    private _controller: string = this.urlService + "/user/"
+    private _controller: string = this.urlService + "/plantingMap/"
+    private _guardar: string = this._controller + "save"
 
     constructor(private http: HttpClient, public navCtrl: NavController) {
     }
@@ -24,7 +25,7 @@ export class SiembraService {
     longitud: number = 0;
 
     postSiembra(datos: Siembra) {
-        return this.http.post(`${this.urlService}/AGD_Plano_de_siembra`, datos);
+        return this.http.post(`${this._guardar}`, datos);
     }
 
     getSiembrasFinca(idFinca: number): Observable<Siembra[]> {

@@ -164,7 +164,8 @@ export class VerPlanillaComponent implements OnInit {
         creationDate: new Date(),
         nSpreadsheetId: cont*-1,
         agregar: false,
-        code: this.generaCodigo()
+        code: this.generaCodigo(),
+        spreadsheets: null
       }
       this.planillas.push(datos)
       window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.planillas));
