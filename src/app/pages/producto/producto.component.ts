@@ -2,9 +2,10 @@ import { Planilla } from 'src/app/model/planilla';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController, LoadingController, ToastController } from '@ionic/angular';
-import { Producto } from 'src/app/model/producto';
+import { ProductEntity } from 'src/app/model/producto';
 import { ProductoService } from 'src/app/services/producto.service';
 import { Siembra } from 'src/app/model/siembra';
+import { UserEntity } from 'src/app/model/userEntity';
 
 @Component({
   selector: 'app-producto',
@@ -12,9 +13,9 @@ import { Siembra } from 'src/app/model/siembra';
   styleUrls: ['./producto.component.scss'],
 })
 export class ProductoComponent implements OnInit {
-
-  productos: Producto[];
-  productosEliminar: Producto[];
+  agricultor: UserEntity;
+  productos: ProductEntity[];
+  productosEliminar: ProductEntity[];
   planillas: Planilla[];
   siembras: Siembra[];
   nombre: String;
@@ -29,6 +30,10 @@ export class ProductoComponent implements OnInit {
   constructor(private loadingController: LoadingController, private serviceProducto: ProductoService, public alertController: AlertController, private router: Router, private toastController: ToastController) { }
 
   ngOnInit() {
+    
+  }
+
+  ionViewDidEnter() {
     this.cargarProductosLS();
   }
 
@@ -60,14 +65,16 @@ export class ProductoComponent implements OnInit {
           }
         })
         if (validacion === true) {
-          let datos = new Producto();
+          this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+          let datos = new ProductEntity();
           datos = {
             name: form.value.nombre,
             product_id: cont * -1,
             variety: form.value.variedad,
             edicion: false,
             agregar: false,
-            code: this.generaCodigo()
+            code: this.generaCodigo(),
+            user: this.agricultor
           }
           this.productos.push(datos);
           this.toastConfirmacion("Se registro correctamente", "success");

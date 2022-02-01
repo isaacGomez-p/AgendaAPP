@@ -18,7 +18,7 @@ export class Planilla{
     codeLand: string;
 
     producto: String;
-    land_id: number;
+    landId: number;
     agricultor_id: number;
     n_planilla: number;
 

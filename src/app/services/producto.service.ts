@@ -2,7 +2,7 @@ import{ HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
-import { Producto } from '../model/producto';
+import { ProductEntity } from '../model/producto';
 import { environment } from 'src/environments/environment';
 
 
@@ -15,8 +15,8 @@ export class ProductoService {
   private dataUrl: string = "assets/json/pedidos.json"
 
   private urlService: string = environment.url
-  private _controller: string = this.urlService + "/user/"
-
+  private _controller: string = this.urlService + "/product/"
+  private _guardar: string = this._controller + "save";
   //private urlService: string = "http://190.60.254.186/Publicada/api"
 
   //private urlService: string = "https://localhost:44341/api";
@@ -25,16 +25,16 @@ export class ProductoService {
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }  
 
-  postProducto(datos: Producto){
-    return this.http.post(`${this.urlService}/AGD_Producto`, datos);
+  postProducto(productEntity: ProductEntity){
+    return this.http.post(`${this._guardar}`, productEntity);
   }
 
-  putProducto(datos: Producto, id: number){
+  putProducto(datos: ProductEntity, id: number){
     return this.http.put(`${this.urlService}/AGD_Producto/`+id, datos);
   }
 
-  getAll(idUsuario: number): Observable<Producto[]>{       
-    return this.http.get<Producto[]>(`${this.urlService}/AGD_Producto/`+idUsuario);
+  getAll(idUsuario: number): Observable<ProductEntity[]>{       
+    return this.http.get<ProductEntity[]>(`${this.urlService}/AGD_Producto/`+idUsuario);
   }
 
   deleteProducto(idProducto: number) {

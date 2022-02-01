@@ -1,6 +1,6 @@
 export class Siembra{
     id: number;
-    land_id: number;
+    landId: number;
     batch: string; // LOTE
     groove: number; //SURCO
     producto: String;

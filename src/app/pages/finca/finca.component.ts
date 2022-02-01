@@ -53,10 +53,10 @@ export class FincaComponent implements OnInit {
     } else {
       this.fincas = JSON.parse(window.localStorage.getItem("fincas"));
       this.fincas.map((item) => {
-        if (item.land_id === id) {
+        if (item.landId === id) {
           this.nombreFinca = item.name;
           this.estado = item.status;
-          this.idFinca = item.land_id;
+          this.idFinca = item.landId;
           this.idAgricultor = item.user.id;
         }
       });
@@ -75,7 +75,7 @@ export class FincaComponent implements OnInit {
       }
       if(this.fincas.length > 0){
         this.fincas.map((item)=>{
-          if(item.land_id <= 0){
+          if(item.landId <= 0){
             cont++;
           }
         })
@@ -91,7 +91,7 @@ export class FincaComponent implements OnInit {
           name: form.value.nombreFinca,
           status: 1, //Estado 1 indica que esta activo
           user: this.agricultor,
-          land_id: cont * -1,
+          landId: cont * -1,
           edicion: false,
           agregar: false,
           code: this.generaCodigo()  
@@ -108,7 +108,7 @@ export class FincaComponent implements OnInit {
     } else {
       if (this.nombreBoton === "Actualizar") {        
         this.fincas.map((item)=>{
-          if(item.land_id === this.idFinca){
+          if(item.landId === this.idFinca){
             item.status = this.estado;
             item.name = form.value.nombreFinca;
             item.user = this.agricultor;

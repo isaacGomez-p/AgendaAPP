@@ -24,8 +24,8 @@ export class SiembraService {
     latitud: number = 0;
     longitud: number = 0;
 
-    postSiembra(datos: Siembra) {
-        return this.http.post(`${this._guardar}`, datos);
+    postSiembra(plantingMapEntity: Siembra) {
+        return this.http.post(`${this._guardar}`, plantingMapEntity);
     }
 
     getSiembrasFinca(idFinca: number): Observable<Siembra[]> {

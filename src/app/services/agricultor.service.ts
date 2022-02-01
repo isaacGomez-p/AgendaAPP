@@ -19,6 +19,7 @@ export class AgricultorService {
   private _controller: string = this.urlService + "/user/"
   private _guardarAgricultor: string = this._controller + "save"  
   private _traerTodosUsuarios: string = this._controller + "list"  
+  private _traerUsuarioPorId: string = this._controller + "getById"  
   private _login: string = this.urlService + "/login/validation"
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }
@@ -41,5 +42,9 @@ export class AgricultorService {
 
   getAllUser(idUsuario: number): Observable<UserEntity[]>{       
     return this.http.get<UserEntity[]>(`${this._traerTodosUsuarios}`+idUsuario);
+  }
+
+  getUserById(idUsuario: number): Observable<ApiResponse>{       
+    return this.http.get<ApiResponse>(`${this._traerUsuarioPorId}`+`?userId=`+idUsuario);
   }
 }

@@ -1,4 +1,6 @@
-export class Producto{
+import { UserEntity } from "./userEntity";
+
+export class ProductEntity{
     product_id: number;
     name: String;
     variety: String;
@@ -6,4 +8,5 @@ export class Producto{
     //No mapeado
     edicion: boolean;
     agregar: boolean;
+    user: UserEntity;
 }

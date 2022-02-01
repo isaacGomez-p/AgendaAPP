@@ -50,7 +50,8 @@ export class RegistroComponent implements OnInit {
         firstName: form.value.nombre,
         city: form.value.ciudad,
         email: form.value.correo,
-        dept: form.value.depto
+        dept: form.value.depto,
+        products: null
       }
       console.log("userEntity -> " + JSON.stringify(datos));
       this.agricultorService.postAgricultor(datos).subscribe(() => {

@@ -1,3 +1,5 @@
+import { ProductEntity } from "./producto";
+
 export class UserEntity{
     id: number;
     firstName: String;
@@ -7,5 +9,6 @@ export class UserEntity{
     status : number;
     email: String;
     dept: String;
-    city: String;    
+    city: String; 
+    products: ProductEntity[];
 }

@@ -2,7 +2,7 @@ import { UserEntity } from "./userEntity";
 
 //Finca
 export class LandEntity{
-    land_id: number;
+    landId: number;
     name: String;
     status: number;
     user: UserEntity;

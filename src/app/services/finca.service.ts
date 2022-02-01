@@ -34,6 +34,6 @@ export class FincaService {
   }
 
   getAllLands(idUsuario: number): Observable<ApiResponse>{       
-    return this.http.get<ApiResponse>(`${this._traerTodosFincas}?idUsuario=`+idUsuario);
+    return this.http.get<ApiResponse>(`${this._traerTodosFincas}?userId=`+idUsuario);
   }
 }

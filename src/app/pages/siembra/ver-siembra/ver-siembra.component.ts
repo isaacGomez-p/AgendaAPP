@@ -7,7 +7,7 @@ import { PlanillaService } from 'src/app/services/planilla.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { ToastController } from '@ionic/angular';
-import { Producto } from 'src/app/model/producto';
+import { ProductEntity } from 'src/app/model/producto';
 
 @Component({
   selector: 'app-ver-siembra',
@@ -20,7 +20,7 @@ export class VerSiembraComponent implements OnInit {
 
   siembras: Siembra[];
   planillas: Planilla[];
-  productos: Producto[];
+  productos: ProductEntity[];
   planillasEliminar: Planilla[];
   lista: Siembra[];
   siembrasLS: Siembra[];
@@ -47,7 +47,7 @@ export class VerSiembraComponent implements OnInit {
         if (this.siembrasLS.length > 0) {
           this.siembras = [];
           this.siembrasLS.map((item) => {            
-            if (item.land_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
+            if (item.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
               this.productos.map((itemP)=>{
                 if(itemP.code === item.producto){
                   item.producto = itemP.name + " " + itemP.variety;

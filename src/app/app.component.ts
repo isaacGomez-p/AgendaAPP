@@ -11,7 +11,7 @@ import { UserEntity } from './model/userEntity';
 import { FincaService } from './services/finca.service';
 import { LandEntity } from './model/finca';
 import { ProductoService } from './services/producto.service';
-import { Producto } from './model/producto';
+import { ProductEntity } from './model/producto';
 import { Planilla } from './model/planilla';
 import { Siembra } from './model/siembra';
 import { SiembraService } from './services/siembra.service';
@@ -19,6 +19,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FcmService } from './services/fcm.service';
+import { AgricultorService } from './services/agricultor.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,7 @@ export class AppComponent implements OnInit {
   agricultor: UserEntity;
   fincas: LandEntity[];
   numeroPlanillas: NumeroPlanilla[];
-  productos: Producto[];
+  productos: ProductEntity[];
   planilla: Planilla[];
   siembras: Siembra[];
   tituloFinca: String = '';
@@ -52,7 +53,8 @@ export class AppComponent implements OnInit {
     private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
-    private fcmService: FcmService) { 
+    private fcmService: FcmService,
+    private userService: AgricultorService) { 
     this.initializeApp();
   }
 
@@ -171,11 +173,14 @@ export class AppComponent implements OnInit {
   }
 
   sincronizar() {
+    //carga los datos del agricultor
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'));
+
     this.fincas = JSON.parse(window.localStorage.getItem('fincas'));
 
     if (this.fincas.length > 0) {
       this.fincas.map((item) => {
-        if (item.land_id <= 0) {
+        if (item.landId <= 0) {
           if (item.agregar === false) {
             this.fincaService.postFinca(item).subscribe(() => {
               item.agregar = true;
@@ -183,7 +188,7 @@ export class AppComponent implements OnInit {
           }
         } else {
           if (item.edicion === true) {
-            this.fincaService.putFinca(item, item.land_id).subscribe(() => {
+            this.fincaService.putFinca(item, item.landId).subscribe(() => {
 
             })
           }
@@ -206,7 +211,9 @@ export class AppComponent implements OnInit {
       })
     }
     window.localStorage.setItem("numeroPlanillas", JSON.stringify(this.numeroPlanillas));
+    */
 
+    //productos
     this.productos = JSON.parse(window.localStorage.getItem('productos'));
     if (this.productos.length > 0) {
       this.productos.map((item) => {
@@ -226,12 +233,14 @@ export class AppComponent implements OnInit {
       });
     }
     window.localStorage.setItem('productos', JSON.stringify(this.productos));
+  
 
+    //siembra
     this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
     if (this.siembras !== null) {
       if (this.siembras.length > 0) {
         this.siembras.map((item) => {
-          if (item.plano_id <= 0) {
+          if (item.id <= 0) {
             if (item.agregar === false) {
               this.siembraService.postSiembra(item).subscribe(siembras_ => {
                 item.agregar = true;                
@@ -239,7 +248,7 @@ export class AppComponent implements OnInit {
                   this.planilla = JSON.parse(window.localStorage.getItem("planillas"));
                   if (this.planilla.length > 0) {
                     this.planilla.map((item) => {
-                      if (item.planilla_id <= 0) {
+                      if (item.spreadsheetId <= 0) {
                         console.log("  " + JSON.stringify(item))
                         this.planillaService.postPlanillaAplicacion(item).subscribe(() => {
                           item.agregar = true;
@@ -257,12 +266,23 @@ export class AppComponent implements OnInit {
     }
     window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
 
-    */
+    
   }
 
   descargarDatos() {
     let cont: number = 0;
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    this.userService.getUserById(this.agricultor.id).subscribe(data => {
+      this.agricultor = data.result;
+      window.localStorage.setItem('agricultor', JSON.stringify(this.agricultor));
+      console.log(".... " + JSON.stringify(this.agricultor))
+      console.log(".... " + JSON.stringify(this.agricultor.products))
+      //carga los productos del LS
+      window.localStorage.setItem('productos', JSON.stringify(this.agricultor.products)); 
+    });
+//  if(this.agricultor.products != null){}
+
+    
 
     this.planillaService.getNumerosPlanillas(this.agricultor.id).subscribe((data) => {
       window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));
@@ -279,13 +299,13 @@ export class AppComponent implements OnInit {
       this.toastConfirmacion("Error en cargar fincas.", "danger");
     })
 
-    this.serviceProducto.getAll(0).subscribe((data) => {
+    /*this.serviceProducto.getAll(0).subscribe((data) => {
       this.productos = data;
       window.localStorage.setItem('productos', JSON.stringify(data));
     }, err => {
       window.localStorage.setItem('productos', JSON.stringify([]));
       this.toastConfirmacion("Error en cargar productos.", "danger");
-    })
+    })*/
 
     this.planillaService.getPlanillas(this.agricultor.id).subscribe((data) => {
       this.planilla = data;

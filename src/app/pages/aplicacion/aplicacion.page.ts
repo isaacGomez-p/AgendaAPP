@@ -5,7 +5,7 @@ import { LoadingController } from '@ionic/angular';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Siembra } from 'src/app/model/siembra';
 import { Planilla } from 'src/app/model/planilla';
-import { Producto } from 'src/app/model/producto';
+import { ProductEntity } from 'src/app/model/producto';
 import { UserEntity } from 'src/app/model/userEntity';
 
 @Component({
@@ -19,7 +19,7 @@ export class AplicacionPage implements OnInit {
 
   fincaLista: LandEntity[];
   listaLotes: Siembra[];
-  productos: Producto[];
+  productos: ProductEntity[];
   agricultor: UserEntity[];
 
   finca: number;
@@ -120,9 +120,9 @@ export class AplicacionPage implements OnInit {
           this.calidad_ejecucion = parseInt(item.quality + "");
           //this.calidad_ejecucion = item.calidad_ejecucion;
           this.fincaLista.map((finca) => {
-            if (item.land_id === finca.land_id) {
+            if (item.landId === finca.landId) {
               this.nombreFincaEditar = 'Finca actual: ' + finca.name;
-              this.finca = finca.land_id;
+              this.finca = finca.landId;
               this.codigoFinca = finca.code;
               this.buscarLotesEditar(this.finca);
               this.listaLotes.map((itemLote) => {
@@ -163,7 +163,7 @@ export class AplicacionPage implements OnInit {
       this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");
     }else{    
       this.fincaLista.map((item)=>{
-        if(parseInt(this.finca+"") === item.land_id){
+        if(parseInt(this.finca+"") === item.landId){
           console.log("entro codigo " + item.code)
           this.codigoFinca = item.code
         }
@@ -175,7 +175,7 @@ export class AplicacionPage implements OnInit {
         if (this.siembras.length > 0) {
           this.listaLotes = [];
           this.siembras.map((item) => {
-            if (item.land_id === parseInt(form.value.finca)) {
+            if (item.landId === parseInt(form.value.finca)) {
               this.listaLotes.push(item);
             }
           })
@@ -204,7 +204,7 @@ export class AplicacionPage implements OnInit {
   buscarLotesEditar(id) {
     this.finca = id;
     this.fincaLista.map((item)=>{
-      if(this.finca === item.land_id){
+      if(this.finca === item.landId){
         console.log("entro codigo editar " + item.code)
         this.codigoFinca = item.code
       }
@@ -213,7 +213,7 @@ export class AplicacionPage implements OnInit {
     if (this.siembras.length > 0) {
       this.listaLotes = [];
       this.siembras.map((item) => {
-        if (item.land_id === parseInt(id)) {
+        if (item.landId === parseInt(id)) {
           this.listaLotes.push(item);
         }
       })
@@ -273,7 +273,7 @@ export class AplicacionPage implements OnInit {
           item.producto = this.producto
           item.totalDose = form.value.total_dosis
           item.n_planilla = Number.parseInt(localStorage.getItem('buscarPlanilla'))
-          item.land_id = Number.parseInt(this.finca + "")
+          item.landId = Number.parseInt(this.finca + "")
           item.codeLand = this.codigoFinca + ""
           item.fincaNombre = null
           this.toastConfirmacion('Planilla editada correctamente.', 'success');
@@ -324,7 +324,7 @@ export class AplicacionPage implements OnInit {
         producto: this.producto,
         totalDose: form.value.total_dosis,
         n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
-        land_id: Number.parseInt(this.finca + ""),
+        landId: Number.parseInt(this.finca + ""),
         fincaNombre: null,
         agricultor_id: this.agricultor[0].id,
         code: codigo,

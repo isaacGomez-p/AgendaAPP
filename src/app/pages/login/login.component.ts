@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
           this.clave = null;
           this.router.navigateByUrl('/home');
           this.appComponent.loginEstado = true;
-          window.localStorage.setItem("agricultor", JSON.stringify(data.result));
+          window.localStorage.setItem("agricultor", JSON.stringify(data.result));          
           this.toastConfirmacion('Bienvenido ' + data.result.firstName + " " + data.result.lastName, 'success');
         }else{          
           this.toastConfirmacion('Datos incorrectos.', 'danger');

@@ -7,7 +7,7 @@ import { LandEntity } from 'src/app/model/finca';
 import { LoadingController } from '@ionic/angular';
 import { FincaService } from 'src/app/services/finca.service';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Producto } from 'src/app/model/producto';
+import { ProductEntity } from 'src/app/model/producto';
 
 @Component({
   selector: 'app-siembra',
@@ -34,7 +34,7 @@ export class SiembraPage implements OnInit {
   dia: number;
 
   listaFincas: LandEntity[] = [];
-  productos: Producto[] = [];
+  productos: ProductEntity[] = [];
   lotes = ["-- Nuevo --"];
   //Control para los formularios
   estadoFormulario2: boolean = false;
@@ -104,8 +104,8 @@ export class SiembraPage implements OnInit {
     if (JSON.parse(window.localStorage.getItem("buscarSiembraFinca")) !== null) {
       if (this.listaFincas.length > 0) {
         for (let i = 0; i < this.listaFincas.length; i++) {
-          if (this.listaFincas[i].land_id === JSON.parse(window.localStorage.getItem("buscarSiembraFinca"))) {
-            this.finca = this.listaFincas[i].land_id;
+          if (this.listaFincas[i].landId === JSON.parse(window.localStorage.getItem("buscarSiembraFinca"))) {
+            this.finca = this.listaFincas[i].landId;
             this.nombreFinca = this.listaFincas[i].name;
           }
         }
@@ -168,8 +168,8 @@ export class SiembraPage implements OnInit {
           let fincas = JSON.parse(window.localStorage.getItem("fincas"));
           let codigo = "";
           for (let f of fincas) {
-            if (f.land_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
-              codigo = f.codigo;
+            if (f.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+              codigo = f.code;
             }
           }
 
@@ -182,7 +182,7 @@ export class SiembraPage implements OnInit {
             year: form.value.anio,
             day: form.value.dia,
             week: form.value.semana,
-            land_id: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+            landId: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
             batch: this.lote,
             agricultor_id: this.agricultor.id,
             code: this.generaCodigo(),
@@ -208,12 +208,12 @@ export class SiembraPage implements OnInit {
         }
         let codigo = "";
         let codigo_finca = "";
-        let land_id = 0;
+        let landId = 0;
 
         this.siembras.map((item) => {
           if (item.id === id) {
             codigo_finca = item.landCode
-            land_id = item.land_id
+            landId = item.landId
             codigo = item.code
           }
         })
@@ -227,7 +227,7 @@ export class SiembraPage implements OnInit {
           year: form.value.anio,
           day: form.value.dia,
           week: form.value.semana,
-          land_id: land_id,
+          landId: landId,
           batch: this.lote,
           agricultor_id: this.agricultor[0].id,
           code: codigo,
@@ -287,7 +287,7 @@ export class SiembraPage implements OnInit {
       this.lotes = [];
       this.lotes.push("--Nuevo--");
       this.siembras.map((item) => {
-        if (item.land_id === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+        if (item.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
           let validacion = true;
           this.lotes.map((l) => {
             if (l === item.batch) {
