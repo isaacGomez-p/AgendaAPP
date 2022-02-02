@@ -47,13 +47,14 @@ export class VerSiembraComponent implements OnInit {
         if (this.siembrasLS.length > 0) {
           this.siembras = [];
           this.siembrasLS.map((item) => {            
-            if (item.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {              
-              this.productos.map((itemP)=>{
-                if(itemP.code === item.producto){
-                  item.producto = itemP.name + " " + itemP.variety;
+            if (item.land.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+              this.siembras.push(item);
+              /*this.productos.map((itemP)=>{
+                if(itemP.code === item.product.code){
+                  item.product = itemP;
                   this.siembras.push(item);
                 }
-              })              
+              })*/          
             }
           });
           if (this.siembras.length <= 0) {
@@ -122,7 +123,7 @@ export class VerSiembraComponent implements OnInit {
                 '   <th> '+
                 '     Productos:    '+
                 '   </th> '+
-                '   <td> '+ siembra.producto +
+                '   <td> '+ siembra.product.name + " - " + siembra.product.variety +
                 '   </td> '+
                 ' </tr>  '+
                 ' <tr> '+

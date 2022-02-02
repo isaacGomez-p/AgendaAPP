@@ -1,9 +1,13 @@
+import { LandEntity } from "./finca";
+import { Planilla } from "./planilla";
+import { ProductEntity } from "./producto";
+
 export class Siembra{
     id: number;
-    landId: number;
+    land: LandEntity;
     batch: string; // LOTE
     groove: number; //SURCO
-    producto: String;
+    //producto: String;
     variedad: String; // tiene producto
     plants: number; //plantas
     year: number;
@@ -12,6 +16,8 @@ export class Siembra{
     agricultor_id: number;
     code: string;
     landCode: string; // código de finca
+    spreadsheets: Planilla[];
+    product: ProductEntity
     //No mapeado
     agregar: boolean;    
 }

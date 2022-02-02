@@ -22,9 +22,9 @@
     <ion-item button (click)="menuSiembras(siembra)">
       <ion-icon slot="start" name="leaf-outline" ></ion-icon>      
       <ion-label>
-        <h2>Lote: {{siembra.batch}}</h2>     
+        <h2>Lote: {{siembra.batch | uppercase}}</h2>     
         <h3>Surco: {{siembra.groove}}</h3>
-        <p>Producto: {{siembra.producto}}</p>   
+        <p>Producto: {{siembra.product.name | uppercase }} - {{siembra.product.variety | uppercase}}</p>
       </ion-label>
     </ion-item>
   </ion-list>

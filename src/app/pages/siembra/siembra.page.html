@@ -22,23 +22,26 @@
   <form #form1="ngForm" (ngSubmit)="siguiente1(form1)">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
-        <ion-col>
+        <ion-col *ngIf="estadoFormulario2 === false">
           <div padding>            
             <ion-item *ngIf="estadoFormulario2 === false">
               <ion-label position="floating">Finca:</ion-label>     
               <ion-input [(ngModel)]="nombreFinca" name="nombreFinca" type="text" placeholder="Lote" ngModel required disabled></ion-input>
             </ion-item>
-            <br>            
-            <ion-select *ngIf="estadoFormulario2 === false" [(ngModel)]="loteSeleccionado" name="loteSeleccionado" (ionChange)="seleccionarLote(loteSeleccionado)" placeholder="Seleccione un lote" ngModel required>              
+            <br>
+            <br>       
+            <ion-select *ngIf="estadoFormulario2 === false" [(ngModel)]="loteSeleccionado" name="loteSeleccionado" (ionChange)="seleccionarLote(loteSeleccionado)" placeholder="Seleccione un lote" ngModel required>
               <ion-select-option *ngFor="let lote of lotes" value="{{lote}}" >
-                {{lote}}
+                {{lote | uppercase}}
               </ion-select-option>
             </ion-select>            
+            <br>               
             <ion-item *ngIf="estadoLoteNuevo === false && estadoFormulario2 === false" >
               <ion-label position="floating">Lote</ion-label>
               <ion-input [(ngModel)]="lote" name="lote" type="text" placeholder="Lote" ngModel required disabled={{estadoCampoLote}}></ion-input>
             </ion-item>
           </div>
+          <br>
           <div padding>
             <ion-button *ngIf="estadoFormulario2 === false" expand="full" color="secondary" type="submit" [disabled]="form1.invalid" expand="block">
               <ion-icon slot="start" name="arrow-forward-outline"></ion-icon>

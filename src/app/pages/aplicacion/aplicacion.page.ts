@@ -7,6 +7,7 @@ import { Siembra } from 'src/app/model/siembra';
 import { Planilla } from 'src/app/model/planilla';
 import { ProductEntity } from 'src/app/model/producto';
 import { UserEntity } from 'src/app/model/userEntity';
+import { NumeroPlanilla } from 'src/app/model/numeroPlanilla';
 
 @Component({
   selector: 'app-aplicacion',
@@ -128,6 +129,7 @@ export class AplicacionPage implements OnInit {
               this.listaLotes.map((itemLote) => {
                 if (itemLote.id === parseInt(item.lote + "")) {
                   this.loteNombre = itemLote.batch + " - Surco: " + itemLote.groove
+                  
                 }
               })
             }
@@ -175,8 +177,8 @@ export class AplicacionPage implements OnInit {
         if (this.siembras.length > 0) {
           this.listaLotes = [];
           this.siembras.map((item) => {
-            if (item.landId === parseInt(form.value.finca)) {
-              this.listaLotes.push(item);
+            if (item.land.landId === parseInt(form.value.finca)) {
+              this.listaLotes.push(item);              
             }
           })
           if (this.listaLotes.length <= 0) {
@@ -201,6 +203,16 @@ export class AplicacionPage implements OnInit {
     })*/
   }
 
+  seleccionarLote(lote){
+    console.log("--- " + JSON.stringify(lote))
+    this.listaLotes.map((item)=> {
+      if(item.id === Number(lote)){
+        this.producto = item.product.name + " - " + item.product.variety
+      }
+    })
+    
+  }
+
   buscarLotesEditar(id) {
     this.finca = id;
     this.fincaLista.map((item)=>{
@@ -213,7 +225,7 @@ export class AplicacionPage implements OnInit {
     if (this.siembras.length > 0) {
       this.listaLotes = [];
       this.siembras.map((item) => {
-        if (item.landId === parseInt(id)) {
+        if (item.land.landId === parseInt(id)) {
           this.listaLotes.push(item);
         }
       })
@@ -255,6 +267,17 @@ export class AplicacionPage implements OnInit {
         this.resetDatos();
         this.estadoSiguiente = false;
       });*/
+
+      let numeroPlanilla: NumeroPlanilla[] = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
+      let codigoNumero = "";
+      let objetoNumeroPlanilla = new NumeroPlanilla();
+      for (let n of numeroPlanilla) {
+        if (n.nSpreadsheetId === Number.parseInt(localStorage.getItem('buscarPlanilla'))) {
+          codigoNumero = n.code
+          objetoNumeroPlanilla = n;
+        }
+      }  
+
       this.planillas.map(item => {
         if (item.spreadsheetId === this.idPLanilla) {
           item.activity = form.value.actividad
@@ -272,7 +295,7 @@ export class AplicacionPage implements OnInit {
           item.prevention = form.value.control
           item.producto = this.producto
           item.totalDose = form.value.total_dosis
-          item.n_planilla = Number.parseInt(localStorage.getItem('buscarPlanilla'))
+          item.nSpreadsheet = objetoNumeroPlanilla
           item.landId = Number.parseInt(this.finca + "")
           item.codeLand = this.codigoFinca + ""
           item.fincaNombre = null
@@ -298,11 +321,13 @@ export class AplicacionPage implements OnInit {
         }
       });
 
-      let numeroPlanilla = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
+      let numeroPlanilla: NumeroPlanilla[] = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
       let codigoNumero = "";
+      let objetoNumeroPlanilla = new NumeroPlanilla();
       for (let n of numeroPlanilla) {
-        if (n.n_planilla_id === Number.parseInt(localStorage.getItem('buscarPlanilla'))) {
-          codigoNumero = n.codigo
+        if (n.nSpreadsheetId === Number.parseInt(localStorage.getItem('buscarPlanilla'))) {
+          codigoNumero = n.code
+          objetoNumeroPlanilla = n;
         }
       }      
 
@@ -323,7 +348,7 @@ export class AplicacionPage implements OnInit {
         prevention: form.value.control,
         producto: this.producto,
         totalDose: form.value.total_dosis,
-        n_planilla: Number.parseInt(localStorage.getItem('buscarPlanilla')),
+        nSpreadsheet: objetoNumeroPlanilla,
         landId: Number.parseInt(this.finca + ""),
         fincaNombre: null,
         agricultor_id: this.agricultor[0].id,
@@ -332,7 +357,9 @@ export class AplicacionPage implements OnInit {
         codeNSpreadsheet: codigoNumero,
         fechaString: null,
         codeLand: this.codigoFinca + "",
-        fechaAplicacionString: null
+        fechaAplicacionString: null,
+        name: null,
+        plantingMaps: null
       }
       this.planillas.push(datos)
       this.toastConfirmacion('Planilla registrada correctamente.', 'success');

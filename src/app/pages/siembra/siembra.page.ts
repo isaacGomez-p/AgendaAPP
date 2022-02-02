@@ -86,7 +86,7 @@ export class SiembraPage implements OnInit {
         this.lote = item.batch
         this.groove = item.groove
         this.productos.map((itemP) => {
-          if (itemP.code === item.producto) {
+          if (itemP.code === item.product.code) {
             this.producto = itemP.product_id+""
           }
         })
@@ -94,11 +94,12 @@ export class SiembraPage implements OnInit {
         this.anio = item.year
         this.semana = item.week
         this.dia = item.day
-        this.productoNombre = "Producto: " + item.producto + " - " + item.variedad
+        this.productoNombre = "Producto: " + item.product.name + " - " + item.product.variety
         this.loteSeleccionado = item.batch
       }
     });
   }
+  
 
   cargarDatos() {
     if (JSON.parse(window.localStorage.getItem("buscarSiembraFinca")) !== null) {
@@ -117,7 +118,7 @@ export class SiembraPage implements OnInit {
 
   siguiente1(form) {
     this.finca = form.value.finca;
-    if (this.loteSeleccionado === "--Nuevo--") {
+    if (this.loteSeleccionado === "-- Agregar nuevo lote --") {
       this.lote = form.value.lote;
     }
     this.estadoFormulario2 = true;
@@ -167,27 +168,36 @@ export class SiembraPage implements OnInit {
 
           let fincas = JSON.parse(window.localStorage.getItem("fincas"));
           let codigo = "";
+          let objetoFinca = null
           for (let f of fincas) {
             if (f.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
               codigo = f.code;
+              objetoFinca = f;
             }
-          }
+          }          
+          let objetoProducto = new ProductEntity();
+          this.productos.map((item)=>{            
+            if(item.code === this.producto){              
+              objetoProducto = item;
+            }
+          })
 
           siembra = {
             id: cont * -1,
             plants: form.value.cant_plantas,
             groove: form.value.surco,
-            variedad: this.variedad,
-            producto: this.producto,
+            variedad: this.variedad,            
             year: form.value.anio,
             day: form.value.dia,
             week: form.value.semana,
-            landId: JSON.parse(window.localStorage.getItem("buscarSiembraFinca")),
+            land: objetoFinca,
             batch: this.lote,
             agricultor_id: this.agricultor.id,
             code: this.generaCodigo(),
             agregar: false,
-            landCode: codigo
+            landCode: codigo,
+            product: objetoProducto,
+            spreadsheets: null
           }
           this.siembras.push(siembra);
           this.toastConfirmacion("Siembra registrada correctamente", "success");
@@ -208,31 +218,38 @@ export class SiembraPage implements OnInit {
         }
         let codigo = "";
         let codigo_finca = "";
-        let landId = 0;
+        let land = new LandEntity();
 
         this.siembras.map((item) => {
           if (item.id === id) {
-            codigo_finca = item.landCode
-            landId = item.landId
+            codigo_finca = item.landCode;
+            land = item.land
             codigo = item.code
           }
         })
+        let objetoProducto = new ProductEntity();
+          this.productos.map((item)=>{
+            if(item.product_id = Number(this.producto)){
+              objetoProducto = item;
+            }
+          })
         let siembra = new Siembra();
         siembra = {
           id: id,
           plants: form.value.cant_plantas,
           groove: form.value.groove,
-          variedad: this.variedad,
-          producto: this.producto,
+          variedad: this.variedad,                    
           year: form.value.anio,
           day: form.value.dia,
           week: form.value.semana,
-          landId: landId,
+          land: land,
           batch: this.lote,
           agricultor_id: this.agricultor[0].id,
           code: codigo,
           agregar: false,
-          landCode: codigo_finca
+          landCode: codigo_finca,
+          product: objetoProducto,
+          spreadsheets: null
         }
         let validacion = 0;
         console.log(" " + JSON.stringify(siembra))
@@ -240,7 +257,7 @@ export class SiembraPage implements OnInit {
           if (item.id === id) {
             item.groove = form.value.groove
             item.variedad = this.variedad
-            item.producto = this.producto
+            item.product = objetoProducto
             item.batch = this.lote
             item.year = form.value.dia
             item.week = form.value.semana
@@ -285,9 +302,9 @@ export class SiembraPage implements OnInit {
     } else {
       this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
       this.lotes = [];
-      this.lotes.push("--Nuevo--");
+      this.lotes.push("-- Agregar nuevo lote --");
       this.siembras.map((item) => {
-        if (item.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
+        if (item.land.landId === parseInt(JSON.parse(window.localStorage.getItem("buscarSiembraFinca")))) {
           let validacion = true;
           this.lotes.map((l) => {
             if (l === item.batch) {
@@ -318,7 +335,7 @@ export class SiembraPage implements OnInit {
   }
 
   seleccionarLote(lote) {
-    if (lote !== "--Nuevo--") {
+    if (lote !== "-- Agregar nuevo lote --") {
       this.lote = lote;
       this.estadoCampoLote = true;
     } else {

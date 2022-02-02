@@ -126,7 +126,7 @@ export class VerPlanillaComponent implements OnInit {
   async nuevaPlanilla() {
     const alert = await this.alertController.create({
       cssClass: 'my-custom-class',      
-      message: '<strong>Desea crear una nueva planilla</strong>?',
+      message: '<strong>¿Desea crear una nueva planilla?</strong>?',
       buttons: [
         {
           text: 'Cancelar',

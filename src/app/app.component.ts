@@ -269,17 +269,23 @@ export class AppComponent implements OnInit {
     
   }
 
-  descargarDatos() {
+  async descargarDatos() {
     let cont: number = 0;
+    console.log("______ descargar datos")
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
-    this.userService.getUserById(this.agricultor.id).subscribe(data => {
+    this.agricultor = (await this.userService.getUserById(this.agricultor.id)).result;
+    window.localStorage.setItem('agricultor', JSON.stringify(this.agricultor));
+    //carga los productos del LS
+    window.localStorage.setItem('productos', JSON.stringify(this.agricultor.products)); 
+    console.log("______ 1")
+    /*this.userService.getUserById(this.agricultor.id).subscribe(data => {
       this.agricultor = data.result;
       window.localStorage.setItem('agricultor', JSON.stringify(this.agricultor));
       console.log(".... " + JSON.stringify(this.agricultor))
       console.log(".... " + JSON.stringify(this.agricultor.products))
       //carga los productos del LS
       window.localStorage.setItem('productos', JSON.stringify(this.agricultor.products)); 
-    });
+    });*/
 //  if(this.agricultor.products != null){}
 
     

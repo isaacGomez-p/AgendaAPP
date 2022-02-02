@@ -1,7 +1,11 @@
+import { NumeroPlanilla } from "./numeroPlanilla";
+import { Siembra } from "./siembra";
+
 export class Planilla{
     spreadsheetId: number;
     filingDate: Date; //Fecha de formulación
     lote: String;
+    name: String;
     activity: String;
     control: String;
     prevention: String;
@@ -16,11 +20,13 @@ export class Planilla{
     code: string;
     codeNSpreadsheet: string;
     codeLand: string;
+    plantingMaps: Siembra[];
+    
 
     producto: String;
     landId: number;
     agricultor_id: number;
-    n_planilla: number;
+    nSpreadsheet: NumeroPlanilla;
 
     //No mapeadas
     fincaNombre: String;

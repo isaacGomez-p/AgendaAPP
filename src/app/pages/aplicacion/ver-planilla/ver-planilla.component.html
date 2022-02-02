@@ -20,9 +20,9 @@
     
   </ion-refresher>
   <ion-list *ngFor="let planilla of planillas">
-    <ion-item button (click)="verPlanillas(planilla.n_planilla_id)">      
+    <ion-item button (click)="verPlanillas(planilla.nSpreadsheetId)">      
       <ion-label>
-        <h2>Planilla {{planilla.n_planilla_id}}</h2>        
+        <h2>Planilla {{planilla.nSpreadsheetId}}</h2>        
       </ion-label>
       <ion-icon slot="end" name="reader-outline" ></ion-icon>      
     </ion-item>

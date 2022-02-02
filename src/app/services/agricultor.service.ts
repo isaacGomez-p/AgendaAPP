@@ -44,7 +44,7 @@ export class AgricultorService {
     return this.http.get<UserEntity[]>(`${this._traerTodosUsuarios}`+idUsuario);
   }
 
-  getUserById(idUsuario: number): Observable<ApiResponse>{       
-    return this.http.get<ApiResponse>(`${this._traerUsuarioPorId}`+`?userId=`+idUsuario);
+  getUserById(idUsuario: number): Promise<ApiResponse>{       
+    return this.http.get<ApiResponse>(`${this._traerUsuarioPorId}`+`?userId=`+idUsuario).toPromise<ApiResponse>();
   }
 }

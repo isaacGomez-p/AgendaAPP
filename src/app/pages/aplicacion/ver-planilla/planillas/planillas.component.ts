@@ -35,7 +35,7 @@ export class PlanillasComponent implements OnInit {
       this.planillasLS =  JSON.parse(window.localStorage.getItem("planillas"));
       this.planillas = [];
       this.planillasLS.map((item)=>{
-        if(item.n_planilla === parseInt(window.localStorage.getItem('buscarPlanilla'))){
+        if(item.nSpreadsheet.nSpreadsheetId === parseInt(window.localStorage.getItem('buscarPlanilla'))){
           this.planillas.push(item)
         }        
       });      

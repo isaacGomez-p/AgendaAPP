@@ -176,7 +176,7 @@ export class ProductoComponent implements OnInit {
       }
     })
     this.siembras.map((item)=>{
-      if(item.producto === this.codigo) {
+      if(item.product.code === this.codigo) {
         validacionSiembras = false;
       }
     })
