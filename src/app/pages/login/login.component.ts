@@ -6,6 +6,7 @@ import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AgricultorService } from 'src/app/services/agricultor.service';
 import { UserEntity } from 'src/app/model/userEntity';
+import { ApiResponse } from 'src/app/model/apiResponse';
 
 @Component({
   selector: 'app-login',
@@ -13,7 +14,8 @@ import { UserEntity } from 'src/app/model/userEntity';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-
+  response : ApiResponse;
+  labelReponse : any;
   cedula: number;
   clave: string;
 
@@ -21,26 +23,35 @@ export class LoginComponent implements OnInit {
 
   ngOnInit() {}
 
-  login(form){
+  /*login(form){
+    console.log("hihih");
+  }*/
+
+  async login(form){
     if(form.value.clave === 0 && form.value.user ===''){
       this.toastConfirmacion('Ingrese las credenciales.', 'danger');
     }else{
       let user = new UserEntity();
       user.document = form.value.user+"";
       user.password = form.value.clave;
-      this.agricultorService.login(user).subscribe((data)=>{
-        console.log("data-> " +JSON.stringify(data) +  " - " + data.status);
-        if(data.status == 200){
+      this.response = await this.agricultorService.login(user);
+      
+        
+        console.log("data-> " +JSON.stringify(this.response.result) +  " - " + this.response.result);
+        if(this.response.status == 200){
           this.cedula = null;
           this.clave = null;
           this.router.navigateByUrl('/home');
           this.appComponent.loginEstado = true;
-          window.localStorage.setItem("agricultor", JSON.stringify(data.result));          
-          this.toastConfirmacion('Bienvenido ' + data.result.firstName + " " + data.result.lastName, 'success');
+          this.labelReponse = (await this.agricultorService.getLabels()).result;
+          window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
+          window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
+             
+          this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
         }else{          
           this.toastConfirmacion('Datos incorrectos.', 'danger');
         }
-      }, err => {
+      /*}, err => {
         this.toastConfirmacion('Error con el servidor.', 'danger');
       });
        /*this.proveedorDatos.getLogin(form.value.password, form.value.user).subscribe((data)=>{

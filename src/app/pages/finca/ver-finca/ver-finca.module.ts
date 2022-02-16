@@ -6,14 +6,16 @@ import { IonicModule } from '@ionic/angular';
 
 import { VerFincaComponent } from './ver-finca.component';
 import { VerFincaPageRoutingModule } from './ver-finca-routing.module';
+import { FincaComponent } from '../finca.component';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VerFincaPageRoutingModule
+    VerFincaPageRoutingModule,
   ],
-  declarations: [VerFincaComponent]
+  declarations: [VerFincaComponent,
+    FincaComponent]
 })
 export class VerFincaPageModule {}

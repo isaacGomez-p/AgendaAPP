@@ -11,13 +11,14 @@
 
 <ion-content [fullscreen]="true">  
   <form #form="ngForm" (ngSubmit)="agregarFinca(form)">
-    <ion-grid>
+    <ion-grid>  
       <ion-row color="primary" justify-content-center>
+        
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
           <div padding>
-            <ion-item>
-              <ion-label position="floating">Nombre</ion-label>
-              <ion-input [(ngModel)]="nombreFinca" name="nombreFinca" ngModel required></ion-input>
+            <ion-item *ngFor="let label of labelList">
+              <ion-label position="floating">{{label.name}}</ion-label>
+              <ion-input [(ngModel)]="firstValue" name="firstValue" ngModel required></ion-input>
             </ion-item>            
           </div>
           <div padding>

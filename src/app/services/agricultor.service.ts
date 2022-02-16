@@ -21,6 +21,7 @@ export class AgricultorService {
   private _traerTodosUsuarios: string = this._controller + "list"  
   private _traerUsuarioPorId: string = this._controller + "getById"  
   private _login: string = this.urlService + "/login/validation"
+  private _labels: string = this.urlService + "/labels/list"
   constructor(private http: HttpClient, public navCtrl: NavController) {    
   }
 
@@ -35,9 +36,14 @@ export class AgricultorService {
     return this.http.put(`${this.urlService}/AGD_Agricultor/`+id, datos);
   }
 
-  login(user: UserEntity){
+  login(user: UserEntity) : Promise<ApiResponse>{
     //return this.http.get<UserEntity[]>(`${this.urlService}/AGD_Agricultor?cedula=`+cedula+`&clave=`+clave);
-    return this.http.post<ApiResponse>(`${this._login}`, user);
+    return this.http.post<ApiResponse>(`${this._login}`, user).toPromise<ApiResponse>();
+  }
+
+  getLabels() : Promise<ApiResponse>{
+    //return this.http.get<UserEntity[]>(`${this.urlService}/AGD_Agricultor?cedula=`+cedula+`&clave=`+clave);
+    return this.http.get<ApiResponse>(`${this._labels}`).toPromise<ApiResponse>();
   }
 
   getAllUser(idUsuario: number): Observable<UserEntity[]>{       

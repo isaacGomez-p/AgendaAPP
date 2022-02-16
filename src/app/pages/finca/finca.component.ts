@@ -19,12 +19,28 @@ export class FincaComponent implements OnInit {
   idAgricultor: number;
   estado: number;
 
+  firstLabel : String;
+  labelList : any;
+
   fincas: LandEntity[];
 
   nombreBoton: String;
 
   constructor(private router: Router, private paramsUrl: ActivatedRoute, private fincaService: FincaService, private toastController: ToastController) {
 
+  }
+
+  ionViewDidEnter() { 
+    this.labelList = JSON.parse(window.localStorage.getItem("labels"));
+  }
+
+  onChangeTime(event){
+    console.log("on change"+ event)
+    // this.labelList = 
+  }
+
+  onInputTime(input){
+    console.log("input time"+ input)
   }
   
   ngOnInit() {
@@ -36,7 +52,7 @@ export class FincaComponent implements OnInit {
       this.nombreBoton = "Actualizar";
     } else {
       this.nombreBoton = "Agregar";
-    }
+    }    
   }
 
   cargarFincasLS(){
@@ -88,7 +104,7 @@ export class FincaComponent implements OnInit {
       if(validacion === true){
         let datos = new LandEntity();
         datos = {
-          name: form.value.nombreFinca,
+          name: form.value.firstValue,
           status: 1, //Estado 1 indica que esta activo
           user: this.agricultor,
           landId: cont * -1,
@@ -110,7 +126,7 @@ export class FincaComponent implements OnInit {
         this.fincas.map((item)=>{
           if(item.landId === this.idFinca){
             item.status = this.estado;
-            item.name = form.value.nombreFinca;
+            item.name = form.value.firstValue;
             item.user = this.agricultor;
             item.edicion = true;
           }
