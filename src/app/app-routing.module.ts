@@ -8,6 +8,10 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
+    path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
+  },
+  /*{
     path: 'registrar/:titulo',
     loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
   },
@@ -58,6 +62,13 @@ const routes: Routes = [
   {
     path: 'home/:id',
     loadChildren: () => import('./pages/details/details.module').then( m => m.DetailsPageModule)
+  },*/
+
+  //------------ Version 2 ------------------------
+
+  {
+    path: 'grupoProductor',
+    loadChildren: () => import('./version2/pages/grupo-productor/grupo-productor.module').then( m => m.GrupoProductorPageModule)
   },
 
 ];

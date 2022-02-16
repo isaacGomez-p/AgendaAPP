@@ -34,23 +34,20 @@ export class LoginComponent implements OnInit {
       let user = new UserEntity();
       user.document = form.value.user+"";
       user.password = form.value.clave;
-      this.response = await this.agricultorService.login(user);
-      
-        
-        console.log("data-> " +JSON.stringify(this.response.result) +  " - " + this.response.result);
-        if(this.response.status == 200){
-          this.cedula = null;
-          this.clave = null;
-          this.router.navigateByUrl('/home');
-          this.appComponent.loginEstado = true;
-          this.labelReponse = (await this.agricultorService.getLabels()).result;
-          window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
-          window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
-             
-          this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
-        }else{          
-          this.toastConfirmacion('Datos incorrectos.', 'danger');
-        }
+      this.response = await this.agricultorService.login(user);              
+      console.log("data-> " +JSON.stringify(this.response.result) +  " - " + this.response.result);
+      if(this.response.status == 200){
+        this.cedula = null;
+        this.clave = null;        
+        this.appComponent.loginEstado = true;
+        this.labelReponse = (await this.agricultorService.getLabels()).result;
+        window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
+        window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
+        this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
+        this.router.navigateByUrl('/grupoProductor');
+      }else{          
+        this.toastConfirmacion('Datos incorrectos.', 'danger');
+      }
       /*}, err => {
         this.toastConfirmacion('Error con el servidor.', 'danger');
       });
