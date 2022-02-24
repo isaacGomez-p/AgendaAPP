@@ -2,16 +2,17 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AgregarComponent } from './agregar.component';
-import { AgregarComponentRoutingModule } from './agregar-component-routing.module';
+import { PredioComponent } from './predio.component';
+
+import { PredioComponentRoutingModule } from './predio-component-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    AgregarComponentRoutingModule
+    PredioComponentRoutingModule
   ],
-  declarations: [AgregarComponent]
+  declarations: [PredioComponent]
 })
-export class AgregarComponentModule {}
+export class PredioComponentModule {}

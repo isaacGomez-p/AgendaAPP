@@ -2,16 +2,17 @@ import { IonicModule } from '@ionic/angular';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AgregarComponent } from './agregar.component';
-import { AgregarComponentRoutingModule } from './agregar-component-routing.module';
+import { NivelComponent } from './nivel.component';
+
+import { NivelComponentRoutingModule } from './nivel-routing.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    AgregarComponentRoutingModule
+    NivelComponentRoutingModule
   ],
-  declarations: [AgregarComponent]
+  declarations: [NivelComponent]
 })
-export class AgregarComponentModule {}
+export class NivelComponentModule {}

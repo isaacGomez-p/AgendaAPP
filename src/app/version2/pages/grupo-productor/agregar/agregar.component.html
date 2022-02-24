@@ -1,6 +1,6 @@
 <ion-header translucent>
   <ion-toolbar>
-    <ion-title>Agregar Grupo</ion-title>
+    <ion-title>Agregar {{titulo}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="dismissModal()">Cerrar</ion-button>
     </ion-buttons>
@@ -12,10 +12,10 @@
     
     <ion-item>
       <ion-label position="stacked">Nombre</ion-label>
-      <ion-textarea placeholder="Grupo productor" [(ngModel)]="nombreGrupo"></ion-textarea>
+      <ion-textarea placeholder="{{singular}}" [(ngModel)]="nombre" type="text"></ion-textarea>
     </ion-item>
     
-  </ion-list>
+  </ion-list>  
 
   <ion-button expand="full" color="secondary" expand="block" (click)="guardar()">
     <ion-icon slot="start" name="add-outline"></ion-icon>

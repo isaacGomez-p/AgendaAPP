@@ -2,8 +2,8 @@
   <ion-toolbar color="light">    
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
-      <div font size=1 align="center"><i>
-          <H6>Grupo Productor</H6>
+      <div font size=1 align="center">{{titulo}}<i>
+          <H6></H6>
         </i></div>
     </ion-title>
   </ion-toolbar>
@@ -11,18 +11,22 @@
 
 <ion-content [fullscreen]="true">  
   <br>
-  <ion-list *ngFor="let gp of grupoProductor">
-    <ion-item button (click)="verPredios(gp)">
+  <ion-list *ngFor="let ld of listaDatos">
+    <ion-item button (click)="siguienteNivel(ld)">
       <ion-label>
-        <h2><!--Nombre:--> {{gp.nombre}}</h2>        
+        <h2><!--Nombre:--> {{ld.nombre}}</h2>        
       </ion-label>
       <ion-icon slot="end" name="reader-outline" ></ion-icon>      
     </ion-item>
   </ion-list>
   <br>
-  <ion-button expand="full" color="secondary" expand="block" (click)="nuevoGrupo()">
+  <ion-button expand="full" color="secondary" expand="block" (click)="nuevo()">
     <ion-icon slot="start" name="add-outline"></ion-icon>
-      Nuevo grupo productor
-  </ion-button>  
+      Nuevo {{boton}}
+  </ion-button>
+  <ion-button expand="full" color="secondary" expand="block" (click)="volver()">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+      Volver
+  </ion-button>
 
 </ion-content>

@@ -70,7 +70,18 @@ const routes: Routes = [
     path: 'grupoProductor',
     loadChildren: () => import('./version2/pages/grupo-productor/grupo-productor.module').then( m => m.GrupoProductorPageModule)
   },
-
+  {
+    path: 'agregar',
+    loadChildren: () => import('./version2/pages/grupo-productor/agregar/agregar.component.module').then( m => m.AgregarComponentModule)
+  },
+  {
+    path: 'predios',
+    loadChildren: () => import('./version2/pages/predio/predio.module').then( m => m.PredioComponentModule)
+  },
+  {
+    path: 'nivel',
+    loadChildren: () => import('./version2/pages/nivel/nivel.component.module').then( m => m.NivelComponentModule)
+  },
 ];
 @NgModule({
   imports: [

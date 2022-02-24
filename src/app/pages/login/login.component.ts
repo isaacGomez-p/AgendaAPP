@@ -44,7 +44,34 @@ export class LoginComponent implements OnInit {
         window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
         window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
         this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
-        this.router.navigateByUrl('/grupoProductor');
+
+        let niveles = [
+          {
+            prioridad: 0,
+            descripcion: "Grupo Productor",
+            plural: "Grupos Productores"
+          },
+          {
+            prioridad: 1,
+            descripcion: "Predio",
+            plural: "Predios"
+          },
+          {
+            prioridad: 2,
+            descripcion: "Piscina",
+            plural: "Piscinas"
+          },
+          {
+            prioridad: 3,
+            descripcion: "Prueba",
+            plural: "Pruebas"
+          }
+        ]
+
+        window.localStorage.setItem("labels", JSON.stringify(niveles));
+
+
+        this.router.navigateByUrl('/nivel');
       }else{          
         this.toastConfirmacion('Datos incorrectos.', 'danger');
       }

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
 import { AgregarComponent } from './agregar/agregar.component';
 
@@ -9,24 +10,30 @@ import { AgregarComponent } from './agregar/agregar.component';
 })
 export class GrupoProductorComponent implements OnInit {
 
-  grupoProductor: any = [
-    {
-      nombre: "NOMBRE"
-    }
-  ]
+  nombreGrupo: string;
 
-  constructor(public modalController: ModalController) { }
+  grupoProductor: any = []
+
+  constructor(public modalController: ModalController,
+    private router: Router) { }
 
   ngOnInit() {
-    console.log("hola")
+    //console.log("hola")
   }
 
   ionViewDidEnter() {
-    //console.log("volvió")
+    console.log("ionViewDidEnter GrupoProductorComponent")
+    this.cargarDatosLS();    
+  }
+
+  cargarDatosLS(){
+    this.grupoProductor = JSON.parse(window.localStorage.getItem("gruposProductores"))
   }
 
   async nuevoGrupo() {
-    const modal = await this.modalController.create({
+    this.router.navigateByUrl('/agregarGrupoProductor');
+
+    /*const modal = await this.modalController.create({
       component: AgregarComponent,
       swipeToClose: true,      
       componentProps: {
@@ -39,7 +46,7 @@ export class GrupoProductorComponent implements OnInit {
       this.cargarGrupos()
     })
     
-    return await modal.present();
+    return await modal.present();*/
   }  
 
   cargarGrupos(){
@@ -48,8 +55,9 @@ export class GrupoProductorComponent implements OnInit {
     this.grupoProductor = gruposProductores;
   }
 
-  verPlanillas(data){
-
+  verPredios(grupoProductor){
+    window.localStorage.setItem("grupoProductorBuscar", JSON.stringify(grupoProductor))
+    this.router.navigateByUrl('/predios');
   }
 
 }

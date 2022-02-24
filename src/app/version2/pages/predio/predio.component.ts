@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-predio',
@@ -7,8 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class PredioComponent implements OnInit {
 
-  constructor() { }
+  predios: any = []
+
+  constructor(private router: Router) { }
 
   ngOnInit() {}
+
+  verPiscina(predio){
+
+  }
+
+  volver(){
+    this.router.navigateByUrl('/grupoProductor');
+  }
+
+  nuevoPredio(){
+    
+  }
 
 }
