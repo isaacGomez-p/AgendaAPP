@@ -15,6 +15,7 @@ export class NivelComponent implements OnInit {
   cont: number = 0;
   nivel: number = 0;
   precedente: number[] = [];
+  buttonActive: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -109,6 +110,10 @@ export class NivelComponent implements OnInit {
     }
     window.localStorage.setItem("precedente", JSON.stringify(datos));
     this.router.navigateByUrl('/agregar');
+  }
+
+  insertarActividad(){
+    this.router.navigateByUrl('/planillas');
   }
 
 }

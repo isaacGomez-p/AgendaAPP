@@ -11,10 +11,11 @@ const routes: Routes = [
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
   },
-  /*{
+  {
     path: 'registrar/:titulo',
     loadChildren: () => import('./pages/registro/registro.module').then( m => m.RegistroPageModule)
   },
+  /*
   {
     path: 'login',
     loadChildren: () => import('./pages/login/login.module').then( m => m.LoginPageModule)
@@ -42,7 +43,7 @@ const routes: Routes = [
   {
     path: 'aplicacion/:idEditar',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
-  },
+  },*/
   {
     path: 'verPlanilla',
     loadChildren: () => import('./pages/aplicacion/ver-planilla/ver-planilla.module').then( m => m.VerAplicacionPageModule)
@@ -50,7 +51,7 @@ const routes: Routes = [
   {
     path: 'planillas',
     loadChildren: () => import('./pages/aplicacion/ver-planilla/planillas/planillas.module').then( m => m.PlanillasPageModule)
-  },
+  },/*
   {
     path: 'producto',
     loadChildren: () => import('./pages/producto/producto.module').then( m => m.ProductoPageModule)

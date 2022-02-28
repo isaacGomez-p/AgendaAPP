@@ -34,47 +34,46 @@ export class LoginComponent implements OnInit {
       let user = new UserEntity();
       user.document = form.value.user+"";
       user.password = form.value.clave;
-      this.response = await this.agricultorService.login(user);              
-      console.log("data-> " +JSON.stringify(this.response.result) +  " - " + this.response.result);
-      if(this.response.status == 200){
-        this.cedula = null;
-        this.clave = null;        
-        this.appComponent.loginEstado = true;
-        this.labelReponse = (await this.agricultorService.getLabels()).result;
-        window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
-        window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
-        this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
-
-        let niveles = [
-          {
-            prioridad: 0,
-            descripcion: "Grupo Productor",
-            plural: "Grupos Productores"
-          },
-          {
-            prioridad: 1,
-            descripcion: "Predio",
-            plural: "Predios"
-          },
-          {
-            prioridad: 2,
-            descripcion: "Piscina",
-            plural: "Piscinas"
-          },
-          {
-            prioridad: 3,
-            descripcion: "Prueba",
-            plural: "Pruebas"
-          }
-        ]
-
-        window.localStorage.setItem("labels", JSON.stringify(niveles));
-
-
-        this.router.navigateByUrl('/nivel');
-      }else{          
-        this.toastConfirmacion('Datos incorrectos.', 'danger');
-      }
+      try {
+        this.response = await this.agricultorService.login(user)
+        if(this.response.status == 200){
+          this.cedula = null;
+          this.clave = null;        
+          this.appComponent.loginEstado = true;
+          //productorService
+          this.labelReponse = (await this.agricultorService.getLabels()).result;
+          window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
+          window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
+          this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
+  
+          let niveles = [
+            {
+              prioridad: 0,
+              descripcion: "Grupo Productor",
+              plural: "Grupos Productores"
+            },
+            {
+              prioridad: 1,
+              descripcion: "Predio",
+              plural: "Predios"
+            },
+            {
+              prioridad: 2,
+              descripcion: "Piscina",
+              plural: "Piscinas"
+            }
+          ]  
+          window.localStorage.setItem("labels", JSON.stringify(niveles)); 
+  
+          this.router.navigateByUrl('/nivel');
+        }else{          
+          this.toastConfirmacion('Datos incorrectos.', 'warning');
+        }
+      } catch (e){
+        this.toastConfirmacion('Error con el servidor', 'danger')
+      }           
+      
+      
       /*}, err => {
         this.toastConfirmacion('Error con el servidor.', 'danger');
       });
