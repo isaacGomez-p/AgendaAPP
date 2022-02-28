@@ -113,6 +113,7 @@ export class NivelComponent implements OnInit {
   }
 
   insertarActividad(){
+    localStorage.setItem("insertarActividad", JSON.stringify(this.niveles[this.cont]))
     this.router.navigateByUrl('/planillas');
   }
 

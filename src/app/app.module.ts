@@ -1,7 +1,7 @@
 import { FormsModule } from '@angular/forms';
 import { SiembraPage } from './pages/siembra/siembra.page';
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
@@ -17,6 +17,12 @@ import { LoginComponent } from './pages/login/login.component';
 //Services
 import { FincaService } from './services/finca.service';
 
+ // importar locales
+ import localePy from '@angular/common/locales/es-PY';
+ import { registerLocaleData } from '@angular/common';
+
+ registerLocaleData(localePy, 'es');
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -30,7 +36,10 @@ import { FincaService } from './services/finca.service';
     SplashScreen,
     //Services
     FincaService,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    { provide: LOCALE_ID, useValue: 'es' }
+  ],
+    
   bootstrap: [AppComponent],
 })
 export class AppModule {}

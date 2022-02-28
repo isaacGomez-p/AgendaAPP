@@ -29,6 +29,30 @@ export class PlanillasComponent implements OnInit {
   }
 
   inicioCargarPlanillasLS(){
+
+    console.log("Cargando planillas")
+    if(JSON.parse(window.localStorage.getItem("planillasActividad")) === undefined || JSON.parse(window.localStorage.getItem("planillasActividad")) === null || JSON.parse(window.localStorage.getItem("planillasActividad")).length === 0){
+      this.toastConfirmacion('No tiene planillas registradas.', 'warning');
+      //this.planillas =  JSON.parse(window.localStorage.getItem("planillasActividad"));
+    }else{                   
+      let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));
+      console.log("planillasPrioridad-> " + JSON.stringify(planillasPrioridad))
+      let prioridad = JSON.parse(window.localStorage.getItem("insertarActividad"))
+      this.planillas = []
+      planillasPrioridad.map((item)=> {
+        if(item.priority === prioridad.prioridad){
+          item.fincaNombre = prioridad.descripcion
+          this.planillas.push(item)
+        }
+      });
+      /*this.planillas.map((item)=>{
+        if(item.n_planilla_id !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
+          this.planillas = [];
+        }
+      });*/
+    } 
+
+/*
     if(JSON.parse(window.localStorage.getItem("planillas")) === null){
       this.toastConfirmacion('No tiene planillas registradas. Por favor descargue los datos.', 'warning');
     }else{
@@ -40,7 +64,7 @@ export class PlanillasComponent implements OnInit {
         }        
       });      
       this.cargarPlanillasLS();
-    }    
+    }    */
   }
 
   doRefresh(event) {    
@@ -110,6 +134,10 @@ export class PlanillasComponent implements OnInit {
 
   editar(id){
     this.router.navigateByUrl('/aplicacion/'+id);
+  }
+
+  volver(){
+    this.router.navigateByUrl('/nivel');
   }
 
 }

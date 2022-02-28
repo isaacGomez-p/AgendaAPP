@@ -82,11 +82,19 @@ export class VerPlanillaComponent implements OnInit {
 
   cargarPlanillasLS(){    
     console.log("Cargando planillas")
-    if(JSON.parse(window.localStorage.getItem("numeroPlanillas")) === null || JSON.parse(window.localStorage.getItem("numeroPlanillas")).length === 0){
+    if(JSON.parse(window.localStorage.getItem("planillasActividad")) === undefined || JSON.parse(window.localStorage.getItem("planillasActividad")) === null || JSON.parse(window.localStorage.getItem("planillasActividad")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
-      this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));
+      //this.planillas =  JSON.parse(window.localStorage.getItem("planillasActividad"));
     }else{                   
-      this.planillas =  JSON.parse(window.localStorage.getItem("numeroPlanillas"));      
+      let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));
+      console.log("planillasPrioridad-> " + JSON.stringify(planillasPrioridad))
+      let idPrioridad = JSON.parse(window.localStorage.getItem("insertarActividad")).prioridad
+      this.planillas = []
+      planillasPrioridad.map((item)=> {
+        if(item.priority === idPrioridad){
+          this.planillas.push(item)
+        }
+      });
       /*this.planillas.map((item)=>{
         if(item.n_planilla_id !== parseInt(window.localStorage.getItem('buscarPlanilla'))){
           this.planillas = [];

@@ -39,11 +39,11 @@ const routes: Routes = [
   {
     path: 'verSiembra',
     loadChildren: () => import('./pages/siembra/ver-siembra/ver-siembra.module').then( m => m.VerSiembraPageModule)
-  },
+  },*/
   {
     path: 'aplicacion/:idEditar',
     loadChildren: () => import('./pages/aplicacion/aplicacion.module').then( m => m.AplicacionPageModule)
-  },*/
+  },
   {
     path: 'verPlanilla',
     loadChildren: () => import('./pages/aplicacion/ver-planilla/ver-planilla.module').then( m => m.VerAplicacionPageModule)

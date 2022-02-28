@@ -20,7 +20,7 @@
     
   </ion-refresher>
 
-  <form #form="ngForm" (ngSubmit)="buscarLotes(form)" *ngIf="estadoSiguiente === false">
+ <!-- <form #form="ngForm" (ngSubmit)="buscarLotes(form)" *ngIf="estadoSiguiente === false">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
         <ion-col align-self-center size-md="6" size-lg="5" size-xs="12">
@@ -37,7 +37,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-  </form>
+  </form>-->
   <form #form="ngForm" *ngIf="estadoSiguiente === true" (ngSubmit)="registrar(form)">
     <ion-grid>
       <ion-row color="primary" justify-content-center>
@@ -48,9 +48,14 @@
                 {{this.loteNombre}}
               </ion-label>
             </ion-item>            
-            <ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote" interface="action-sheet" (ionChange)="seleccionarLote(lote)">
+            <ion-item>
+              <ion-label>
+                {{this.loteNombre}}
+              </ion-label>
+            </ion-item>            
+            <!--<ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote" interface="action-sheet" (ionChange)="seleccionarLote(lote)">
               <ion-select-option *ngFor="let lotes of listaLotes" value="{{lotes.id}}"> {{ lotes.batch }} - Surco: {{lotes.groove}}</ion-select-option>
-            </ion-select>
+            </ion-select>-->
             <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad" interface="action-sheet">
               <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}
               </ion-select-option>
@@ -65,11 +70,11 @@
                 Producto: {{producto}}
               </ion-label>
             </ion-item>            
-            <!--<ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required interface="action-sheet">
-              <ion-select-option *ngFor="let producto of productos" value="{{producto.producto_id}}" >
-                {{producto.nombre}} - {{producto.variedad}}
+            <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required interface="action-sheet">
+              <ion-select-option *ngFor="let producto of productos" value="{{producto.product_id}}" >
+                {{producto.name}} - {{producto.variety}}
               </ion-select-option>
-            </ion-select>-->
+            </ion-select>
             <ion-item>
               <ion-label position="floating">Dosis</ion-label>
               <ion-input [(ngModel)]="dosis" name="dosis" type="number" placeholder="Dosis (L)" ngModel required>

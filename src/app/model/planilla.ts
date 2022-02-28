@@ -21,7 +21,7 @@ export class Planilla{
     codeNSpreadsheet: string;
     codeLand: string;
     plantingMaps: Siembra[];
-    
+    priority: number;
 
     producto: String;
     landId: number;
