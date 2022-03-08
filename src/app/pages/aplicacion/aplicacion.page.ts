@@ -45,7 +45,7 @@ export class AplicacionPage implements OnInit {
   estadoFincaEditar: boolean = false;
   nombreFincaEditar: String;
   estadoEditar: boolean = false;
-  controlTipo = ["Control", "Fertilización", "Prevención"]
+  controlTipo = ["Control", "Nutrición", "Prevención"]
 
   listaEjecucion = ["Ejecutado", "No ejecutado", "Por ejecutar"];
 
@@ -98,7 +98,7 @@ export class AplicacionPage implements OnInit {
   cargarPrioridad(){
     let prioridad = JSON.parse(window.localStorage.getItem("insertarActividad"));
     this.loteNombre = prioridad.descripcion
-    this.prioridadId = prioridad.prioridad
+    this.prioridadId = prioridad.idNombre
   }
 
   cargarDatosEditar(id) {
@@ -156,25 +156,17 @@ export class AplicacionPage implements OnInit {
           agregar: true,
           code: 'asdasdsad',
           edicion: false,
-          name: "Mango",
+          name: "Camaron",
           user: null,
-          variety: "Verde"
-        },
-        {
-          product_id: 2,
-          agregar: true,
-          code: 'asdasdsaasdsad',
-          edicion: false,
-          name: "Papa",
-          user: null,
-          variety: "Criolla"
+          variety: "Vannamei"
         }
       )
-    if (JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0) {
+      this.fincaLista = []
+    /*if (JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0) {
       this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
     } else {
       this.fincaLista = JSON.parse(window.localStorage.getItem("fincas"));
-    }
+    }*/
     /*if (JSON.parse(window.localStorage.getItem("productos")) === null || JSON.parse(window.localStorage.getItem("productos")).length === 0) {
       this.toastConfirmacion('No tiene productos registrados.', 'warning');      
       
@@ -298,7 +290,7 @@ export class AplicacionPage implements OnInit {
         this.estadoSiguiente = false;
       });*/
 
-      let numeroPlanilla: NumeroPlanilla[] = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
+      /*let numeroPlanilla: NumeroPlanilla[] = JSON.parse(window.localStorage.getItem('numeroPlanillas'))
       let codigoNumero = "";
       let objetoNumeroPlanilla = new NumeroPlanilla();
       for (let n of numeroPlanilla) {
@@ -307,8 +299,11 @@ export class AplicacionPage implements OnInit {
           objetoNumeroPlanilla = n;
         }
       }  
-
+*/
+      let objetoNumeroPlanilla = new NumeroPlanilla();   
+      console.log("this.idPLanilla -> " + this.idPLanilla)   
       this.planillas.map(item => {
+        console.log("item.spreadsheetId  -> " + item.spreadsheetId )   
         if (item.spreadsheetId === this.idPLanilla) {
           item.activity = form.value.actividad
           item.quality = form.value.calidad_ejecucion
@@ -332,11 +327,11 @@ export class AplicacionPage implements OnInit {
           this.toastConfirmacion('Planilla editada correctamente.', 'success');
           this.resetDatos();
          // this.estadoSiguiente = false;
-          item.agricultor_id = this.agricultor[0].id;
+          item.agricultor_id = this.agricultor.id;
         }
       })
 
-
+      console.log("" + JSON.stringify(this.planillas));
     } else {
       console.log("ASDSADASDDAS----------1")
       let cont = 0;

@@ -3,6 +3,7 @@
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
       <div font size=1 align="center">{{titulo}}<i>
+        <div *ngIf="subtitulo" font size=1 align="center">{{subtitulo}}</div>
           <H6></H6>
         </i></div>
     </ion-title>
@@ -12,11 +13,18 @@
 <ion-content [fullscreen]="true">  
   <br>
   <ion-list *ngFor="let ld of listaDatos">
-    <ion-item button (click)="siguienteNivel(ld)">
+    <ion-item >
       <ion-label>
         <h2><!--Nombre:--> {{ld.nombre}}</h2>        
       </ion-label>
-      <ion-icon slot="end" name="reader-outline" ></ion-icon>      
+      <ion-button color="light" expand="block" (click)="edit(ld)">
+        <ion-icon name="create-outline"></ion-icon>
+      </ion-button>
+      
+      <ion-button color="light" expand="block" (click)="siguienteNivel(ld)">
+        <ion-icon slot="end" name="reader-outline" ></ion-icon>                
+      </ion-button>
+      
     </ion-item>
   </ion-list>
   <br>
@@ -24,12 +32,14 @@
     <ion-icon slot="start" name="add-outline"></ion-icon>
       Nuevo {{boton}}
   </ion-button>
-  <ion-button expand="full" color="secondary" expand="block" (click)="volver()">
+  
+  <ion-button [ngClass]="{'activated' : buttonActive}" expand="full" color="warning" expand="block" (click)="insertarActividad()" *ngIf="cont !== 0">
+    <ion-icon slot="start" name="add-outline"></ion-icon>
+      Insertar Actividad
+  </ion-button>
+
+  <ion-button expand="full" color="danger" expand="block" (click)="volver()">
     <ion-icon slot="start" name="caret-back-circle-outline"></ion-icon>
       Volver
-  </ion-button>
-  <ion-button [ngClass]="{'activated' : buttonActive}" expand="full" color="secondary" expand="block" (click)="insertarActividad()">
-    <ion-icon slot="start" name="caret-back-circle-outline"></ion-icon>
-      Insertar Actividad
   </ion-button>
 </ion-content>

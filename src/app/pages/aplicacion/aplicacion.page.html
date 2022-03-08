@@ -48,23 +48,12 @@
                 {{this.loteNombre}}
               </ion-label>
             </ion-item>            
-            <ion-item>
+            <ion-item *ngIf="estadoEditar === false">
               <ion-label>
                 {{this.loteNombre}}
               </ion-label>
             </ion-item>            
-            <!--<ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote" interface="action-sheet" (ionChange)="seleccionarLote(lote)">
-              <ion-select-option *ngFor="let lotes of listaLotes" value="{{lotes.id}}"> {{ lotes.batch }} - Surco: {{lotes.groove}}</ion-select-option>
-            </ion-select>-->
-            <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad" interface="action-sheet">
-              <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}
-              </ion-select-option>
-            </ion-select>
 
-            <ion-select [(ngModel)]="control" name="control" placeholder="Seleccione una opción" interface="action-sheet">
-              <ion-select-option *ngFor="let controlL of controlTipo" value="{{controlL}}">{{controlL}}
-              </ion-select-option>
-            </ion-select>
             <ion-item >
               <ion-label>
                 Producto: {{producto}}
@@ -75,6 +64,54 @@
                 {{producto.name}} - {{producto.variety}}
               </ion-select-option>
             </ion-select>
+            
+            
+            <ion-select [(ngModel)]="control" name="control" placeholder="Seleccione un tipo" interface="action-sheet">
+              <ion-select-option *ngFor="let controlL of controlTipo" value="{{controlL}}">{{controlL}}
+              </ion-select-option>
+            </ion-select>
+
+            <!--<ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote" interface="action-sheet" (ionChange)="seleccionarLote(lote)">
+              <ion-select-option *ngFor="let lotes of listaLotes" value="{{lotes.id}}"> {{ lotes.batch }} - Surco: {{lotes.groove}}</ion-select-option>
+            </ion-select>-->
+            <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad" interface="action-sheet">
+              <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}
+              </ion-select-option>
+            </ion-select>
+
+            <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione un estado" interface="action-sheet">
+              <ion-select-option *ngFor="let ejec of listaEjecucion" value="{{ejec}}">{{ ejec }}</ion-select-option>
+            </ion-select>
+
+            <ion-item>
+              <ion-label >Calidad ejecución</ion-label>
+            </ion-item>
+            <ion-item>              
+              <ion-range [(ngModel)]="calidad_ejecucion" name="calidad_ejecucion" min="0" max="5" step="0.5" snaps="true" color="secondary" ngModel required>
+                <ion-label slot="start">0</ion-label>
+                <ion-label slot="end">5</ion-label>
+              </ion-range>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Fecha aplicacion</ion-label>
+              <ion-datetime [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" value="2021-05-20"
+                placeholder="Seleccionar fecha" ngModel required></ion-datetime>
+            </ion-item>        
+
+            <ion-item>
+              <ion-label position="floating">Elaborado Por</ion-label>
+              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required>
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Elaborado Por</ion-label>
+              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required>
+              </ion-input>
+            </ion-item>
+
+            <!--
             <ion-item>
               <ion-label position="floating">Dosis</ion-label>
               <ion-input [(ngModel)]="dosis" name="dosis" type="number" placeholder="Dosis (L)" ngModel required>
@@ -90,28 +127,10 @@
               <ion-input [(ngModel)]="total_dosis" name="total_dosis" type="number" placeholder="Total Dosis" ngModel
                 required></ion-input>
             </ion-item>
-            <ion-item>
-              <ion-label position="floating">Elaborado</ion-label>
-              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required>
-              </ion-input>
-            </ion-item>
-            <ion-item>
-              <ion-label position="floating">Fecha aplicacion</ion-label>
-              <ion-datetime [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" value="2021-05-20"
-                placeholder="Seleccionar fecha" ngModel required></ion-datetime>
-            </ion-item>            
-            <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione una ejecución" interface="action-sheet">
-              <ion-select-option *ngFor="let ejec of listaEjecucion" value="{{ejec}}">{{ ejec }}</ion-select-option>
-            </ion-select>
-            <ion-item>
-              <ion-label >Calidad ejecución</ion-label>
-            </ion-item>
-            <ion-item>              
-              <ion-range [(ngModel)]="calidad_ejecucion" name="calidad_ejecucion" min="0" max="5" step="0.5" snaps="true" color="secondary" ngModel required>
-                <ion-label slot="start">0</ion-label>
-                <ion-label slot="end">5</ion-label>
-              </ion-range>
-            </ion-item>
+            
+                
+            -->
+            
             
           </div>
 

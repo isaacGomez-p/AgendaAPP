@@ -11,6 +11,7 @@ export class NivelComponent implements OnInit {
   niveles: any = [];
   listaDatos: any = []
   titulo: string;
+  subtitulo:string;
   boton: string;
   cont: number = 0;
   nivel: number = 0;
@@ -32,6 +33,7 @@ export class NivelComponent implements OnInit {
 
   cargarDatosNivel(){
     this.titulo = this.niveles[this.cont].plural;
+   
     this.boton = this.niveles[this.cont].descripcion;
     this.nivel = this.niveles[this.cont].prioridad;
     
@@ -41,6 +43,7 @@ export class NivelComponent implements OnInit {
   cargarLista(){
     console.log("____________ precedente " + JSON.stringify(this.precedente))
     console.log("____________ Nivel: " + this.nivel + " -- Precedente: " + this.precedente[this.cont-1])
+    
     this.listaDatos = [];
     if(window.localStorage.getItem("SP_UEN") !== undefined && window.localStorage.getItem("SP_UEN") !== null){
       let datos = JSON.parse(window.localStorage.getItem("SP_UEN"));
@@ -56,8 +59,33 @@ export class NivelComponent implements OnInit {
             console.log("____________ agrego "  +JSON.stringify(item))
           }
         }
-      })
-    }    
+        if(this.cont === 0){
+          this.subtitulo = undefined;
+        }else{
+          if(item.id === this.precedente[this.cont-1]){
+            this.subtitulo = item.nombre;
+          }
+        }
+      })   
+    } 
+  }
+
+  edit(ld){
+    console.log("___edit")    
+    let precedenteId = 0;
+    if(this.nivel !== 0){
+      precedenteId = this.precedente[this.cont]
+    }
+    let datos = {
+      prioridad: this.nivel,
+      titulo: this.titulo,
+      singular: this.boton,
+      precedente: precedenteId,
+      nombre: ld.nombre,
+      id: ld.id
+    }
+    window.localStorage.setItem("precedente", JSON.stringify(datos));
+    this.router.navigateByUrl('/agregar/Editar');
   }
 
   siguienteNivel(ld){
@@ -109,11 +137,26 @@ export class NivelComponent implements OnInit {
       precedente: precedenteId
     }
     window.localStorage.setItem("precedente", JSON.stringify(datos));
-    this.router.navigateByUrl('/agregar');
+    this.router.navigateByUrl('/agregar/Agregar');
   }
 
   insertarActividad(){
-    localStorage.setItem("insertarActividad", JSON.stringify(this.niveles[this.cont]))
+    let sepUn = JSON.parse(window.localStorage.getItem("SP_UEN"));
+    let nombreGrupo;
+    let idNombre;
+    sepUn.map((item)=>{
+      if(item.id === this.precedente[this.cont-1]){
+        nombreGrupo = item.nombre;
+        idNombre = item.id
+      }
+    })
+    
+    let datos = {
+      descripcion: nombreGrupo,
+      plural: this.niveles[this.cont].plural,
+      idNombre: idNombre,
+    }
+    localStorage.setItem("insertarActividad", JSON.stringify(datos))
     this.router.navigateByUrl('/planillas');
   }
 

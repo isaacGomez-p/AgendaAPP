@@ -21,7 +21,7 @@
   </ion-refresher>
   <ion-item-group *ngFor="let planilla of planillas">
     <ion-item-divider color="secondary">
-      <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.planilla_id)"></ion-icon> 
+      <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.spreadsheetId)"></ion-icon> 
       <ion-label> Formulación: </ion-label>        
       <ion-label>{{planilla.fechaString}} </ion-label>
     </ion-item-divider>

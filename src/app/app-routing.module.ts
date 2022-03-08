@@ -72,7 +72,7 @@ const routes: Routes = [
     loadChildren: () => import('./version2/pages/grupo-productor/grupo-productor.module').then( m => m.GrupoProductorPageModule)
   },
   {
-    path: 'agregar',
+    path: 'agregar/:accion',
     loadChildren: () => import('./version2/pages/grupo-productor/agregar/agregar.component.module').then( m => m.AgregarComponentModule)
   },
   {

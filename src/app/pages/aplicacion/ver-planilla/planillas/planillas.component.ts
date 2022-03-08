@@ -33,6 +33,7 @@ export class PlanillasComponent implements OnInit {
     console.log("Cargando planillas")
     if(JSON.parse(window.localStorage.getItem("planillasActividad")) === undefined || JSON.parse(window.localStorage.getItem("planillasActividad")) === null || JSON.parse(window.localStorage.getItem("planillasActividad")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
+      this.planillas = []
       //this.planillas =  JSON.parse(window.localStorage.getItem("planillasActividad"));
     }else{                   
       let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));
@@ -40,7 +41,7 @@ export class PlanillasComponent implements OnInit {
       let prioridad = JSON.parse(window.localStorage.getItem("insertarActividad"))
       this.planillas = []
       planillasPrioridad.map((item)=> {
-        if(item.priority === prioridad.prioridad){
+        if(item.priority === prioridad.idNombre){
           item.fincaNombre = prioridad.descripcion
           this.planillas.push(item)
         }
@@ -133,6 +134,7 @@ export class PlanillasComponent implements OnInit {
   }
 
   editar(id){
+    console.log("____ id planilla " + id)
     this.router.navigateByUrl('/aplicacion/'+id);
   }
 
