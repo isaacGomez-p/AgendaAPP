@@ -54,34 +54,38 @@
               </ion-label>
             </ion-item>            
 
-            <ion-item >
-              <ion-label>
-                Producto: {{producto}}
-              </ion-label>
-            </ion-item>            
+  
+              
+          <ion-item>            
             <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required interface="action-sheet">
               <ion-select-option *ngFor="let producto of productos" value="{{producto.product_id}}" >
                 {{producto.name}} - {{producto.variety}}
               </ion-select-option>
             </ion-select>
+          </ion-item>            
             
-            
+          <ion-item>              
             <ion-select [(ngModel)]="control" name="control" placeholder="Seleccione un tipo" interface="action-sheet">
               <ion-select-option *ngFor="let controlL of controlTipo" value="{{controlL}}">{{controlL}}
               </ion-select-option>
             </ion-select>
+          </ion-item>            
 
             <!--<ion-select [(ngModel)]="lote" name="lote" placeholder="Seleccione un lote" interface="action-sheet" (ionChange)="seleccionarLote(lote)">
               <ion-select-option *ngFor="let lotes of listaLotes" value="{{lotes.id}}"> {{ lotes.batch }} - Surco: {{lotes.groove}}</ion-select-option>
             </ion-select>-->
+          <ion-item>            
             <ion-select [(ngModel)]="actividad" name="actividad" placeholder="Seleccione una actividad" interface="action-sheet">
               <ion-select-option *ngFor="let actividad of listaActividad" value="{{actividad}}">{{ actividad }}
               </ion-select-option>
             </ion-select>
+          </ion-item>            
 
+          <ion-item>            
             <ion-select [(ngModel)]="ejecucion" name="ejecucion" placeholder="Seleccione un estado" interface="action-sheet">
               <ion-select-option *ngFor="let ejec of listaEjecucion" value="{{ejec}}">{{ ejec }}</ion-select-option>
             </ion-select>
+          </ion-item>            
 
             <ion-item>
               <ion-label >Calidad ejecución</ion-label>
@@ -100,14 +104,14 @@
             </ion-item>        
 
             <ion-item>
-              <ion-label position="floating">Elaborado Por</ion-label>
-              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required>
+              <ion-label position="floating">Elaborado por:</ion-label>
+              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado por" ngModel required>
               </ion-input>
             </ion-item>
 
             <ion-item>
-              <ion-label position="floating">Elaborado Por</ion-label>
-              <ion-input [(ngModel)]="elaborado" name="elaborado" type="text" placeholder="Elaborado" ngModel required>
+              <ion-label position="floating">Ejecutado por:</ion-label>
+              <ion-input [(ngModel)]="ejecutado" name="ejecutado" type="text" placeholder="Ejecutado por" ngModel required>
               </ion-input>
             </ion-item>
 

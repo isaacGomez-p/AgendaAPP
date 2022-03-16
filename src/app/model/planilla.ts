@@ -16,7 +16,7 @@ export class Planilla{
     madeBy: String;
     applicationDate: Date;
     status: String;
-    quality: String;
+    quality: number;
     code: string;
     codeNSpreadsheet: string;
     codeLand: string;

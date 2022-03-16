@@ -10,6 +10,11 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">  
+  <ion-item>
+    <ion-label>Filtrar por fecha: </ion-label>
+    <ion-datetime [(ngModel)]="fecha_aplicacion" name="fecha_aplicacion" value="2021-05-20"
+                placeholder="Seleccionar fecha" ngModel required></ion-datetime>
+  </ion-item>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content
       pullingIcon="chevron-down-circle-outline"
@@ -24,8 +29,7 @@
       <ion-icon slot="start" name="pencil-outline" button (click)="editar(planilla.spreadsheetId)"></ion-icon> 
       <ion-label> Formulación: </ion-label>        
       <ion-label>{{planilla.fechaString}} </ion-label>
-    </ion-item-divider>
-    
+    </ion-item-divider>    
 
     <ion-item>
       <ion-label>Nivel: </ion-label>
@@ -45,13 +49,14 @@
       <ion-label>Tipo: </ion-label>
       <ion-label>{{planilla.control}}</ion-label>
     </ion-item>    
-    <ion-item-divider>
-      <ion-label>Producto: </ion-label>
-    </ion-item-divider>
+       
     <ion-item>
-      <ion-label>      {{planilla.producto}}</ion-label>
+          <ion-label>Producto: </ion-label>
+          <ion-label> {{planilla.producto}}</ion-label>
+    
+      
     </ion-item>
-    <ion-item>
+    <!--<ion-item>
       <ion-label>Dosis: </ion-label>
       <ion-label>{{planilla.dose}}</ion-label>
     </ion-item>
@@ -62,7 +67,7 @@
     <ion-item>
       <ion-label>Total dosis: </ion-label>
       <ion-label>{{planilla.totalDose}}</ion-label>
-    </ion-item>
+    </ion-item>-->
     <ion-item>
       <ion-label>Elaborado: </ion-label>
       <ion-label> {{planilla.madeBy}}</ion-label>
@@ -77,8 +82,13 @@
     </ion-item>
     <ion-item>
       <ion-label>Calidad ejecución: </ion-label>
-      <ion-label>  {{planilla.quality}}</ion-label>
+      
     </ion-item>
+    <ion-item>
+      <ion-progress-bar color="secondary" value={{planilla.quality}}></ion-progress-bar>
+    </ion-item>
+  <br>
+<br>
   </ion-item-group>
 
   <div>                   

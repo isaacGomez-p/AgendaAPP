@@ -84,7 +84,7 @@ export class AplicacionPage implements OnInit {
     this.cargarPrioridad()
     this.cargarFincasLS();
     if (this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a') {
-      this.titulo = "Planilla de aplicación";
+      this.titulo = "Control de actividades";
       this.nombreBoton = "Registrar";
       this.estadoEditar = false;
     } else {
@@ -277,9 +277,9 @@ export class AplicacionPage implements OnInit {
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
     console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
-      console.log(' ' + JSON.stringify(p));
+      console.log(' epepeppepe' + JSON.stringify(p));
       if (p.product_id === Number.parseInt(form.value.producto)) {
-        this.producto = p.code
+        this.producto = p.name + '-' + p.variety
       }
     }
     if (this.titulo === "Editar planilla") {
@@ -303,10 +303,11 @@ export class AplicacionPage implements OnInit {
       let objetoNumeroPlanilla = new NumeroPlanilla();   
       console.log("this.idPLanilla -> " + this.idPLanilla)   
       this.planillas.map(item => {
-        console.log("item.spreadsheetId  -> " + item.spreadsheetId )   
+        console.log("item.spreadsheetId  -> " + item.spreadsheetId )  
+        console.log("dddddd"+ form.value.calidad_ejecucion*0.1);
         if (item.spreadsheetId === this.idPLanilla) {
           item.activity = form.value.actividad
-          item.quality = form.value.calidad_ejecucion
+          item.quality = form.value.calidad_ejecucion*0.2
           item.control = form.value.control
           item.dose = form.value.dosis
           item.madeBy = form.value.elaborado
@@ -361,7 +362,7 @@ console.log("ASDSADASDDAS----------2 -> " + JSON.stringify(this.agricultor) + " 
       let datos = new Planilla();
       datos = {
         activity: form.value.actividad,
-        quality: form.value.calidad_ejecucion,
+        quality: form.value.calidad_ejecucion*0.2,
         control: form.value.control,
         dose: form.value.dosis,
         madeBy: form.value.elaborado,
