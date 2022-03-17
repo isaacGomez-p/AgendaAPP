@@ -11,12 +11,14 @@ export class NivelComponent implements OnInit {
   niveles: any = [];
   listaDatos: any = []
   titulo: string;
-  subtitulo:string;
+  subtitulo:string = "";
   boton: string;
   cont: number = 0;
   nivel: number = 0;
   precedente: number[] = [];
   buttonActive: boolean = false;
+  disponibleBotonPlanilla: boolean = false;
+  habiltarEspacio: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -25,18 +27,21 @@ export class NivelComponent implements OnInit {
   ionViewDidEnter(){
     this.niveles = JSON.parse(window.localStorage.getItem("labels"))
     
-    if(window.localStorage.getItem("labels") !== undefined || window.localStorage.getItem("labels") !== null){    this.titulo = this.niveles[this.cont].descripcion;
+    if(window.localStorage.getItem("labels") !== undefined || window.localStorage.getItem("labels") !== null){   
+      this.cargarTitulo()
       this.cargarDatosNivel();
     }    
     
   }
 
-  cargarDatosNivel(){
-    this.titulo = this.niveles[this.cont].plural;
-   
+  cargarDatosNivel(){        
     this.boton = this.niveles[this.cont].descripcion;
     this.nivel = this.niveles[this.cont].prioridad;
-    
+    if(this.niveles[this.cont].disponiblePlanilla){
+      this.disponibleBotonPlanilla = true;
+    }else{
+      this.disponibleBotonPlanilla = false;
+    }
     this.cargarLista();
   }
 
@@ -62,8 +67,10 @@ export class NivelComponent implements OnInit {
         if(this.cont === 0){
           this.subtitulo = undefined;
         }else{
-          if(item.id === this.precedente[this.cont-1]){
-            this.subtitulo = item.nombre;
+          if(item.id === this.precedente[this.cont-1]){                          
+            if(this.subtitulo === undefined){
+              this.subtitulo = item.nombre;              
+            }    
           }
         }
       })   
@@ -88,16 +95,18 @@ export class NivelComponent implements OnInit {
     this.router.navigateByUrl('/agregar/Editar');
   }
 
-  siguienteNivel(ld){
-    console.log("siguienteNivel")
-    
-    if(this.niveles.length > this.cont) {
-      this.cont++;
+  siguienteNivel(ld){    
+    this.cont++;
+    console.log("siguienteNivel " + this.niveles.length + " - " + this.cont)
+    if(this.niveles.length > this.cont) {      
       console.log("this.cont: " + (this.cont))
-      this.titulo = this.niveles[this.cont-1].descripcion;      
+            
       this.precedente.push(ld.id);
       this.cargarDatosNivel();
+      this.cargarDatosSubTitulo(true)
+      this.cargarTitulo()
     }else{
+      this.cont--;
       console.log("no hay mas niveles")
     }
     
@@ -114,11 +123,12 @@ export class NivelComponent implements OnInit {
           this.precedente.splice(index,1);
         }
       });
-      this.titulo = this.niveles[this.cont].descripcion;      
+       
       this.cargarDatosNivel();
       
       this.precedente[this.cont-1];
-      
+      this.cargarDatosSubTitulo(false)
+      this.cargarTitulo()
     }else{
       console.log("no hay mas niveles 2")
     }
@@ -140,24 +150,76 @@ export class NivelComponent implements OnInit {
     this.router.navigateByUrl('/agregar/Agregar');
   }
 
-  insertarActividad(){
+  insertarActividad(ld){
     let sepUn = JSON.parse(window.localStorage.getItem("SP_UEN"));
     let nombreGrupo;
     let idNombre;
     sepUn.map((item)=>{
       if(item.id === this.precedente[this.cont-1]){
-        nombreGrupo = item.nombre;
-        idNombre = item.id
+        nombreGrupo = ld.nombre;
+        idNombre = ld.id
       }
     })
     
     let datos = {
       descripcion: nombreGrupo,
       plural: this.niveles[this.cont].plural,
-      idNombre: idNombre,
+      idNombre: idNombre,      
     }
     localStorage.setItem("insertarActividad", JSON.stringify(datos))
     this.router.navigateByUrl('/planillas');
+  }
+
+  cargarTitulo(){
+    this.titulo = this.niveles[this.cont].descripcion;
+  }
+
+  cargarDatosSubTitulo(agregar){
+    if(agregar){
+      this.subtitulo = "";
+      this.habiltarEspacio = false    
+      let cont = 0;
+      let contAux = 0;
+      this.precedente.map((item)=>{
+        let sepUn = JSON.parse(window.localStorage.getItem("SP_UEN"));
+        sepUn.map((sep)=>{
+          if(sep.id === item){
+            if(cont === 0){
+              this.subtitulo = sep.nombre
+            }else{
+              this.subtitulo = this.subtitulo + " - " +sep.nombre         
+            }
+            cont++;
+          }
+        })
+        contAux++;
+        if(contAux > 2){
+          this.habiltarEspacio = true
+        }
+      })
+    }else{
+      this.subtitulo = "";
+      let cont = 0;
+      let contAux = 0;
+      this.habiltarEspacio = false
+      this.precedente.map((item)=>{
+        let sepUn = JSON.parse(window.localStorage.getItem("SP_UEN"));
+        sepUn.map((sep)=>{
+          if(sep.id === item){
+            if(cont === 0){
+              this.subtitulo = sep.nombre
+            }else{
+              this.subtitulo = this.subtitulo + " - " +sep.nombre
+            }            
+            cont++;
+          }
+        })
+        contAux++;
+        if(contAux > 2){
+          this.habiltarEspacio = true
+        }
+      })
+    }
   }
 
 }

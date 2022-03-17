@@ -50,17 +50,20 @@ export class LoginComponent implements OnInit {
             {
               prioridad: 0,
               descripcion: "Grupo Productor",
-              plural: "Grupos Productores"
+              plural: "Grupos Productores",
+              disponiblePlanilla: false
             },
             {
               prioridad: 1,
               descripcion: "Predio",
-              plural: "Predios"
+              plural: "Predios",
+              disponiblePlanilla: false
             },
             {
               prioridad: 2,
               descripcion: "Piscina",
-              plural: "Piscinas"
+              plural: "Piscinas",
+              disponiblePlanilla: true
             }
           ]  
           window.localStorage.setItem("labels", JSON.stringify(niveles)); 

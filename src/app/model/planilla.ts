@@ -14,6 +14,7 @@ export class Planilla{
     totalMix: number;
     totalDose: number;
     madeBy: String;
+    executedBy: String;
     applicationDate: Date;
     status: String;
     quality: number;
@@ -33,4 +34,6 @@ export class Planilla{
     agregar: boolean;
     fechaString: string;
     fechaAplicacionString: string;
+    colorQuality: string;
+    qualityRango: number; //Rango de 0 - 1
 }

@@ -34,6 +34,7 @@ export class AplicacionPage implements OnInit {
   mezcla_total: number;
   total_dosis: number;
   elaborado: String;
+  ejecutado: String;
   fecha_aplicacion: String;
   ejecucion: String;
   calidad_ejecucion: number;
@@ -73,7 +74,7 @@ export class AplicacionPage implements OnInit {
   prioridadId: number;
   productoNombre: String;
   ejecucionNombre: String;
-
+  colorRange: String = "secondary";
   constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { }
 
   ngOnInit() {
@@ -125,6 +126,7 @@ export class AplicacionPage implements OnInit {
           this.mezcla_total = item.totalMix;
           this.total_dosis = item.totalDose;
           this.elaborado = item.madeBy;
+          this.ejecutado = item.executedBy;
           this.fecha_aplicacion = item.filingDate + "";
           this.calidad_ejecucion = parseInt(item.quality + "");
           //this.calidad_ejecucion = item.calidad_ejecucion;
@@ -307,7 +309,7 @@ export class AplicacionPage implements OnInit {
         console.log("dddddd"+ form.value.calidad_ejecucion*0.1);
         if (item.spreadsheetId === this.idPLanilla) {
           item.activity = form.value.actividad
-          item.quality = form.value.calidad_ejecucion*0.2
+          item.quality = form.value.calidad_ejecucion//*0.2
           item.control = form.value.control
           item.dose = form.value.dosis
           item.madeBy = form.value.elaborado
@@ -333,8 +335,7 @@ export class AplicacionPage implements OnInit {
       })
 
       console.log("" + JSON.stringify(this.planillas));
-    } else {
-      console.log("ASDSADASDDAS----------1")
+    } else {      
       let cont = 0;
       this.planillas.map((item) => {
         if (item.spreadsheetId <= 0) {
@@ -358,14 +359,34 @@ export class AplicacionPage implements OnInit {
         }
       }      
 */
-console.log("ASDSADASDDAS----------2 -> " + JSON.stringify(this.agricultor) + " - " + form.value.fecha_aplicacion)
+
+      let calidad = form.value.calidad_ejecucion;
+      let colorQuality = "";
+      console.log(" ColorQuality " + calidad)
+      if(calidad >= 0 && calidad < 2){
+        console.log("calidad -> danger " )
+        colorQuality = "danger"
+      }else{
+        if(calidad >= 2 && calidad < 4){
+          console.log("calidad -> warning")
+          colorQuality = "warning"
+        }else{
+          if(calidad >= 4 && calidad <= 5){
+            console.log("calidad -> primary")
+            colorQuality = "primary"
+          }
+        }
+      }
+      
       let datos = new Planilla();
       datos = {
         activity: form.value.actividad,
-        quality: form.value.calidad_ejecucion*0.2,
+        quality: calidad,
+        colorQuality: colorQuality,
         control: form.value.control,
         dose: form.value.dosis,
         madeBy: form.value.elaborado,
+        executedBy: form.value.ejecutado,
         status: form.value.ejecucion,
         applicationDate: new Date(form.value.fecha_aplicacion),
         filingDate: new Date,
@@ -388,7 +409,8 @@ console.log("ASDSADASDDAS----------2 -> " + JSON.stringify(this.agricultor) + " 
         fechaAplicacionString: null,
         name: null,
         plantingMaps: null,
-        priority: this.prioridadId
+        priority: this.prioridadId,
+        qualityRango: (calidad*2)/10
       }
       console.log("ASDSADASDDAS----------3")
       this.planillas.push(datos)
@@ -479,6 +501,22 @@ console.log("ASDSADASDDAS----------2 -> " + JSON.stringify(this.agricultor) + " 
      // this.estadoSiguiente = false;
     }*/
     this.router.navigateByUrl('/planillas');
+  }
+
+  cambiarColorEjecucion(){    
+    let calidad = this.calidad_ejecucion;
+    if(calidad === 0 && calidad < 2){
+      this.colorRange = "danger"      
+    }else{
+      if(calidad >= 2 && calidad < 4){
+        this.colorRange = "warning"        
+      }else{
+        if(calidad >= 4 && calidad < 5){
+          this.colorRange = "success"          
+        }
+      }
+    }
+    
   }
 
 }

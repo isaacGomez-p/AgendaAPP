@@ -17,33 +17,61 @@ export class PlanillasComponent implements OnInit {
   planillas: Planilla[];
   siembras: Siembra[];
   duracionRefresh: number = 2000;
+  fechaFiltro: Date;
 
   constructor(private loadingController: LoadingController, private router: Router, private planillaService: PlanillaService, private toastController: ToastController, private fincaService: FincaService) { }
 
   ionViewDidEnter(){
-    this.inicioCargarPlanillasLS();
+    this.inicioCargarPlanillasLS(null, false);
   }
 
   ngOnInit() {
-    this.inicioCargarPlanillasLS();
+    this.inicioCargarPlanillasLS(null, false);
   }
 
-  inicioCargarPlanillasLS(){
-
-    console.log("Cargando planillas")
+  inicioCargarPlanillasLS(date, estaFiltrando){    
     if(JSON.parse(window.localStorage.getItem("planillasActividad")) === undefined || JSON.parse(window.localStorage.getItem("planillasActividad")) === null || JSON.parse(window.localStorage.getItem("planillasActividad")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
       this.planillas = []
       //this.planillas =  JSON.parse(window.localStorage.getItem("planillasActividad"));
     }else{                   
-      let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));
-      console.log("planillasPrioridad-> " + JSON.stringify(planillasPrioridad))
+      let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));      
       let prioridad = JSON.parse(window.localStorage.getItem("insertarActividad"))
       this.planillas = []
       planillasPrioridad.map((item)=> {
+        
         if(item.priority === prioridad.idNombre){
           item.fincaNombre = prioridad.descripcion
-          this.planillas.push(item)
+          if(item.colorQuality === null || item.colorQuality === undefined || item.colorQuality === ""){
+            if(item.quality === 0 && item.quality < 2){
+              item.colorQuality = "danger"
+            }else{
+              if(item.quality >= 2 && item.quality < 4){
+                item.colorQuality = "warning"
+              }else{
+                if(item.quality >= 4 && item.quality < 5){
+                  item.colorQuality = "primary"
+                }
+              }
+            }
+          }                    
+          item.qualityRango = (item.quality*2)/10
+          if(estaFiltrando){            
+            //Variables para la fecha de la planilla
+            let dia;
+            let mes;
+            let anio;
+            var fecha = new Date(item.applicationDate);
+            dia = fecha.getDate();
+            mes = fecha.getMonth();
+            anio= fecha.getFullYear();            
+            if(date.dia === dia && date.mes === mes && date.anio === anio){              
+              this.planillas.push(item)
+            }
+          }else{            
+            this.planillas.push(item)
+          }
+          
         }
       });
       /*this.planillas.map((item)=>{
@@ -133,13 +161,29 @@ export class PlanillasComponent implements OnInit {
     toast.present();
   }
 
-  editar(id){
-    console.log("____ id planilla " + id)
+  editar(id){    
     this.router.navigateByUrl('/aplicacion/'+id);
   }
 
   volver(){
     this.router.navigateByUrl('/nivel');
+  }
+
+  filtrarPorFecha(){    
+    //Variables para la fecha que filtra
+    let dia;
+    let mes;
+    let anio;
+    var fecha = new Date(this.fechaFiltro);
+    dia = fecha.getDate();
+    mes = fecha.getMonth();
+    anio= fecha.getFullYear();    
+    let date = {
+      dia: dia,
+      mes: mes,
+      anio: anio
+    }
+    this.inicioCargarPlanillasLS(date, true);
   }
 
 }

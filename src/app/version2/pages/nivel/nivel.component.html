@@ -3,9 +3,10 @@
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
       <div font size=1 align="center">{{titulo}}<i>
-        <div *ngIf="subtitulo" font size=1 align="center">{{subtitulo}}</div>
+        <div *ngIf="subtitulo" font size=1 align="center" class="text-wrap">{{subtitulo}}</div>
           <H6></H6>
         </i></div>
+      <br *ngIf="habiltarEspacio">
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -17,6 +18,11 @@
       <ion-label>
         <h2><!--Nombre:--> {{ld.nombre}}</h2>        
       </ion-label>
+
+      <ion-button [ngClass]="{'activated' : buttonActive}" expand="full" color="light" expand="block" (click)="insertarActividad(ld)" *ngIf="disponibleBotonPlanilla">
+        <ion-icon slot="start" name="add-outline"></ion-icon>          
+      </ion-button>
+
       <ion-button color="light" expand="block" (click)="edit(ld)">
         <ion-icon name="create-outline"></ion-icon>
       </ion-button>
@@ -24,7 +30,7 @@
       <ion-button color="light" expand="block" (click)="siguienteNivel(ld)">
         <ion-icon slot="end" name="reader-outline" ></ion-icon>                
       </ion-button>
-      
+            
     </ion-item>
   </ion-list>
   <br>
@@ -33,10 +39,7 @@
       Nuevo {{boton}}
   </ion-button>
   
-  <ion-button [ngClass]="{'activated' : buttonActive}" expand="full" color="warning" expand="block" (click)="insertarActividad()" *ngIf="cont !== 0">
-    <ion-icon slot="start" name="add-outline"></ion-icon>
-      Insertar Actividad
-  </ion-button>
+  
 
   <ion-button expand="full" color="danger" expand="block" (click)="volver()">
     <ion-icon slot="start" name="caret-back-circle-outline"></ion-icon>
