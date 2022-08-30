@@ -41,10 +41,10 @@ export class AgricultorService {
     return this.http.post<ApiResponse>(`${this._login}`, user).toPromise<ApiResponse>();
   }
 
-  getLabels() : Promise<ApiResponse>{
+  /*getLabels() : Promise<ApiResponse>{
     //return this.http.get<UserEntity[]>(`${this.urlService}/AGD_Agricultor?cedula=`+cedula+`&clave=`+clave);
     return this.http.get<ApiResponse>(`${this._labels}`).toPromise<ApiResponse>();
-  }
+  }*/
 
   getAllUser(idUsuario: number): Observable<UserEntity[]>{       
     return this.http.get<UserEntity[]>(`${this._traerTodosUsuarios}`+idUsuario);

@@ -4,7 +4,7 @@ import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    redirectTo: 'login',
+    redirectTo: 'qrcode',
     pathMatch: 'full'
   },
   {
@@ -82,6 +82,10 @@ const routes: Routes = [
   {
     path: 'nivel',
     loadChildren: () => import('./version2/pages/nivel/nivel.component.module').then( m => m.NivelComponentModule)
+  },
+  {
+    path: 'qrcode',
+    loadChildren: () => import('./pages/qrcomponent/qrcomponent.module').then( m => m.QrComponentModule)
   },
 ];
 @NgModule({

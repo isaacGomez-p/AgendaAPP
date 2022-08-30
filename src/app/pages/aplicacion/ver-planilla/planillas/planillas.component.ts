@@ -16,6 +16,7 @@ export class PlanillasComponent implements OnInit {
   planillasLS: Planilla[];
   planillas: Planilla[];
   siembras: Siembra[];
+  subtitulo: String;
   duracionRefresh: number = 2000;
   fechaFiltro: Date;
 
@@ -23,6 +24,7 @@ export class PlanillasComponent implements OnInit {
 
   ionViewDidEnter(){
     this.inicioCargarPlanillasLS(null, false);
+    this.subtitulo = window.localStorage.getItem("subtitulo").toString();
   }
 
   ngOnInit() {

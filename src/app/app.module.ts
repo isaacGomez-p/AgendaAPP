@@ -20,13 +20,14 @@ import { FincaService } from './services/finca.service';
  // importar locales
  import localePy from '@angular/common/locales/es-PY';
  import { registerLocaleData } from '@angular/common';
+ import { NgxQRCodeModule } from 'ngx-qrcode2';
 
  registerLocaleData(localePy, 'es');
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule, NgxQRCodeModule],
   providers: [    
     //Components
     FincaComponent,  
@@ -36,8 +37,10 @@ import { FincaService } from './services/finca.service';
     SplashScreen,
     //Services
     FincaService,
+    //BarcodeScanner,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    { provide: LOCALE_ID, useValue: 'es' }
+    { provide: LOCALE_ID, useValue: 'es' },
+    
   ],
     
   bootstrap: [AppComponent],

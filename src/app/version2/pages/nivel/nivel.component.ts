@@ -18,7 +18,7 @@ export class NivelComponent implements OnInit {
   precedente: number[] = [];
   buttonActive: boolean = false;
   disponibleBotonPlanilla: boolean = false;
-  habiltarEspacio: boolean = false;
+  habilitarEspacio: boolean = false;
 
   constructor(private router: Router) { }
 
@@ -46,8 +46,6 @@ export class NivelComponent implements OnInit {
   }
 
   cargarLista(){
-    console.log("____________ precedente " + JSON.stringify(this.precedente))
-    console.log("____________ Nivel: " + this.nivel + " -- Precedente: " + this.precedente[this.cont-1])
     
     this.listaDatos = [];
     if(window.localStorage.getItem("SP_UEN") !== undefined && window.localStorage.getItem("SP_UEN") !== null){
@@ -56,12 +54,10 @@ export class NivelComponent implements OnInit {
         if(this.nivel === 0){          
           if(item.prioridad === this.nivel){
             this.listaDatos.push(item);
-            console.log("____________ agrego "  +JSON.stringify(item))
           }
         }else{
           if(item.precedente === this.precedente[this.cont-1] && item.prioridad === this.nivel){
             this.listaDatos.push(item);
-            console.log("____________ agrego "  +JSON.stringify(item))
           }
         }
         if(this.cont === 0){
@@ -77,8 +73,7 @@ export class NivelComponent implements OnInit {
     } 
   }
 
-  edit(ld){
-    console.log("___edit")    
+  edit(ld){ 
     let precedenteId = 0;
     if(this.nivel !== 0){
       precedenteId = this.precedente[this.cont]
@@ -97,7 +92,6 @@ export class NivelComponent implements OnInit {
 
   siguienteNivel(ld){    
     this.cont++;
-    console.log("siguienteNivel " + this.niveles.length + " - " + this.cont)
     if(this.niveles.length > this.cont) {      
       console.log("this.cont: " + (this.cont))
             
@@ -113,8 +107,6 @@ export class NivelComponent implements OnInit {
   }
 
   volver(){
-    console.log("volver _______" + JSON.stringify(this.precedente) + " ---- " +this.cont)
-
     if(this.cont !== 0){      
       this.cont--;      
       console.log("this.cont: " + (this.cont-1))
@@ -135,7 +127,6 @@ export class NivelComponent implements OnInit {
   }
 
   nuevo(){
-    console.log("_______" + JSON.stringify(this.precedente))
     let precedenteId = 0;
     if(this.nivel !== 0){
       precedenteId = this.precedente[this.cont-1]
@@ -171,13 +162,13 @@ export class NivelComponent implements OnInit {
   }
 
   cargarTitulo(){
-    this.titulo = this.niveles[this.cont].descripcion;
+    this.titulo = this.niveles[this.cont].plural;
   }
 
   cargarDatosSubTitulo(agregar){
     if(agregar){
       this.subtitulo = "";
-      this.habiltarEspacio = false    
+      this.habilitarEspacio = false    
       let cont = 0;
       let contAux = 0;
       this.precedente.map((item)=>{
@@ -187,21 +178,21 @@ export class NivelComponent implements OnInit {
             if(cont === 0){
               this.subtitulo = sep.nombre
             }else{
-              this.subtitulo = this.subtitulo + " - " +sep.nombre         
+              this.subtitulo = this.subtitulo + " - " +sep.nombre      
             }
             cont++;
           }
         })
         contAux++;
         if(contAux > 2){
-          this.habiltarEspacio = true
+          this.habilitarEspacio = true
         }
       })
     }else{
       this.subtitulo = "";
       let cont = 0;
       let contAux = 0;
-      this.habiltarEspacio = false
+      this.habilitarEspacio = false
       this.precedente.map((item)=>{
         let sepUn = JSON.parse(window.localStorage.getItem("SP_UEN"));
         sepUn.map((sep)=>{
@@ -216,10 +207,11 @@ export class NivelComponent implements OnInit {
         })
         contAux++;
         if(contAux > 2){
-          this.habiltarEspacio = true
+          this.habilitarEspacio = true
         }
       })
     }
+    window.localStorage.setItem("subtitulo", this.subtitulo);   
   }
 
 }

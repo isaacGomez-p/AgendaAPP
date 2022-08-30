@@ -25,15 +25,23 @@
             <ion-button expand="full" color="success" type="submit" [disabled]="form.invalid" expand="block">
               <ion-icon name="log-in-outline"></ion-icon> 
             </ion-button>
+
+            
+          </div>
+          <div>
+            <ion-item>
+              <ion-label color="primary">¿No tiene una cuenta?</ion-label>
+                <ion-button expand="full" color="secondary" expand="block" (click)="registrar()">
+                  Registrar    
+                </ion-button>
+                <button ion-button full icon-left (click) = "qrcode()"><ion-icon name = "barcode"></ion-icon>Create code </button>
+            </ion-item>
           </div>
         </ion-col>
       </ion-row>
     </ion-grid>
   </form>
-  <ion-label color="primary">¿No tiene una cuenta?</ion-label>
-  <ion-button expand="full" color="secondary" expand="block" (click)="registrar()">
-    Registrar    
-  </ion-button>
+  
 
 </ion-content>
 

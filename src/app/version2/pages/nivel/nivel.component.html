@@ -2,11 +2,13 @@
   <ion-toolbar color="light">    
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
-      <div font size=1 align="center">{{titulo}}<i>
+      <i>
         <div *ngIf="subtitulo" font size=1 align="center" class="text-wrap">{{subtitulo}}</div>
           <H6></H6>
-        </i></div>
-      <br *ngIf="habiltarEspacio">
+        </i>
+      <div font size=1 align="center">{{titulo}}
+        <br *ngIf="habilitarEspacio">
+      </div>
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -20,7 +22,7 @@
       </ion-label>
 
       <ion-button [ngClass]="{'activated' : buttonActive}" expand="full" color="light" expand="block" (click)="insertarActividad(ld)" *ngIf="disponibleBotonPlanilla">
-        <ion-icon slot="start" name="add-outline"></ion-icon>          
+        <ion-icon name="add-outline"></ion-icon>          
       </ion-button>
 
       <ion-button color="light" expand="block" (click)="edit(ld)">
@@ -28,7 +30,7 @@
       </ion-button>
       
       <ion-button color="light" expand="block" (click)="siguienteNivel(ld)">
-        <ion-icon slot="end" name="reader-outline" ></ion-icon>                
+        <ion-icon name="reader-outline" ></ion-icon>                
       </ion-button>
             
     </ion-item>
@@ -41,7 +43,7 @@
   
   
 
-  <ion-button expand="full" color="danger" expand="block" (click)="volver()">
+  <ion-button *ngIf="cont !== 0" expand="full" color="danger" expand="block" (click)="volver()">
     <ion-icon slot="start" name="caret-back-circle-outline"></ion-icon>
       Volver
   </ion-button>

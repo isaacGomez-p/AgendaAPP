@@ -35,13 +35,13 @@ export class LoginComponent implements OnInit {
       user.document = form.value.user+"";
       user.password = form.value.clave;
       try {
-        this.response = await this.agricultorService.login(user)
-        if(this.response.status == 200){
+        /*this.response = await this.agricultorService.login(user)
+        if(this.response.status == 200){*/
           this.cedula = null;
           this.clave = null;        
           this.appComponent.loginEstado = true;
           //productorService
-          this.labelReponse = (await this.agricultorService.getLabels()).result;
+          this.labelReponse =// (await this.agricultorService.getLabels()).result;
           window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
           window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
           this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
@@ -69,12 +69,12 @@ export class LoginComponent implements OnInit {
           window.localStorage.setItem("labels", JSON.stringify(niveles)); 
   
           this.router.navigateByUrl('/nivel');
-        }else{          
+        /*}else{          
           this.toastConfirmacion('Datos incorrectos.', 'warning');
-        }
+        }*/
       } catch (e){
         this.toastConfirmacion('Error con el servidor', 'danger')
-      }           
+      }          
       
       
       /*}, err => {
@@ -109,6 +109,10 @@ export class LoginComponent implements OnInit {
 
   registrar(){
     this.router.navigateByUrl('/registrar/registrar');
+  }
+
+  qrcode() {
+    this.router.navigateByUrl('/qrcode');
   }
 
   /*async registrar() {

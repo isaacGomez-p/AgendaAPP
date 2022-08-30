@@ -75,6 +75,7 @@ export class AplicacionPage implements OnInit {
   productoNombre: String;
   ejecucionNombre: String;
   colorRange: String = "secondary";
+  subtitulo: String;
   constructor(private paramsUrl: ActivatedRoute, private toastController: ToastController, private loadingController: LoadingController, private router: Router) { }
 
   ngOnInit() {
@@ -82,6 +83,7 @@ export class AplicacionPage implements OnInit {
   }
 
   ionViewDidEnter() {
+    this.subtitulo = window.localStorage.getItem("subtitulo").toString();
     this.cargarPrioridad()
     this.cargarFincasLS();
     if (this.paramsUrl.snapshot.paramMap.get('idEditar') === 'a') {

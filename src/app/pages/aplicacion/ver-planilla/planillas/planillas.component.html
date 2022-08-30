@@ -3,6 +3,10 @@
     <ion-title stacked class="my-title" color="dark">
       <div font size=4 align="center"><strong>AGENDA APP</strong></div>
       <div font size=1 align="center"><i>
+        <i>
+          <div *ngIf="subtitulo" font size=1 align="center" class="text-wrap">{{subtitulo}}</div>
+            <H6></H6>
+          </i>
           <H6>Planillas</H6>
         </i></div>
     </ion-title>
@@ -97,6 +101,6 @@
 </div>
   <section class="full-width">    
     <ion-button expand="full" color="secondary" expand="block" (click)="registrar()">Ingresar nueva planilla</ion-button>
-    <ion-button expand="full" color="secondary" expand="block" (click)="volver()">Volver</ion-button>
+    <ion-button expand="full" color="danger" expand="block" (click)="volver()">Volver</ion-button>
   </section>
 </ion-content>

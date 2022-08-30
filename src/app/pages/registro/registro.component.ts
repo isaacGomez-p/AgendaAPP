@@ -23,7 +23,7 @@ export class RegistroComponent implements OnInit {
   ciudad: string;
 
   constructor(private toastController: ToastController, private paramsUrl: ActivatedRoute, private router: Router, private modalController: ModalController, private agricultorService: AgricultorService) {
-    this.titulo = this.paramsUrl.snapshot.paramMap.get('titulo')
+    this.titulo = 'Registrar';//this.paramsUrl.snapshot.paramMap.get('titulo')
   }
 
   ngOnInit() { }
@@ -80,8 +80,6 @@ export class RegistroComponent implements OnInit {
     let claveConfirmacion: String
     clave = form.value.clave;
     claveConfirmacion = form.value.claveConfirmacion;
-    console.log('1 - ' + clave)
-    console.log('2 - ' + claveConfirmacion)
     if (clave !== claveConfirmacion) {
       this.toastConfirmacion("Las claves no coinciden.", "warning");
       return false;
