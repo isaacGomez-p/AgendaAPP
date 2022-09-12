@@ -1,6 +1,10 @@
+const { Capacitor } = require("@capacitor/core")
+
 *********************************************************
 
 Para generar apk con Capacitor
+
+Borrar carpeta Android y Capacitor.config.ts
 
 1. ionic build
 2. npx cap init

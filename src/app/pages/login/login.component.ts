@@ -1,12 +1,11 @@
 import { AppComponent } from './../../app.component';
-import { RegistroComponent } from './../registro/registro.component';
 import { Component, OnInit } from '@angular/core';
 import { ToastController } from '@ionic/angular';
 import { ModalController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AgricultorService } from 'src/app/services/agricultor.service';
 import { UserEntity } from 'src/app/model/userEntity';
-import { ApiResponse } from 'src/app/model/apiResponse';
+import { LevelEntity } from 'src/app/model/levelEntity';
 
 @Component({
   selector: 'app-login',
@@ -14,10 +13,11 @@ import { ApiResponse } from 'src/app/model/apiResponse';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
-  response : ApiResponse;
   labelReponse : any;
   cedula: number;
   clave: string;
+  levels: LevelEntity[];
+  user: UserEntity;
 
   constructor(private toastController: ToastController, private modalController: ModalController, private router: Router, private agricultorService: AgricultorService, private appComponent: AppComponent) { }
 
@@ -37,41 +37,90 @@ export class LoginComponent implements OnInit {
       try {
         /*this.response = await this.agricultorService.login(user)
         if(this.response.status == 200){*/
-          this.cedula = null;
-          this.clave = null;        
-          this.appComponent.loginEstado = true;
-          //productorService
-          this.labelReponse =// (await this.agricultorService.getLabels()).result;
-          window.localStorage.setItem("agricultor", JSON.stringify(this.response.result));       
-          window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
-          this.toastConfirmacion('Bienvenido ' + this.response.result.firstName + " " + this.response.result.lastName, 'success');
-  
-          let niveles = [
-            {
-              prioridad: 0,
-              descripcion: "Grupo Productor",
-              plural: "Grupos Productores",
-              disponiblePlanilla: false
-            },
-            {
-              prioridad: 1,
-              descripcion: "Predio",
-              plural: "Predios",
-              disponiblePlanilla: false
-            },
-            {
-              prioridad: 2,
-              descripcion: "Piscina",
-              plural: "Piscinas",
-              disponiblePlanilla: true
-            }
-          ]  
-          window.localStorage.setItem("labels", JSON.stringify(niveles)); 
-  
-          this.router.navigateByUrl('/nivel');
-        /*}else{          
+        this.agricultorService.login(user).subscribe((data)=>{
+          if(data.status == 200){
+            this.cedula = null;
+            this.clave = null;        
+            this.appComponent.loginEstado = true;
+
+            this.user = JSON.parse(JSON.stringify(data.result));
+            /*this.labelReponse = [
+              "Label 1",
+              "LKabel 2",
+              "Label 3"
+            ]*/
+            /*this.productos = this.user.products; /*[
+              {
+                name : 'Papa',
+                agregar: true,
+                code: '1234',
+                edicion: false,
+                product_id: 1,
+                variety: 'Criolla',
+                user: null
+              },
+              {
+                name : 'Papa',
+                agregar: true,
+                code: '1232',
+                edicion: false,
+                product_id: 2,
+                variety: 'De año',
+                user: null
+              },
+              {
+                name : 'Papa',
+                agregar: true,
+                code: '1233',
+                edicion: false,
+                product_id: 3,
+                variety: 'Salada',
+                user: null
+              }
+            ]*/
+
+              // (await this.agricultorService.getLabels()).result;
+            //user.city = "Bogota";
+            //user.dept = "Bogota";
+            //user.email = "email@email.com";
+            //user.firstName = "Test";
+            //user.id = 1;
+            //user.status = 1;
+            //user.products = this.productos;
+            window.localStorage.setItem("agricultor", JSON.stringify(this.user));       
+            window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
+            
+
+            
+            /*let niveles = [
+              {
+                prioridad: 0,
+                descripcion: "Grupo Productor",
+                plural: "Grupos Productores",
+                disponiblePlanilla: false
+              },
+              {
+                prioridad: 1,
+                descripcion: "Predio",
+                plural: "Predios",
+                disponiblePlanilla: false
+              },
+              {
+                prioridad: 2,
+                descripcion: "Piscina",
+                plural: "Piscinas",
+                disponiblePlanilla: true
+              }
+            ]  */
+            this.levels = this.user.levels;
+            window.localStorage.setItem("labels", JSON.stringify(this.levels)); 
+            this.toastConfirmacion('Bienvenido'+ this.user.firstName + " " + this.user.lastName, 'success');
+
+            this.router.navigateByUrl('/nivel');
+          }else{          
           this.toastConfirmacion('Datos incorrectos.', 'warning');
-        }*/
+        }
+      })
       } catch (e){
         this.toastConfirmacion('Error con el servidor', 'danger')
       }          

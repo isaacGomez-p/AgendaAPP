@@ -1,3 +1,5 @@
+import { LevelEntity } from "./levelEntity";
+import { Planilla } from "./planilla";
 import { ProductEntity } from "./producto";
 
 export class UserEntity{
@@ -11,4 +13,6 @@ export class UserEntity{
     dept: String;
     city: String; 
     products: ProductEntity[];
+    levels: LevelEntity[];
+    planillas: Planilla[];
 }

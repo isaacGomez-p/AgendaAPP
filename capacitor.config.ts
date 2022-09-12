@@ -1,18 +1,10 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.agenda.v1',
-  appName: 'agendaApp',
+  appId: 'com.agenda',
+  appName: 'agendaAppBeta',
   webDir: 'www',
-  bundledWebRuntime: false,
-  "plugins": {
-    "SplashScreen": {
-      "launchShowDuration": 0
-    },
-    "PushNotifications": {
-      "presentationOptions": ["badge", "sound", "alert"]
-    }
-  }
+  bundledWebRuntime: false
 };
 
 export default config;

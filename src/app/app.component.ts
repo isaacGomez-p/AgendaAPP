@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
   fincas: LandEntity[];
   numeroPlanillas: NumeroPlanilla[];
   productos: ProductEntity[];
-  planilla: Planilla[];
+  planillas: Planilla[];
   siembras: Siembra[];
   tituloFinca: String = '';
 
@@ -83,7 +83,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.router.navigateByUrl('/home');
           }
-        },
+        }/*,
         {
           text: 'Sincronizar',
           role: 'selected',
@@ -99,7 +99,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.presentAlertConfirmDescargar();
           }
-        },
+        }*/,
         {
           text: 'Cerrar sesión',
           role: 'selected',
@@ -214,7 +214,7 @@ export class AppComponent implements OnInit {
     */
 
     //productos
-    this.productos = JSON.parse(window.localStorage.getItem('productos'));
+    /*this.productos = JSON.parse(window.localStorage.getItem('productos'));
     if (this.productos.length > 0) {
       this.productos.map((item) => {
         if (item.product_id <= 0) {
@@ -232,11 +232,11 @@ export class AppComponent implements OnInit {
         }
       });
     }
-    window.localStorage.setItem('productos', JSON.stringify(this.productos));
+    window.localStorage.setItem('productos', JSON.stringify(this.productos));*/
   
 
     //siembra
-    this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+    /*this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
     if (this.siembras !== null) {
       if (this.siembras.length > 0) {
         this.siembras.map((item) => {
@@ -264,7 +264,17 @@ export class AppComponent implements OnInit {
         })
       }
     }
-    window.localStorage.setItem('siembras', JSON.stringify(this.siembras));
+    window.localStorage.setItem('siembras', JSON.stringify(this.siembras));*/
+    if (JSON.parse(window.localStorage.getItem("planillasActividad")) === null) {
+      this.toastConfirmacion('No tiene planillas para sincronizar.', 'warning');
+    } else {
+      this.planillas = JSON.parse(window.localStorage.getItem("planillasActividad"));
+      this.planillas.map(planilla => {
+        if(planilla.agregar){
+
+        }
+      })
+    }
 
     
   }
@@ -273,10 +283,10 @@ export class AppComponent implements OnInit {
     let cont: number = 0;
     console.log("______ descargar datos")
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
-    this.agricultor = (await this.userService.getUserById(this.agricultor.id)).result;
+    //this.agricultor = (await this.userService.getUserById(this.agricultor.id)).result;
     window.localStorage.setItem('agricultor', JSON.stringify(this.agricultor));
     //carga los productos del LS
-    window.localStorage.setItem('productos', JSON.stringify(this.agricultor.products)); 
+    window.localStorage.setItem('productos', JSON.stringify([])); 
     console.log("______ 1")
     /*this.userService.getUserById(this.agricultor.id).subscribe(data => {
       this.agricultor = data.result;
@@ -314,7 +324,7 @@ export class AppComponent implements OnInit {
     })*/
 
     this.planillaService.getPlanillas(this.agricultor.id).subscribe((data) => {
-      this.planilla = data;
+      this.planillas = data;
       window.localStorage.setItem('planillas', JSON.stringify(data));
     }, err => {
       window.localStorage.setItem('planillas', JSON.stringify([]));
@@ -332,18 +342,16 @@ export class AppComponent implements OnInit {
 
   async menuFinca() {
     const alert = await this.actionSheetCtrl.create({
-      header: 'Finca',
+      header: 'Niveles',
       buttons: [
         {
-          text: 'Agregar una finca',
+          text: 'Administrar',
           role: 'selected',
-          icon: 'add-outline',
+          icon: 'layers-outline', //add-outline
           handler: () => {
-            this.tituloFinca = "Agregar una finca";
-            //this.finca.setTitulo("Agregar una finca")            
-            this.router.navigateByUrl('/finca/Agregar una finca/A');
+            this.router.navigateByUrl('/nivel');
           }
-        },
+        }/*,
         {
           text: 'Ver todas las fincas',
           role: 'selected',
@@ -351,7 +359,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.router.navigateByUrl('/verFinca');
           }
-        },
+        }*/,
         {
           text: 'Cancelar',
           icon: 'close',

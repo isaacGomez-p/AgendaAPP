@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { NavController } from '@ionic/angular';
 import { environment } from 'src/environments/environment';
+import { ApiResponse } from '../model/apiResponse';
 
 
 
@@ -23,13 +24,17 @@ export class PlanillaService {
   private _guardar: string = this._controller + "save"  
   private _cargarDatos: string = this._controller + "list"
   
-  private login = [];
+  //private login = [];
 
   constructor(private http: HttpClient, public navCtrl: NavController) {
   }
 
   latitud: number = 0;
   longitud: number = 0;
+
+  postPlanilla(planilla: Planilla): Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(this._guardar, Planilla);    
+  }
 
   postPlanillaAplicacion(datos: Planilla) {
     return this.http.post(`${this._guardar}/`, datos);

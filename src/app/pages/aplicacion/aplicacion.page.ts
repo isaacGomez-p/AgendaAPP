@@ -18,7 +18,7 @@ export class AplicacionPage implements OnInit {
 
   siembras: Siembra[];
 
-  fincaLista: LandEntity[];
+  fincaLista: LandEntity[] = [];
   listaLotes: Siembra[];
   productos: ProductEntity[];
   agricultor: UserEntity;
@@ -152,25 +152,18 @@ export class AplicacionPage implements OnInit {
   }
 
   cargarFincasLS() {
-    console.log("planillas"+this.planillas);
-    this.productos = []
-      this.productos.push(
-        {
-          product_id: 1,
-          agregar: true,
-          code: 'asdasdsad',
-          edicion: false,
-          name: "Camaron",
-          user: null,
-          variety: "Vannamei"
-        }
-      )
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    console.log("planillas"+this.planillas + 'sss');
+    console.log("agricutlur"+this.agricultor + 'sss');
+    //this.agricultor
+    this.productos = this.agricultor.products;
       this.fincaLista = []
     /*if (JSON.parse(window.localStorage.getItem("fincas")) === null || JSON.parse(window.localStorage.getItem("fincas")).length === 0) {
       this.toastConfirmacion('No tiene fincas registradas. Por favor actualice la pagina.', 'warning');
     } else {
       this.fincaLista = JSON.parse(window.localStorage.getItem("fincas"));
     }*/
+    window.localStorage.setItem("productos", JSON.stringify(this.productos));
     /*if (JSON.parse(window.localStorage.getItem("productos")) === null || JSON.parse(window.localStorage.getItem("productos")).length === 0) {
       this.toastConfirmacion('No tiene productos registrados.', 'warning');      
       
@@ -187,7 +180,8 @@ export class AplicacionPage implements OnInit {
 
   buscarLotes(form) {
     this.finca = form.value.finca;
-    if(this.fincaLista == null){
+    this.fincaLista = []; //QUITAR ESTE INIT
+    if(this.fincaLista == null){      
       this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");
     }else{    
       this.fincaLista.map((item)=>{
@@ -197,8 +191,10 @@ export class AplicacionPage implements OnInit {
         }
       })
       this.siembras = JSON.parse(window.localStorage.getItem("siembras"));
+      this.siembras = [];
       if(this.siembras == null){
-        this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");
+        //QUITAR ESTE INIT
+        //this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");
       }else{    
         if (this.siembras.length > 0) {
           this.listaLotes = [];
@@ -278,7 +274,6 @@ export class AplicacionPage implements OnInit {
 
 
   registrar(form) {
-    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
     console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
       console.log(' epepeppepe' + JSON.stringify(p));
@@ -304,12 +299,10 @@ export class AplicacionPage implements OnInit {
         }
       }  
 */
-      let objetoNumeroPlanilla = new NumeroPlanilla();   
-      console.log("this.idPLanilla -> " + this.idPLanilla)   
+      let objetoNumeroPlanilla = new NumeroPlanilla();  
       this.planillas.map(item => {
-        console.log("item.spreadsheetId  -> " + item.spreadsheetId )  
-        console.log("dddddd"+ form.value.calidad_ejecucion*0.1);
         if (item.spreadsheetId === this.idPLanilla) {
+          item.agregar = true;
           item.activity = form.value.actividad
           item.quality = form.value.calidad_ejecucion//*0.2
           item.control = form.value.control

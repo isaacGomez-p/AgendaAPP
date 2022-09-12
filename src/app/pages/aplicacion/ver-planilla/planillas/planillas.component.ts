@@ -116,7 +116,7 @@ export class PlanillasComponent implements OnInit {
     await loading.present();    
   }
 
-  cargarPlanillasLS(){
+  cargarPlanillasLS(){/*
     if(this.planillas !== null){
       this.planillas.map(item =>{
         let fincas = JSON.parse(window.localStorage.getItem('fincas'));
@@ -147,7 +147,7 @@ export class PlanillasComponent implements OnInit {
       })    
     }else{
       this.toastConfirmacion("No hay planillas registradas", "warning");
-    }
+    }*/
   }
 
   registrar(){

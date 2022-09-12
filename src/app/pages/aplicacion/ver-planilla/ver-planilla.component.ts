@@ -159,7 +159,9 @@ export class VerPlanillaComponent implements OnInit {
     
     let datos = new NumeroPlanilla();
     let cont = 0;
+    this.planillas = [];
     if(this.planillas == null){
+      
       this.toastConfirmacion("Por favor verifique que haya sincronizado.", "warning");      
     }else{      
       this.planillas.map((item)=>{

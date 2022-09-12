@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 export class NivelComponent implements OnInit {
 
   niveles: any = [];
-  listaDatos: any = []
+  listaDatos: any = [];
   titulo: string;
   subtitulo:string = "";
   boton: string;
@@ -157,6 +157,7 @@ export class NivelComponent implements OnInit {
       plural: this.niveles[this.cont].plural,
       idNombre: idNombre,      
     }
+    
     localStorage.setItem("insertarActividad", JSON.stringify(datos))
     this.router.navigateByUrl('/planillas');
   }
