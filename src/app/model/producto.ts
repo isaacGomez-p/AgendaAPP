@@ -1,7 +1,7 @@
 import { UserEntity } from "./userEntity";
 
 export class ProductEntity{
-    product_id: number;
+    productId: number;
     name: String;
     variety: String;
     code: String;

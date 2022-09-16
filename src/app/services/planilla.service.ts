@@ -33,8 +33,12 @@ export class PlanillaService {
   longitud: number = 0;
 
   postPlanilla(planilla: Planilla): Observable<ApiResponse>{
-    return this.http.post<ApiResponse>(this._guardar, Planilla);    
+    return this.http.post<ApiResponse>(this._guardar, planilla);    
   }
+
+  /*postPlanilla(planilla: Planilla): Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(this._guardar, Planilla);    
+  }*/
 
   postPlanillaAplicacion(datos: Planilla) {
     return this.http.post(`${this._guardar}/`, datos);

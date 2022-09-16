@@ -71,7 +71,7 @@ export class AplicacionPage implements OnInit {
   nombreBoton: String;
 
   loteNombre: String;
-  prioridadId: number;
+  prioridadId: String;
   productoNombre: String;
   ejecucionNombre: String;
   colorRange: String = "secondary";
@@ -277,7 +277,7 @@ export class AplicacionPage implements OnInit {
     console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
       console.log(' epepeppepe' + JSON.stringify(p));
-      if (p.product_id === Number.parseInt(form.value.producto)) {
+      if (p.productId === Number.parseInt(form.value.producto)) {
         this.producto = p.name + '-' + p.variety
       }
     }
@@ -405,7 +405,8 @@ export class AplicacionPage implements OnInit {
         name: null,
         plantingMaps: null,
         priority: this.prioridadId,
-        qualityRango: (calidad*2)/10
+        qualityRango: (calidad*2)/10,
+        user: null
       }
       console.log("ASDSADASDDAS----------3")
       this.planillas.push(datos)

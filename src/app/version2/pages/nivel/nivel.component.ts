@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SP_UEN } from 'src/app/model/SP_UEN';
 
 @Component({
   selector: 'app-nivel',
@@ -11,14 +12,15 @@ export class NivelComponent implements OnInit {
   niveles: any = [];
   listaDatos: any = [];
   titulo: string;
-  subtitulo:string = "";
+  subtitulo: String = "";
   boton: string;
   cont: number = 0;
   nivel: number = 0;
-  precedente: number[] = [];
+  precedente: String[] = [];
   buttonActive: boolean = false;
   disponibleBotonPlanilla: boolean = false;
   habilitarEspacio: boolean = false;
+  listaSpUen: SP_UEN[] = [];
 
   constructor(private router: Router) { }
 
@@ -35,22 +37,25 @@ export class NivelComponent implements OnInit {
   }
 
   cargarDatosNivel(){        
-    this.boton = this.niveles[this.cont].descripcion;
-    this.nivel = this.niveles[this.cont].prioridad;
-    if(this.niveles[this.cont].disponiblePlanilla){
-      this.disponibleBotonPlanilla = true;
-    }else{
-      this.disponibleBotonPlanilla = false;
-    }
-    this.cargarLista();
+    this.niveles.map(item =>{
+      if(item.prioridad === this.cont){
+        this.boton = item.descripcion;
+        this.nivel = item.prioridad;
+        if(item.disponiblePlanilla){
+          this.disponibleBotonPlanilla = true;
+        }else{
+          this.disponibleBotonPlanilla = false;
+        }
+        this.cargarLista();
+      }
+    })
   }
 
   cargarLista(){
-    
     this.listaDatos = [];
     if(window.localStorage.getItem("SP_UEN") !== undefined && window.localStorage.getItem("SP_UEN") !== null){
-      let datos = JSON.parse(window.localStorage.getItem("SP_UEN"));
-      datos.map((item)=>{
+      this.listaSpUen = JSON.parse(window.localStorage.getItem("SP_UEN"));
+      this.listaSpUen.map((item)=>{
         if(this.nivel === 0){          
           if(item.prioridad === this.nivel){
             this.listaDatos.push(item);
@@ -62,27 +67,30 @@ export class NivelComponent implements OnInit {
         }
         if(this.cont === 0){
           this.subtitulo = undefined;
-        }else{
-          if(item.id === this.precedente[this.cont-1]){                          
+        }else{          
+          if(item.precedente === this.precedente[this.cont-1]){                          
             if(this.subtitulo === undefined){
               this.subtitulo = item.nombre;              
             }    
           }
         }
       })   
-    } 
+    }
+    
   }
 
   edit(ld){ 
-    let precedenteId = 0;
+    /*let precedenteId = "";
+    console.log("A  VER " + JSON.stringify(this.precedente));
+    
     if(this.nivel !== 0){
-      precedenteId = this.precedente[this.cont]
-    }
+      precedenteId = this.precedente[this.cont].toString()
+    }*/
     let datos = {
       prioridad: this.nivel,
       titulo: this.titulo,
       singular: this.boton,
-      precedente: precedenteId,
+      precedente: ld.code,
       nombre: ld.nombre,
       id: ld.id
     }
@@ -92,10 +100,8 @@ export class NivelComponent implements OnInit {
 
   siguienteNivel(ld){    
     this.cont++;
-    if(this.niveles.length > this.cont) {      
-      console.log("this.cont: " + (this.cont))
-            
-      this.precedente.push(ld.id);
+    if(this.niveles.length > this.cont) {
+      this.precedente.push(ld.code);
       this.cargarDatosNivel();
       this.cargarDatosSubTitulo(true)
       this.cargarTitulo()
@@ -108,14 +114,12 @@ export class NivelComponent implements OnInit {
 
   volver(){
     if(this.cont !== 0){      
-      this.cont--;      
-      console.log("this.cont: " + (this.cont-1))
+      this.cont--;
       this.precedente.forEach((value,index)=>{
         if(this.precedente.length - 1 === index){
           this.precedente.splice(index,1);
         }
-      });
-       
+      });       
       this.cargarDatosNivel();
       
       this.precedente[this.cont-1];
@@ -127,9 +131,9 @@ export class NivelComponent implements OnInit {
   }
 
   nuevo(){
-    let precedenteId = 0;
+    let precedenteId = "";
     if(this.nivel !== 0){
-      precedenteId = this.precedente[this.cont-1]
+      precedenteId = this.precedente[this.cont-1].toString()
     }
     let datos = {
       prioridad: this.nivel,
@@ -146,24 +150,34 @@ export class NivelComponent implements OnInit {
     let nombreGrupo;
     let idNombre;
     sepUn.map((item)=>{
-      if(item.id === this.precedente[this.cont-1]){
+      if(item.code === this.precedente[this.cont-1]){
         nombreGrupo = ld.nombre;
-        idNombre = ld.id
+        idNombre = ld.code
       }
     })
     
-    let datos = {
-      descripcion: nombreGrupo,
-      plural: this.niveles[this.cont].plural,
-      idNombre: idNombre,      
-    }
+    this.niveles.map(item =>{
+      if(this.cont === item.prioridad){       
+        let datos = {
+          descripcion: nombreGrupo,
+          plural: item.plural,
+          idNombre: idNombre,      
+        }
+        localStorage.setItem("insertarActividad", JSON.stringify(datos))
+      }
+    })
     
-    localStorage.setItem("insertarActividad", JSON.stringify(datos))
+    
     this.router.navigateByUrl('/planillas');
   }
 
   cargarTitulo(){
-    this.titulo = this.niveles[this.cont].plural;
+    
+    this.niveles.map(item =>{
+      if(this.cont === item.prioridad){
+        this.titulo = item.plural;        
+      }
+    })
   }
 
   cargarDatosSubTitulo(agregar){
@@ -212,7 +226,7 @@ export class NivelComponent implements OnInit {
         }
       })
     }
-    window.localStorage.setItem("subtitulo", this.subtitulo);   
+    window.localStorage.setItem("subtitulo", this.subtitulo.toString());   
   }
 
 }

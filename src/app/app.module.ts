@@ -20,14 +20,14 @@ import { FincaService } from './services/finca.service';
  // importar locales
  import localePy from '@angular/common/locales/es-PY';
  import { registerLocaleData } from '@angular/common';
- import { NgxQRCodeModule } from 'ngx-qrcode2';
+ //import { NgxQRCodeModule } from 'ngx-qrcode2';
 
  registerLocaleData(localePy, 'es');
 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule, NgxQRCodeModule],
+  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, HttpClientModule, FormsModule],
   providers: [    
     //Components
     FincaComponent,  

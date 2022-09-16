@@ -86,11 +86,10 @@ export class LoginComponent implements OnInit {
             //user.firstName = "Test";
             //user.id = 1;
             //user.status = 1;
-            //user.products = this.productos;
-            window.localStorage.setItem("agricultor", JSON.stringify(this.user));       
-            window.localStorage.setItem("labels", JSON.stringify(this.labelReponse));
-            
-
+            //user.products = this.productos;planillasActividad
+            window.localStorage.setItem("planillasActividad", JSON.stringify(this.user.planillas));       
+            window.localStorage.setItem("agricultor", JSON.stringify(this.user)); 
+            window.localStorage.setItem("SP_UEN", JSON.stringify(this.user.sp_uen_list === undefined || this.user.sp_uen_list === null ? [] : this.user.sp_uen_list)) 
             
             /*let niveles = [
               {

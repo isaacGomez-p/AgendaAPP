@@ -5,6 +5,7 @@ import { NavController } from '@ionic/angular';
 import { UserEntity } from '../model/userEntity';
 import { environment } from 'src/environments/environment';
 import { ApiResponse } from '../model/apiResponse';
+import { SP_UEN } from '../model/SP_UEN';
 
 
 @Injectable({
@@ -20,6 +21,7 @@ export class AgricultorService {
   private _guardarAgricultor: string = this._controller + "save"  
   private _traerTodosUsuarios: string = this._controller + "list"  
   private _traerUsuarioPorId: string = this._controller + "getById"  
+  private _guardarSpUen: string = this._controller + "saveSpUen"
   private _login: string = this._controller + "login"
   private _labels: string = this.urlService + "/labels/list"
   constructor(private http: HttpClient, public navCtrl: NavController) {    
@@ -28,8 +30,16 @@ export class AgricultorService {
   latitud: number = 0;
   longitud: number = 0;
 
-  postAgricultor(user: UserEntity){
-    return this.http.post(`${this._guardarAgricultor}`, user);
+  getUserById(idUsuario: number): Observable<ApiResponse>{       
+    return this.http.get<ApiResponse>(`${this._traerUsuarioPorId}`+`?userId=`+idUsuario);
+  }
+
+  postAgricultor(user: UserEntity): Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(this._guardarAgricultor, user);    
+  }
+
+  postSpUen(spUen: SP_UEN): Observable<ApiResponse>{
+    return this.http.post<ApiResponse>(this._guardarSpUen, spUen);    
   }
 
   putAgricultor(datos: UserEntity, id: number){
@@ -54,7 +64,7 @@ export class AgricultorService {
     return this.http.get<UserEntity[]>(`${this._traerTodosUsuarios}`+idUsuario);
   }
 
-  getUserById(idUsuario: number): Promise<ApiResponse>{       
+  /*getUserById(idUsuario: number): Promise<ApiResponse>{       
     return this.http.get<ApiResponse>(`${this._traerUsuarioPorId}`+`?userId=`+idUsuario).toPromise<ApiResponse>();
-  }
+  }*/
 }

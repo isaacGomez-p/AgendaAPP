@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QrcomponentComponent } from './qrcomponent.component';
-import { NgxQRCodeModule } from 'ngx-qrcode2';
+//import { NgxQRCodeModule } from 'ngx-qrcode2';
 
 import { QrcomponentPageRoutingModule } from './qrcomponent-routing.module';
 
@@ -13,7 +13,7 @@ import { QrcomponentPageRoutingModule } from './qrcomponent-routing.module';
     CommonModule,
     FormsModule,
     QrcomponentPageRoutingModule,
-    NgxQRCodeModule
+   // NgxQRCodeModule
   ],
   declarations: [QrcomponentComponent]
 })

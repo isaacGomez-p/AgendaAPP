@@ -87,7 +87,7 @@ export class SiembraPage implements OnInit {
         this.groove = item.groove
         this.productos.map((itemP) => {
           if (itemP.code === item.product.code) {
-            this.producto = itemP.product_id+""
+            this.producto = itemP.productId+""
           }
         })
         this.cant_plantas = item.plants
@@ -154,7 +154,7 @@ export class SiembraPage implements OnInit {
         if (validacion === true) {
           let siembra = new Siembra();
           for (let p of this.productos) {
-            if (p.product_id === Number.parseInt(form.value.producto)) {
+            if (p.productId === Number.parseInt(form.value.producto)) {
               this.variedad = p.variety;
               this.producto = p.code
             }
@@ -211,7 +211,7 @@ export class SiembraPage implements OnInit {
       } else {
         let id = parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar'))
         for (let p of this.productos) {
-          if (p.product_id === Number.parseInt(form.value.producto)) {
+          if (p.productId === Number.parseInt(form.value.producto)) {
             this.variedad = p.variety;
             this.producto = p.code
           }
@@ -229,7 +229,7 @@ export class SiembraPage implements OnInit {
         })
         let objetoProducto = new ProductEntity();
           this.productos.map((item)=>{
-            if(item.product_id = Number(this.producto)){
+            if(item.productId = Number(this.producto)){
               objetoProducto = item;
             }
           })

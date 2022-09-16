@@ -63,7 +63,7 @@
               
           <ion-item>            
             <ion-select [(ngModel)]="producto" name="producto" placeholder="Seleccione un producto" ngModel required interface="action-sheet">
-              <ion-select-option *ngFor="let producto of productos" value="{{producto.product_id}}" >
+              <ion-select-option *ngFor="let producto of productos" value="{{producto.productId}}" >
                 {{producto.name}} - {{producto.variety}}
               </ion-select-option>
             </ion-select>

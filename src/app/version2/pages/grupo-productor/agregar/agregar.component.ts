@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { SP_UEN } from 'src/app/model/SP_UEN';
 
 @Component({
   selector: 'app-agregar',
@@ -15,9 +16,11 @@ export class AgregarComponent implements OnInit {
   accion: string;
   nombre: string = "";
   singular: string = "";
-  precedenteId: number;
+  precedenteId: String;
   prioridad: number;
   id: number;
+  spUen : SP_UEN[];
+
   constructor(public modalController: ModalController,
     private router: Router,
     private paramsUrl: ActivatedRoute) { }
@@ -54,38 +57,38 @@ export class AgregarComponent implements OnInit {
   }
 
   guardar(){
-    console.log("--- " + this.nombre);
     if(this.nombre !== undefined && this.nombre !== null && this.nombre !== ""){
-
       if(this.accion === "Editar"){
-        let spUen = JSON.parse(localStorage.getItem("SP_UEN"))
-        spUen.map((item)=>{
+        this.spUen = JSON.parse(localStorage.getItem("SP_UEN"))
+        this.spUen.map((item)=>{
           if(item.id === this.id){
             item.nombre = this.nombre
           }
         })
-        localStorage.setItem("SP_UEN", JSON.stringify(spUen))  
+        localStorage.setItem("SP_UEN", JSON.stringify(this.spUen))  
         this.router.navigateByUrl('/nivel');
       }else{
         //Va a guardar
-        let spUen = JSON.parse(localStorage.getItem("SP_UEN"))
+        this.spUen = JSON.parse(localStorage.getItem("SP_UEN"))
         
         let cont = 0;
-        if(spUen === null || spUen === undefined){
-          spUen = []      
+        if(this.spUen === null || this.spUen === undefined){
+          this.spUen = []      
         }else{
-          cont = spUen.length;
+          cont = this.spUen.length;
         }
 
-        spUen.push({
-          id: cont,
-          nombre: this.nombre,
-          prioridad: this.prioridad,
-          precedente: this.precedenteId,
-          code: this.generaCodigo()
-        })
+        
+        let sp = new SP_UEN();
+        sp.id = cont*-1
+        sp.nombre = this.nombre
+        sp.prioridad =  this.prioridad
+        sp.precedente = this.precedenteId
+        sp.code = this.generaCodigo()        
+        sp.agregar = false;
+        this.spUen.push(sp);
 
-        localStorage.setItem("SP_UEN", JSON.stringify(spUen))  
+        localStorage.setItem("SP_UEN", JSON.stringify(this.spUen))  
         this.router.navigateByUrl('/nivel');
       }
     }else{

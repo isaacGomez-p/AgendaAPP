@@ -1,5 +1,6 @@
 import { NumeroPlanilla } from "./numeroPlanilla";
 import { Siembra } from "./siembra";
+import { UserEntity } from "./userEntity";
 
 export class Planilla{
     spreadsheetId: number;
@@ -22,7 +23,7 @@ export class Planilla{
     codeNSpreadsheet: string;
     codeLand: string;
     plantingMaps: Siembra[];
-    priority: number;
+    priority: String;
 
     producto: String;
     landId: number;
@@ -36,4 +37,6 @@ export class Planilla{
     fechaAplicacionString: string;
     colorQuality: string;
     qualityRango: number; //Rango de 0 - 1
+
+    user: UserEntity;
 }

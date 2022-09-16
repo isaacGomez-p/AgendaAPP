@@ -20,6 +20,8 @@ import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { FcmService } from './services/fcm.service';
 import { AgricultorService } from './services/agricultor.service';
+import { LevelEntity } from './model/levelEntity';
+import { SP_UEN } from './model/SP_UEN';
 
 @Component({
   selector: 'app-root',
@@ -37,18 +39,18 @@ export class AppComponent implements OnInit {
   planillas: Planilla[];
   siembras: Siembra[];
   tituloFinca: String = '';
+  levels: LevelEntity[];
+  user: UserEntity;
+  SP_UEN : SP_UEN[];
+
 
   loginEstado: boolean = false;
 
   constructor(
-    private siembraService: SiembraService, 
-    private serviceProducto: ProductoService, 
-    private fincaService: FincaService, 
     private planillaService: PlanillaService, 
     private alertController: AlertController, 
     private actionSheetCtrl: ActionSheetController, 
-    private router: Router, 
-    private finca: FincaComponent, 
+    private router: Router,
     private toastController: ToastController,
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -83,7 +85,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.router.navigateByUrl('/home');
           }
-        }/*,
+        },
         {
           text: 'Sincronizar',
           role: 'selected',
@@ -99,7 +101,7 @@ export class AppComponent implements OnInit {
           handler: () => {
             this.presentAlertConfirmDescargar();
           }
-        }*/,
+        },
         {
           text: 'Cerrar sesión',
           role: 'selected',
@@ -173,10 +175,12 @@ export class AppComponent implements OnInit {
   }
 
   sincronizar() {
+    console.log("ENTRA A SINCRONIZAR");
+    
     //carga los datos del agricultor
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'));
 
-    this.fincas = JSON.parse(window.localStorage.getItem('fincas'));
+    /*this.fincas = JSON.parse(window.localStorage.getItem('fincas'));
 
     if (this.fincas.length > 0) {
       this.fincas.map((item) => {
@@ -196,7 +200,7 @@ export class AppComponent implements OnInit {
 
       })
     }
-    window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
+    window.localStorage.setItem("fincas", JSON.stringify(this.fincas));*/
 
     /*this.numeroPlanillas = JSON.parse(window.localStorage.getItem('numeroPlanillas'));
     if (this.numeroPlanillas.length > 0) {
@@ -268,19 +272,53 @@ export class AppComponent implements OnInit {
     if (JSON.parse(window.localStorage.getItem("planillasActividad")) === null) {
       this.toastConfirmacion('No tiene planillas para sincronizar.', 'warning');
     } else {
+      let success, error = 0;
+      console.log("1----");
+      
       this.planillas = JSON.parse(window.localStorage.getItem("planillasActividad"));
       this.planillas.map(planilla => {
-        if(planilla.agregar){
-
+        planilla.user = this.agricultor;        
+        console.log("2----" + JSON.stringify(planilla));
+        if(!planilla.agregar){
+          console.log("3----");
+          this.planillaService.postPlanilla(planilla).subscribe(response =>{
+            if(response.status == 200){
+              console.log("Succesfully sync"+ ++success);
+              
+            }else{
+              console.log("Sync failed"+ ++error);
+              
+            }
+          });
         }
       })
+    }
+
+    if (JSON.parse(window.localStorage.getItem("SP_UEN")) === null) {
+      this.toastConfirmacion('No tiene niveles para sincronizar.', 'warning');
+    } else {
+      this.SP_UEN = JSON.parse(window.localStorage.getItem("SP_UEN"));
+      this.SP_UEN.map(item => {
+        if(!item.agregar){
+          item.user = this.agricultor;
+          this.userService.postSpUen(item).subscribe(response =>{
+            if(response.status == 200){
+              console.log("Succesfully sync");
+            }else{
+              console.log("Sync failed");
+            }
+          })
+        }
+      })
+            
     }
 
     
   }
 
   async descargarDatos() {
-    let cont: number = 0;
+    
+    /*let cont: number = 0;
     console.log("______ descargar datos")
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
     //this.agricultor = (await this.userService.getUserById(this.agricultor.id)).result;
@@ -299,7 +337,7 @@ export class AppComponent implements OnInit {
 //  if(this.agricultor.products != null){}
 
     
-
+/*
     this.planillaService.getNumerosPlanillas(this.agricultor.id).subscribe((data) => {
       window.localStorage.setItem("numeroPlanillas", JSON.stringify(data));
     }, err => {
@@ -322,7 +360,7 @@ export class AppComponent implements OnInit {
       window.localStorage.setItem('productos', JSON.stringify([]));
       this.toastConfirmacion("Error en cargar productos.", "danger");
     })*/
-
+/*
     this.planillaService.getPlanillas(this.agricultor.id).subscribe((data) => {
       this.planillas = data;
       window.localStorage.setItem('planillas', JSON.stringify(data));
@@ -336,7 +374,90 @@ export class AppComponent implements OnInit {
     }, err => {
       window.localStorage.setItem('siembras', JSON.stringify([]));
       this.toastConfirmacion("Error al cargar siembras.", "danger");
-    })
+    })*/
+    this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
+    this.userService.getUserById(this.agricultor.id).subscribe((data)=>{
+      if(data.status == 200){      
+        //this.appComponent.loginEstado = true;
+
+        this.user = JSON.parse(JSON.stringify(data.result));
+        /*this.labelReponse = [
+          "Label 1",
+          "LKabel 2",
+          "Label 3"
+        ]*/
+        /*this.productos = this.user.products; /*[
+          {
+            name : 'Papa',
+            agregar: true,
+            code: '1234',
+            edicion: false,
+            product_id: 1,
+            variety: 'Criolla',
+            user: null
+          },
+          {
+            name : 'Papa',
+            agregar: true,
+            code: '1232',
+            edicion: false,
+            product_id: 2,
+            variety: 'De año',
+            user: null
+          },
+          {
+            name : 'Papa',
+            agregar: true,
+            code: '1233',
+            edicion: false,
+            product_id: 3,
+            variety: 'Salada',
+            user: null
+          }
+        ]*/
+
+          // (await this.agricultorService.getLabels()).result;
+        //user.city = "Bogota";
+        //user.dept = "Bogota";
+        //user.email = "email@email.com";
+        //user.firstName = "Test";
+        //user.id = 1;
+        //user.status = 1;
+        //user.products = this.productos;planillasActividad
+        window.localStorage.setItem("planillasActividad", JSON.stringify(this.user.planillas));       
+        window.localStorage.setItem("agricultor", JSON.stringify(this.user));       
+        window.localStorage.setItem("labels", JSON.stringify(this.user.levels));
+        window.localStorage.setItem("SP_UEN", JSON.stringify(this.user.sp_uen_list)) 
+
+        //this.levels = this.user.levels;
+        //window.localStorage.setItem("labels", JSON.stringify(this.levels));
+        /*let niveles = [
+          {
+            prioridad: 0,
+            descripcion: "Grupo Productor",
+            plural: "Grupos Productores",
+            disponiblePlanilla: false
+          },
+          {
+            prioridad: 1,
+            descripcion: "Predio",
+            plural: "Predios",
+            disponiblePlanilla: false
+          },
+          {
+            prioridad: 2,
+            descripcion: "Piscina",
+            plural: "Piscinas",
+            disponiblePlanilla: true
+          }
+        ]  */
+        this.toastConfirmacion('Bienvenido'+ this.user.firstName + " " + this.user.lastName, 'success');
+
+        this.router.navigateByUrl('/nivel');
+      }else{          
+      this.toastConfirmacion('Datos incorrectos.', 'warning');
+    }
+  })    
     
   }
 
