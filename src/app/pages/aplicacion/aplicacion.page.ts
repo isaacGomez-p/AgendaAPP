@@ -110,11 +110,9 @@ export class AplicacionPage implements OnInit {
     } else {
       this.estadoFincaEditar = true;
       this.planillas = JSON.parse(window.localStorage.getItem("planillasActividad"));
-      console.log("planilla" + JSON.stringify(this.planillas));
       this.planillas.map((item) => {
         if (item.spreadsheetId === id) {
           this.lote = parseInt(item.lote+"")
-          console.log(" lote " + this.lote)
           this.ejecucion = item.status
           this.idPLanilla = item.spreadsheetId;
           this.producto = item.producto
@@ -153,8 +151,6 @@ export class AplicacionPage implements OnInit {
 
   cargarFincasLS() {
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'))
-    console.log("planillas"+this.planillas + 'sss');
-    console.log("agricutlur"+this.agricultor + 'sss');
     //this.agricultor
     this.productos = this.agricultor.products;
       this.fincaLista = []
@@ -274,9 +270,7 @@ export class AplicacionPage implements OnInit {
 
 
   registrar(form) {
-    console.log("planilla1" + JSON.stringify(this.planillas));
     for (let p of this.productos) {
-      console.log(' epepeppepe' + JSON.stringify(p));
       if (p.productId === Number.parseInt(form.value.producto)) {
         this.producto = p.name + '-' + p.variety
       }
@@ -357,17 +351,13 @@ export class AplicacionPage implements OnInit {
 
       let calidad = form.value.calidad_ejecucion;
       let colorQuality = "";
-      console.log(" ColorQuality " + calidad)
       if(calidad >= 0 && calidad < 2){
-        console.log("calidad -> danger " )
         colorQuality = "danger"
       }else{
         if(calidad >= 2 && calidad < 4){
-          console.log("calidad -> warning")
           colorQuality = "warning"
         }else{
           if(calidad >= 4 && calidad <= 5){
-            console.log("calidad -> primary")
             colorQuality = "primary"
           }
         }
@@ -408,19 +398,15 @@ export class AplicacionPage implements OnInit {
         qualityRango: (calidad*2)/10,
         user: null
       }
-      console.log("ASDSADASDDAS----------3")
       this.planillas.push(datos)
       this.toastConfirmacion('Planilla registrada correctamente.', 'success');
       this.resetDatos();
-      console.log("ASDSADASDDAS----------4")
     }
     window.localStorage.setItem("planillasActividad", JSON.stringify(this.planillas));
     this.router.navigateByUrl('/planillas');
-    console.log("ASDSADASDDAS----------5")
   }
 
   horaLocalCO(hora: Date): Date {
-    console.log("_________ " + hora)
     let HoraInicio = hora;
     HoraInicio.setMinutes
     HoraInicio.setUTCFullYear(HoraInicio.getFullYear());

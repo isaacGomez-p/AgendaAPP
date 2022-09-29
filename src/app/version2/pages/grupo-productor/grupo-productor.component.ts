@@ -18,7 +18,6 @@ export class GrupoProductorComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    //console.log("hola")
   }
 
   ionViewDidEnter() {

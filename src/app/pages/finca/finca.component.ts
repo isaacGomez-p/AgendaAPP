@@ -131,8 +131,7 @@ export class FincaComponent implements OnInit {
             item.edicion = true;
           }
         })        
-        this.toastConfirmacion("Actualizado correctamente.","success");        
-        console.log('edito');
+        this.toastConfirmacion("Actualizado correctamente.","success");
         window.localStorage.setItem("fincas", JSON.stringify(this.fincas));
         this.router.navigateByUrl('/verFinca');
       }else{

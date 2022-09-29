@@ -19,7 +19,6 @@ export class QrcomponentComponent implements OnInit {
 
   createCode(){
     this.createdCode = this.qrData;
-    console.log("si llega" + this.qrData);
   }
 
   scanCode(){

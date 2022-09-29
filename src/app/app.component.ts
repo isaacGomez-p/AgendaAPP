@@ -175,8 +175,6 @@ export class AppComponent implements OnInit {
   }
 
   sincronizar() {
-    console.log("ENTRA A SINCRONIZAR");
-    
     //carga los datos del agricultor
     this.agricultor = JSON.parse(window.localStorage.getItem('agricultor'));
 
@@ -273,18 +271,13 @@ export class AppComponent implements OnInit {
       this.toastConfirmacion('No tiene planillas para sincronizar.', 'warning');
     } else {
       let success, error = 0;
-      console.log("1----");
-      
       this.planillas = JSON.parse(window.localStorage.getItem("planillasActividad"));
       this.planillas.map(planilla => {
-        planilla.user = this.agricultor;        
-        console.log("2----" + JSON.stringify(planilla));
+        planilla.user = this.agricultor;
         if(!planilla.agregar){
-          console.log("3----");
           this.planillaService.postPlanilla(planilla).subscribe(response =>{
             if(response.status == 200){
-              console.log("Succesfully sync"+ ++success);
-              
+              console.log("Succesfully sync"+ ++success);              
             }else{
               console.log("Sync failed"+ ++error);
               
@@ -329,8 +322,6 @@ export class AppComponent implements OnInit {
     /*this.userService.getUserById(this.agricultor.id).subscribe(data => {
       this.agricultor = data.result;
       window.localStorage.setItem('agricultor', JSON.stringify(this.agricultor));
-      console.log(".... " + JSON.stringify(this.agricultor))
-      console.log(".... " + JSON.stringify(this.agricultor.products))
       //carga los productos del LS
       window.localStorage.setItem('productos', JSON.stringify(this.agricultor.products)); 
     });*/

@@ -75,7 +75,6 @@ export class SiembraPage implements OnInit {
       this.cargarDatosEditar(parseInt(this.paramsUrl.snapshot.paramMap.get('idEditar')));
     }
     this.cargarDatosLS();
-    console.log("productos"+ this.productos.length);
   }
 
   cargarDatosEditar(id) {
@@ -252,7 +251,6 @@ export class SiembraPage implements OnInit {
           spreadsheets: null
         }
         let validacion = 0;
-        console.log(" " + JSON.stringify(siembra))
         this.siembras.map((item) => {
           if (item.id === id) {
             item.groove = form.value.groove

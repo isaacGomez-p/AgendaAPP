@@ -80,14 +80,12 @@ export class VerPlanillaComponent implements OnInit {
     this.router.navigateByUrl('/planillas');
   }
 
-  cargarPlanillasLS(){    
-    console.log("Cargando planillas")
+  cargarPlanillasLS(){
     if(JSON.parse(window.localStorage.getItem("planillasActividad")) === undefined || JSON.parse(window.localStorage.getItem("planillasActividad")) === null || JSON.parse(window.localStorage.getItem("planillasActividad")).length === 0){
       this.toastConfirmacion('No tiene planillas registradas.', 'warning');
       //this.planillas =  JSON.parse(window.localStorage.getItem("planillasActividad"));
     }else{                   
       let planillasPrioridad =  JSON.parse(window.localStorage.getItem("planillasActividad"));
-      console.log("planillasPrioridad-> " + JSON.stringify(planillasPrioridad))
       let idPrioridad = JSON.parse(window.localStorage.getItem("insertarActividad")).prioridad
       this.planillas = []
       planillasPrioridad.map((item)=> {

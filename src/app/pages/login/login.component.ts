@@ -136,11 +136,7 @@ export class LoginComponent implements OnInit {
           window.localStorage.setItem( "session", 'true');
           window.localStorage.setItem( "usuario", data[0].Nombre_Conductor); 
           //this.nombreUsuario = data[0].Nombre_Conductor; 
-          //this.nombreUsuario = "Bienvenido";
-          
-          
-          //console.log("asdddddddddddd"+ data[0].Nombre_Conductor);
-          
+          //this.nombreUsuario = "Bienvenido";          
           form.value.user = '';
           form.value.password = 0;
           this.usuario = '';

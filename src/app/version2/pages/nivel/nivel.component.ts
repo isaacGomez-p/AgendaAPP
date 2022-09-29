@@ -107,7 +107,6 @@ export class NivelComponent implements OnInit {
       this.cargarTitulo()
     }else{
       this.cont--;
-      console.log("no hay mas niveles")
     }
     
   }
